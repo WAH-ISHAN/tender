@@ -293,7 +293,7 @@ export default function HomePage() {
           <div className="max-w-5xl mb-10 sm:mb-12">
             
             {/* Top Verification Beacon */}
-            <div className="mb-4">
+            <div className="mb-4 animate-hero-badge">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -305,11 +305,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.02] mb-5">
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight uppercase leading-[1.02] mb-5 animate-hero-title">
               {t("heroTitle")}
             </h1>
 
-            <p className="text-base sm:text-lg text-blue-100 font-normal leading-relaxed max-w-3xl">
+            <p className="text-base sm:text-lg text-blue-100 font-normal leading-relaxed max-w-3xl animate-hero-desc">
               {t("heroDesc")}
             </p>
           </div>
