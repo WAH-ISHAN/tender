@@ -252,57 +252,22 @@ export default function HomePage() {
 
         <div className="relative z-10 px-6 sm:px-12 py-10 sm:py-14">
           
-          {/* Top 2-Column Hero Header with Live Command Stats */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-8">
-            
-            {/* Left Title & Mandate */}
-            <div className="lg:col-span-7">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
-                  {t("heroSubtitle")}
-                </span>
-              </div>
-
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
-                {t("heroTitle")}
-              </h1>
-
-              <p className="text-xs sm:text-sm text-blue-100 font-normal leading-relaxed max-w-xl">
-                {t("heroDesc")}
-              </p>
+          {/* Top Hero Header */}
+          <div className="max-w-4xl mb-8">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
+                {t("heroSubtitle")}
+              </span>
             </div>
 
-            {/* Right Modern Frosted Metrics Command Card */}
-            <div className="lg:col-span-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 sm:p-6 shadow-xl">
-              <div className="text-[10px] font-black uppercase tracking-widest text-blue-200 pb-2 mb-3 border-b border-white/15 flex items-center justify-between">
-                <span>{t("radarTitle")}</span>
-                <span className="text-emerald-300 font-bold">&bull; 05:00 AM Daily Sync</span>
-              </div>
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
+              {t("heroTitle")}
+            </h1>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricPublishedToday")}</span>
-                  <div className="text-xl sm:text-2xl font-black text-white">12 Notices</div>
-                </div>
-
-                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricLiveTenders")}</span>
-                  <div className="text-xl sm:text-2xl font-black text-emerald-400">366 Live</div>
-                </div>
-
-                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricClosingThisWeek")}</span>
-                  <div className="text-xl sm:text-2xl font-black text-amber-300">41 Urgent</div>
-                </div>
-
-                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricTotalArchive")}</span>
-                  <div className="text-xl sm:text-2xl font-black text-blue-200 font-mono">39,942+</div>
-                </div>
-              </div>
-            </div>
-
+            <p className="text-xs sm:text-sm text-blue-100 font-normal leading-relaxed max-w-2xl">
+              {t("heroDesc")}
+            </p>
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
