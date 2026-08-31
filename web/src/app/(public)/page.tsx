@@ -408,64 +408,7 @@ export default function HomePage() {
       textZoom === "large" ? "text-[110%]" : textZoom === "xl" ? "text-[120%]" : "text-[100%]"
     }`}>
       
-      {/* 1. TOP INSTITUTIONAL STATUS STRIP */}
-      <header className="flex flex-wrap items-center justify-between text-xs pb-3.5 mb-6 border-b border-[#E2E6ED] gap-4">
-        <div className="flex items-center gap-2.5 text-[#374151]">
-          <span className="text-[#0055B8] font-extrabold uppercase tracking-wider">NATIONAL PROCUREMENT GAZETTE</span>
-          <span className="text-gray-300">|</span>
-          <span className="font-semibold">Issue No. 2,426</span>
-          <span className="text-gray-300">|</span>
-          <span className="text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 uppercase tracking-wider text-[11px]">
-            Verified Daily
-          </span>
-        </div>
 
-        <div className="flex items-center gap-5 text-[#374151]">
-          <span className="text-gray-600 font-medium">Hotline: <strong className="text-gray-900">+94 11 278 5141</strong></span>
-          <span className="text-gray-300">|</span>
-          {savedTenders.size > 0 && (
-            <>
-              <span className="text-[#0055B8] font-bold">★ {savedTenders.size} Saved</span>
-              <span className="text-gray-300">|</span>
-            </>
-          )}
-
-          {/* Accessibility Font Scaler */}
-          <div className="hidden sm:flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
-            <span className="text-[11px] font-bold text-gray-500 px-2 uppercase tracking-wider">Text Size:</span>
-            <button
-              type="button"
-              onClick={() => setTextZoom("normal")}
-              title="Standard Font Size"
-              className={`px-2 py-0.5 text-xs font-bold rounded ${
-                textZoom === "normal" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
-              }`}
-            >
-              A
-            </button>
-            <button
-              type="button"
-              onClick={() => setTextZoom("large")}
-              title="Large Font Size (+10%)"
-              className={`px-2 py-0.5 text-xs font-bold rounded ${
-                textZoom === "large" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
-              }`}
-            >
-              A+
-            </button>
-            <button
-              type="button"
-              onClick={() => setTextZoom("xl")}
-              title="Extra Large Font Size (+20%)"
-              className={`px-2 py-0.5 text-xs font-bold rounded ${
-                textZoom === "xl" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
-              }`}
-            >
-              A++
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* 2. CINEMATIC HERO BANNER (Clean, High-Contrast Industrial Layout Without Any Cluttering Tags) */}
       <section className="relative rounded-2xl overflow-hidden mb-10 shadow-lg border border-slate-800 bg-[#0A1128] text-white">
