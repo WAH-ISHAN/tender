@@ -1,11 +1,43 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+
+const PLANS = [
+  "Bidder Business Annual — Rs. 24,000 / 12 Months",
+  "Bidder Business Quarterly — Rs. 7,500 / 3 Months",
+];
+
+const CHANNELS = [
+  "WhatsApp (+94 77 388 7615)",
+  "Email Slip (billing@tenderhub.lk)",
+];
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<"annual" | "quarterly">("annual");
   const [showBankClaim, setShowBankClaim] = useState(false);
   const [claimSubmitted, setClaimSubmitted] = useState(false);
+
+  // Modern Dropdowns State in Modal
+  const [selectedPlan, setSelectedPlan] = useState(PLANS[0]);
+  const [isPlanOpen, setIsPlanOpen] = useState(false);
+  const planRef = useRef<HTMLDivElement>(null);
+
+  const [confirmChannel, setConfirmChannel] = useState(CHANNELS[0]);
+  const [isChannelOpen, setIsChannelOpen] = useState(false);
+  const channelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (planRef.current && !planRef.current.contains(e.target as Node)) {
+        setIsPlanOpen(false);
+      }
+      if (channelRef.current && !channelRef.current.contains(e.target as Node)) {
+        setIsChannelOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -254,63 +286,157 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Interactive Bank Claim Modal (§ 16) */}
+      {/* Interactive Bank Claim Modal (§ 16) - Modern Ultra-Sleek Standard */}
       {showBankClaim && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-lg bg-white rounded-xl shadow-2xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between pb-3 border-b mb-4">
-              <h3 className="text-base font-black text-[#0F172A] uppercase">File Subscription Claim (§ 16)</h3>
-              <button onClick={() => setShowBankClaim(false)} className="text-gray-400 font-bold text-2xl">&times;</button>
+          <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-7 sm:p-8 border border-slate-200 text-slate-900 animate-fadeIn">
+            
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#0055B8] block mb-0.5">
+                  OFFLINE SETTLEMENT
+                </span>
+                <h3 className="text-lg sm:text-xl font-black text-[#0F172A] uppercase tracking-tight">
+                  FILE SUBSCRIPTION CLAIM (§ 16)
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowBankClaim(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors font-bold text-sm cursor-pointer"
+              >
+                &times;
+              </button>
             </div>
 
             {claimSubmitted ? (
-              <div className="text-center py-6">
-                <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold">
-                  ✓
+              <div className="text-center py-6 animate-fadeIn">
+                <div className="w-14 h-14 bg-[#EFF6FF] text-[#0055B8] rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black border border-[#BFDBFE]">
+                  &check;
                 </div>
-                <h4 className="text-base font-bold text-gray-900 mb-1">Claim Registered in Staff Queue</h4>
-                <p className="text-xs text-gray-600 mb-4 leading-relaxed">
-                  Your slip reference has been registered. Staff will confirm with statement records and activate your subscription.
+                <h4 className="text-lg font-black text-[#0F172A] mb-1">Claim Registered in Staff Queue</h4>
+                <p className="text-xs sm:text-sm text-slate-600 font-normal mb-6 leading-relaxed">
+                  Your transaction slip reference has been received. Our verification desk will verify against bank records and activate your subscription within 2 hours.
                 </p>
                 <button
+                  type="button"
                   onClick={() => { setClaimSubmitted(false); setShowBankClaim(false); }}
-                  className="bg-[#0055B8] text-white text-xs font-bold px-4 py-2 rounded uppercase"
+                  className="w-full bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-black py-3.5 rounded-xl uppercase tracking-wider shadow-md transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                 >
-                  Done
+                  Return to Plans
                 </button>
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setClaimSubmitted(true); }}>
-                <div className="space-y-3 mb-4 text-xs">
-                  <div>
-                    <label className="font-bold text-gray-700 block mb-1">Selected Plan</label>
-                    <select className="w-full bg-white border border-gray-300 rounded p-2 font-bold text-[#0055B8]">
-                      <option>Bidder Business Annual — Rs. 24,000 / 12 Months</option>
-                      <option>Bidder Business Quarterly — Rs. 7,500 / 3 Months</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="font-bold text-gray-700 block mb-1">Bank Transferred From</label>
-                    <input type="text" placeholder="e.g. Commercial Bank / Sampath" required className="w-full border p-2 rounded" />
-                  </div>
-                  <div>
-                    <label className="font-bold text-gray-700 block mb-1">Slip Reference / Transaction ID</label>
-                    <input type="text" placeholder="e.g. TXN-8849102" required className="w-full border p-2 rounded font-mono" />
-                  </div>
-                  <div>
-                    <label className="font-bold text-gray-700 block mb-1">Confirmation Channel</label>
-                    <select className="w-full border p-2 rounded">
-                      <option>WhatsApp (+94 77 388 7615)</option>
-                      <option>Email Slip</option>
-                    </select>
-                  </div>
+              <form onSubmit={(e) => { e.preventDefault(); setClaimSubmitted(true); }} className="flex flex-col gap-4">
+                
+                {/* 1. Selected Plan (Modern Dropdown) */}
+                <div className="flex flex-col gap-1.5 relative" ref={planRef}>
+                  <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                    Selected Plan
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsPlanOpen(!isPlanOpen)}
+                    className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200 focus:bg-white focus:border-[#0055B8] rounded-xl py-3 px-4 text-left transition-all text-xs sm:text-sm font-semibold text-slate-900 flex items-center justify-between gap-2 cursor-pointer shadow-2xs"
+                  >
+                    <span className="truncate">{selectedPlan}</span>
+                    <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isPlanOpen ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+
+                  {isPlanOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
+                      {PLANS.map((plan) => (
+                        <button
+                          key={plan}
+                          type="button"
+                          onClick={() => { setSelectedPlan(plan); setIsPlanOpen(false); }}
+                          className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                            selectedPlan === plan ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
+                          }`}
+                        >
+                          <span>{plan}</span>
+                          {selectedPlan === plan && <span className="w-1.5 h-1.5 rounded-full bg-[#0055B8]" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex justify-end gap-2">
-                  <button type="button" onClick={() => setShowBankClaim(false)} className="px-4 py-2 text-xs font-bold text-gray-600">
+                {/* 2. Bank Transferred From */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                    Bank Transferred From
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Commercial Bank / Sampath / BOC"
+                    className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+
+                {/* 3. Slip Reference / Transaction ID */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                    Slip Reference / Transaction ID
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. TXN-8849102 or Bank Slip No"
+                    className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-mono font-bold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+
+                {/* 4. Confirmation Channel (Modern Dropdown) */}
+                <div className="flex flex-col gap-1.5 relative" ref={channelRef}>
+                  <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                    Confirmation Channel
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsChannelOpen(!isChannelOpen)}
+                    className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200 focus:bg-white focus:border-[#0055B8] rounded-xl py-3 px-4 text-left transition-all text-xs sm:text-sm font-semibold text-slate-900 flex items-center justify-between gap-2 cursor-pointer shadow-2xs"
+                  >
+                    <span className="truncate">{confirmChannel}</span>
+                    <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isChannelOpen ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+
+                  {isChannelOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
+                      {CHANNELS.map((channel) => (
+                        <button
+                          key={channel}
+                          type="button"
+                          onClick={() => { setConfirmChannel(channel); setIsChannelOpen(false); }}
+                          className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                            confirmChannel === channel ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
+                          }`}
+                        >
+                          <span>{channel}</span>
+                          {confirmChannel === channel && <span className="w-1.5 h-1.5 rounded-full bg-[#0055B8]" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 mt-2 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => setShowBankClaim(false)}
+                    className="px-5 py-2.5 text-xs font-bold text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+                  >
                     Cancel
                   </button>
-                  <button type="submit" className="px-5 py-2 bg-[#0055B8] text-white text-xs font-bold rounded uppercase">
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-black rounded-xl uppercase tracking-wider shadow-md transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                  >
                     Submit Claim &rarr;
                   </button>
                 </div>
