@@ -937,15 +937,21 @@ export default function HomePage() {
                           </td>
                           
                           <td className="px-5 py-4 align-middle text-center whitespace-nowrap">
-                            <span className="inline-flex items-center justify-center bg-[#F1F5F9] text-[#0055B8] border border-[#E2E8F0] px-3.5 py-1.5 rounded-xl font-bold text-xs shadow-2xs whitespace-nowrap">
+                            <div className="font-bold text-[#0F172A] text-xs">
                               {tender.categoryName}
-                            </span>
+                            </div>
+                            <div className="text-[11px] text-slate-400 font-medium mt-0.5">
+                              {tender.district}
+                            </div>
                           </td>
                           
-                          <td className="px-5 py-4 align-middle text-center whitespace-nowrap font-mono text-xs">
-                            <span className="inline-flex items-center justify-center text-[#0055B8] font-bold bg-[#F1F5F9] px-3 py-1.5 rounded-xl border border-[#E2E8F0] shadow-2xs whitespace-nowrap">
-                              {tender.endDate} ({tender.daysLeft}d left)
-                            </span>
+                          <td className="px-5 py-4 align-middle text-center whitespace-nowrap font-mono">
+                            <div className="font-mono font-bold text-[#0F172A] text-xs">
+                              {tender.endDate}
+                            </div>
+                            <div className="font-mono text-[11px] font-bold text-[#0055B8] mt-0.5">
+                              {tender.daysLeft}d left
+                            </div>
                           </td>
                           
                           <td className="px-5 py-4 align-middle font-mono font-black text-right text-[#0F172A] whitespace-nowrap text-sm">
@@ -971,7 +977,7 @@ export default function HomePage() {
                               </button>
                               <Link 
                                 href={`/tender/${tender.id}`}
-                                className="px-3.5 py-1.5 bg-[#F1F5F9] hover:bg-[#0055B8] hover:text-white text-[#0055B8] font-black text-xs rounded-xl border border-[#E2E8F0] hover:border-[#0055B8] transition-all shadow-2xs hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
+                                className="px-3.5 py-1.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-xs transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                               >
                                 Details &rarr;
                               </Link>
