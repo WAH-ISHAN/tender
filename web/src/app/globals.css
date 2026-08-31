@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+:root {
+  --primary-blue: #0055b8;
+  --primary-blue-hover: #004394;
+  --bg-card: #f3f5f8;
+  --bg-segmented: #eceef2;
+  --border-subtle: #e2e6ed;
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+}
+
+@theme inline {
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display), "Barlow Condensed", sans-serif;
+  --color-primary-blue: var(--primary-blue);
+  --color-bg-card: var(--bg-card);
+  --color-border-subtle: var(--border-subtle);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #ffffff;
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  font-weight: 800;
+}
+
+/* Unified Segmented Switcher UI matching reference */
+.segmented-bar {
+  background-color: #f1f3f7;
+  border: 1px solid #e2e6ed;
+  border-radius: 8px;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.segmented-btn {
+  padding: 8px 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #4b5563;
+  border-radius: 6px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.segmented-btn:hover:not(.active) {
+  color: #111827;
+}
+
+.segmented-btn.active {
+  background-color: #ffffff;
+  color: #0055b8;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.search-input-box {
+  background: #ffffff;
+  border: 1px solid #d9dfe7;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-input-box:focus {
+  border-color: #0055b8;
+  box-shadow: 0 0 0 3px rgba(0, 85, 184, 0.12);
+}
+
+.tender-card-standard {
+  background: #f3f5f8;
+  border-radius: 6px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 230px;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.tender-card-standard:hover {
+  transform: translateY(-2px);
+  border-color: #d9dfe7;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.tender-card-blue {
+  background: #0055b8;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 230px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tender-card-blue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 85, 184, 0.25);
+}

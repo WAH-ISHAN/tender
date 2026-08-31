@@ -1,0 +1,36 @@
+# Node dependencies
+node_modules/
+*/node_modules/
+
+# Next.js build output
+.next/
+*/.next/
+out/
+*/out/
+
+# Build artifacts
+dist/
+*/dist/
+build/
+*/build/
+
+# Environment files
+.env
+.env*.local
+*.env
+.env*
+
+# Logs & Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# TypeScript / Cache
+*.tsbuildinfo
+.turbo/
