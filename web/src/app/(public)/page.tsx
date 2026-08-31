@@ -534,30 +534,53 @@ export default function HomePage() {
     closingWindow !== "all" ||
     activePreset !== null;
 
+  const getCategoryBadgeClass = (category: string) => {
+    const lower = (category || "").toLowerCase();
+    if (lower.includes("solar") || lower.includes("energy")) {
+      return "bg-amber-50 text-amber-800 border-amber-200";
+    }
+    if (lower.includes("civil") || lower.includes("construction") || lower.includes("road") || lower.includes("culvert")) {
+      return "bg-orange-50 text-orange-800 border-orange-200";
+    }
+    if (lower.includes("it") || lower.includes("server") || lower.includes("hardware") || lower.includes("technology")) {
+      return "bg-blue-50 text-blue-800 border-blue-200";
+    }
+    if (lower.includes("health") || lower.includes("pharma") || lower.includes("medical") || lower.includes("surgical")) {
+      return "bg-emerald-50 text-emerald-800 border-emerald-200";
+    }
+    if (lower.includes("janitorial") || lower.includes("sanitation") || lower.includes("service") || lower.includes("waste")) {
+      return "bg-purple-50 text-purple-800 border-purple-200";
+    }
+    if (lower.includes("maritime") || lower.includes("port") || lower.includes("harbour")) {
+      return "bg-cyan-50 text-cyan-800 border-cyan-200";
+    }
+    return "bg-slate-100 text-slate-700 border-slate-200";
+  };
+
   return (
-    <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
-      {/* 1. eTenders STYLE HERO BANNER WITH INTEGRATED FULL SEARCH FILTER ENGINE */}
-      <section className="relative rounded-2xl overflow-hidden mb-8 shadow-xl bg-linear-to-r from-[#0055B8] via-[#0066E0] to-[#004CA3] text-white">
+      {/* 1. ELEGANT HERO BANNER WITH INTEGRATED FULL SEARCH FILTER ENGINE */}
+      <section className="relative rounded-3xl overflow-hidden mb-12 shadow-xl bg-linear-to-r from-[#0C1E4A] via-[#102A6B] to-[#0A1A40] text-white">
         
         {/* Background Lotus Tower / City Silhouette */}
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity pointer-events-none"
+          className="absolute inset-0 bg-cover bg-center opacity-15 mix-blend-luminosity pointer-events-none"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
           }}
         />
-        <div className="absolute inset-0 bg-linear-to-r from-[#004DA8]/95 via-[#005BBF]/85 to-[#004DA8]/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#081535]/95 via-[#0C2052]/85 to-[#081535]/90 pointer-events-none" />
 
-        <div className="relative z-10 px-6 sm:px-10 lg:px-12 pt-8 pb-7">
+        <div className="relative z-10 px-6 sm:px-12 py-10 sm:py-14">
           
           {/* Top Heading */}
-          <div className="mb-6 max-w-3xl">
-            <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-200 mb-1.5">
+          <div className="mb-8 max-w-3xl">
+            <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300 mb-2">
               THE LARGEST COLLECTION OF
             </div>
 
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-2.5">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
               TENDERS IN SRI LANKA
             </h1>
 
@@ -567,10 +590,10 @@ export default function HomePage() {
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
-          <div className="bg-white rounded-xl p-4 sm:p-5 shadow-2xl text-gray-900 border border-white/30">
+          <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-2xl text-slate-900 border border-slate-100">
             
             {/* Primary Search Bar */}
-            <div className="mb-3 relative" ref={searchContainerRef}>
+            <div className="mb-4 relative" ref={searchContainerRef}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -579,19 +602,19 @@ export default function HomePage() {
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-[#F8F9FB] border border-[#D9DFE7] focus:border-[#0055B8] focus:bg-white rounded-lg py-2.5 pl-4 pr-16 text-xs sm:text-sm font-semibold text-[#111827] outline-none transition-all placeholder:text-gray-400 placeholder:font-normal"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 pl-4 pr-16 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                 />
                 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                   {keyword && (
                     <button
                       onClick={() => setKeyword("")}
-                      className="text-gray-400 hover:text-gray-700 font-black text-lg mr-1"
+                      className="text-slate-400 hover:text-slate-700 font-black text-lg mr-1"
                     >
                       &times;
                     </button>
                   )}
-                  <kbd className="hidden sm:inline-block bg-gray-200 text-gray-600 text-[10px] font-mono px-1.5 py-0.5 rounded border border-gray-300">
+                  <kbd className="hidden sm:inline-block bg-slate-200 text-slate-600 text-[10px] font-mono px-1.5 py-0.5 rounded border border-slate-300">
                     /
                   </kbd>
                 </div>
@@ -599,8 +622,8 @@ export default function HomePage() {
 
               {/* On-Focus Popover */}
               {isSearchFocused && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D9DFE7] rounded-lg shadow-lg z-30 p-3 animate-fadeIn">
-                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 mb-2">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-3.5 animate-fadeIn">
+                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">
                     Recent Search Queries
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -612,7 +635,7 @@ export default function HomePage() {
                           setKeyword(term);
                           setIsSearchFocused(false);
                         }}
-                        className="bg-[#F3F5F8] hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-2.5 py-1 rounded transition-colors text-gray-700"
+                        className="bg-slate-100 hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors text-slate-700"
                       >
                         {term}
                       </button>
@@ -623,17 +646,17 @@ export default function HomePage() {
             </div>
 
             {/* 4 Core Dropdowns + Action CTA */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 mb-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-4">
               
               {/* Category */}
               <div>
-                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block mb-1.5">
                   CATEGORY
                 </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-lg py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer outline-none truncate"
                 >
                   <option value="all">All Categories ({CATEGORIES.length})</option>
                   {CATEGORIES.map((cat) => (
@@ -646,13 +669,13 @@ export default function HomePage() {
 
               {/* Province */}
               <div>
-                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block mb-1.5">
                   PROVINCE
                 </label>
                 <select
                   value={selectedProvince}
                   onChange={(e) => setSelectedProvince(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-lg py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer outline-none truncate"
                 >
                   {PROVINCES.map((prov) => (
                     <option key={prov.id} value={prov.id}>
@@ -664,13 +687,13 @@ export default function HomePage() {
 
               {/* Value Band */}
               <div>
-                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block mb-1.5">
                   VALUE BAND
                 </label>
                 <select
                   value={selectedValueBand}
                   onChange={(e) => setSelectedValueBand(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-lg py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer outline-none truncate"
                 >
                   {VALUE_BANDS.map((band) => (
                     <option key={band.id} value={band.id}>
@@ -682,13 +705,13 @@ export default function HomePage() {
 
               {/* Closing Date Window */}
               <div>
-                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block mb-1.5">
                   CLOSING DEADLINE
                 </label>
                 <select
                   value={closingWindow}
                   onChange={(e) => setClosingWindow(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-lg py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer outline-none"
                 >
                   <option value="all">Any Closing Date</option>
                   <option value="3days">Next 3 Days (Urgent)</option>
@@ -705,7 +728,7 @@ export default function HomePage() {
                     const element = document.getElementById("tender-results-section");
                     element?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-2.5 px-3 rounded-md transition-colors uppercase tracking-wider shadow-xs whitespace-nowrap"
+                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-2.5 px-4 rounded-lg transition-colors uppercase tracking-wider shadow-sm whitespace-nowrap"
                 >
                   FIND TENDERS
                 </button>
@@ -713,7 +736,7 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="h-[38px] px-3 border-2 border-[#D9DFE7] hover:bg-gray-100 text-[#374151] text-xs font-extrabold rounded-md transition-colors whitespace-nowrap"
+                    className="h-[40px] px-3.5 border-2 border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-extrabold rounded-lg transition-colors whitespace-nowrap"
                   >
                     Clear
                   </button>
@@ -723,17 +746,17 @@ export default function HomePage() {
             </div>
 
             {/* Quick Filters Row */}
-            <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-[#F1F3F7]">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#4B5563] mr-1">
+            <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mr-1">
                 QUICK FILTERS:
               </span>
               <button
                 type="button"
                 onClick={() => applyPreset("urgent")}
-                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                className={`text-xs px-3 py-1 rounded-lg border transition-colors ${
                   activePreset === "urgent"
                     ? "bg-red-600 text-white border-red-600 shadow-xs font-bold"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-150 font-medium"
                 }`}
               >
                 Closing in ≤ 7 Days
@@ -741,10 +764,10 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => applyPreset("gov")}
-                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                className={`text-xs px-3 py-1 rounded-lg border transition-colors ${
                   activePreset === "gov"
                     ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-150 font-medium"
                 }`}
               >
                 Central Government
@@ -752,10 +775,10 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => applyPreset("highValue")}
-                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                className={`text-xs px-3 py-1 rounded-lg border transition-colors ${
                   activePreset === "highValue"
                     ? "bg-emerald-700 text-white border-emerald-700 shadow-xs font-bold"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-150 font-medium"
                 }`}
               >
                 High Value (&gt; 30M LKR)
@@ -763,10 +786,10 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => applyPreset("western")}
-                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                className={`text-xs px-3 py-1 rounded-lg border transition-colors ${
                   activePreset === "western"
                     ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-150 font-medium"
                 }`}
               >
                 Western Province
@@ -778,37 +801,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+      {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT WITH AMPLE BREATHING ROOM */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
         
         {/* LEFT COLUMN: NAVIGATION & TAXONOMY */}
-        <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col gap-5 sticky top-28">
+        <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col space-y-6 sticky top-28">
           
           {/* Buyer CTA Banner */}
-          <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] text-white p-4 rounded-xl shadow-sm border border-gray-700">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-blue-300 block mb-1">
+          <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] text-white p-5 rounded-2xl shadow-sm border border-slate-700">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-blue-300 block mb-1.5">
               FOR PROCURING ENTITIES
             </span>
             <h4 className="text-sm font-black leading-tight mb-2">
               Publish Your Tenders Free
             </h4>
-            <p className="text-xs text-gray-300 mb-3 leading-relaxed">
+            <p className="text-xs text-slate-300 mb-4 leading-relaxed">
               Connect with 3,200+ verified Sri Lankan suppliers and contractors.
             </p>
             <Link
               href="/register"
-              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2 px-3 rounded uppercase tracking-wider transition-colors shadow-xs"
+              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2.5 px-3 rounded-lg uppercase tracking-wider transition-colors shadow-xs"
             >
               + Post Tender Notice
             </Link>
           </div>
 
           {/* Fixed Value Band Filter */}
-          <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-3.5 rounded-xl">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#4B5563] block mb-2">
+          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-xs">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-3">
               VALUE BANDS
             </span>
-            <div className="flex flex-col gap-1 text-xs font-semibold text-[#374151]">
+            <div className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700">
               {VALUE_BANDS.map((band) => {
                 const isSelected = selectedValueBand === band.id;
                 return (
@@ -816,10 +839,10 @@ export default function HomePage() {
                     key={band.id}
                     type="button"
                     onClick={() => setSelectedValueBand(band.id)}
-                    className={`py-1.5 px-2.5 rounded text-left flex items-center justify-between transition-colors ${
+                    className={`py-2 px-3 rounded-lg text-left flex items-center justify-between transition-colors ${
                       isSelected
                         ? "bg-[#0055B8] text-white font-bold shadow-xs"
-                        : "hover:bg-gray-200"
+                        : "hover:bg-slate-100 text-slate-700"
                     }`}
                   >
                     <span>{band.name}</span>
@@ -830,22 +853,22 @@ export default function HomePage() {
           </div>
 
           {/* Categories Taxonomy */}
-          <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-3.5 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-[#4B5563]">
+          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-xs">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
                 CATEGORIES
               </span>
-              <span className="text-[11px] text-gray-400 font-mono">39,942</span>
+              <span className="text-[11px] text-slate-400 font-mono">39,942</span>
             </div>
 
-            <nav className="flex flex-col gap-1 text-xs text-[#374151]">
+            <nav className="flex flex-col gap-1.5 text-xs text-slate-700">
               <button
                 type="button"
                 onClick={() => setSelectedCategory("all")}
-                className={`py-1.5 px-2.5 rounded text-left flex items-center justify-between transition-colors ${
+                className={`py-2 px-3 rounded-lg text-left flex items-center justify-between transition-colors ${
                   selectedCategory === "all"
                     ? "bg-[#0055B8] text-white font-bold shadow-xs"
-                    : "hover:bg-gray-200 font-semibold"
+                    : "hover:bg-slate-100 font-semibold"
                 }`}
               >
                 <span>All Categories</span>
@@ -856,14 +879,14 @@ export default function HomePage() {
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`py-1.5 px-2.5 rounded text-left flex items-center justify-between transition-colors ${
+                  className={`py-2 px-3 rounded-lg text-left flex items-center justify-between transition-colors ${
                     selectedCategory === cat.id
                       ? "bg-[#0055B8] text-white font-bold shadow-xs"
-                      : "hover:bg-gray-200 font-semibold"
+                      : "hover:bg-slate-100 font-semibold text-slate-700"
                   }`}
                 >
                   <span className="truncate pr-1">{cat.name}</span>
-                  <span className="opacity-80 font-mono text-[11px]">{cat.count}</span>
+                  <span className="opacity-70 font-mono text-[11px]">{cat.count}</span>
                 </button>
               ))}
             </nav>
@@ -871,11 +894,11 @@ export default function HomePage() {
 
         </aside>
 
-        {/* RIGHT COLUMN: DIRECT TENDER RESULTS (NO DUPLICATE SEARCH BAR) */}
+        {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-10">
           
           {/* Breadcrumb Navigation */}
-          <nav className="text-xs font-medium text-gray-500 mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
+          <nav className="text-xs font-medium text-slate-400 mb-4 flex items-center gap-1.5" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-[#0055B8]">Home</Link>
             <span>&rsaquo;</span>
             <span>Procurement Gazettes</span>
@@ -884,28 +907,28 @@ export default function HomePage() {
           </nav>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
-          <section id="tender-results-section" className="mb-5">
-            <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-[#E2E6ED]">
+          <section id="tender-results-section" className="mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
               
               <div className="flex items-baseline gap-3">
-                <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                   Tender Notices ({filteredTenders.length})
                 </h3>
-                <span className="text-xs text-gray-500 font-medium hidden sm:inline">
+                <span className="text-xs text-slate-500 font-medium hidden sm:inline">
                   Verified procurement publications
                 </span>
               </div>
 
-              {/* View Switcher, Density Switcher & Sort Selector */}
-              <div className="flex items-center gap-2">
+              {/* View Switcher & Sort Selector */}
+              <div className="flex items-center gap-2.5">
                 
                 {/* View Switcher */}
-                <div className="flex bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
+                <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
                   <button
                     type="button"
                     onClick={() => setViewMode("cards")}
-                    className={`px-3 py-1 text-xs font-bold rounded transition-all ${
-                      viewMode === "cards" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+                    className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
+                      viewMode === "cards" ? "bg-white text-[#0055B8] shadow-xs" : "text-slate-600 hover:text-black"
                     }`}
                   >
                     Grid Cards
@@ -913,8 +936,8 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={() => setViewMode("list")}
-                    className={`px-3 py-1 text-xs font-bold rounded transition-all ${
-                      viewMode === "list" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+                    className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
+                      viewMode === "list" ? "bg-white text-[#0055B8] shadow-xs" : "text-slate-600 hover:text-black"
                     }`}
                   >
                     Dense List
@@ -925,7 +948,7 @@ export default function HomePage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-white border border-[#D9DFE7] rounded px-3 py-1.5 text-xs font-semibold text-[#111827] outline-none"
+                  className="bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none shadow-2xs cursor-pointer"
                 >
                   <option value="closing">Sort: Closing Soonest</option>
                   <option value="newest">Sort: Newly Published</option>
@@ -938,28 +961,31 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* 5. RESULTS DISPLAY: PROFESSIONAL HUMAN-DESIGNED CARDS OR TABLE */}
+          {/* 5. RESULTS DISPLAY: COLOR-CODED SPACIOUS CARDS OR TABLE */}
           {viewMode === "cards" ? (
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-12">
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
               {filteredTenders.map((tender) => {
                 const isSaved = savedTenders.has(tender.id);
+                const categoryClass = getCategoryBadgeClass(tender.categoryName);
 
                 return (
                   <article
                     key={tender.id}
                     onClick={() => { setQuickViewTender(tender); setDrawerTab("overview"); }}
-                    className="bg-white border border-[#D9DFE7] hover:border-[#0055B8] rounded-lg p-5 flex flex-col justify-between transition-all hover:shadow-sm cursor-pointer group"
+                    className="bg-white border border-slate-200/90 hover:border-[#0055B8] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer group min-h-[300px]"
                   >
                     <div>
                       {/* Top Authority & Urgency Row */}
-                      <div className="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-gray-100 text-xs">
-                        <span className="font-bold text-[#0055B8] uppercase tracking-wide truncate">
+                      <div className="flex items-center justify-between gap-2 pb-3 mb-3.5 border-b border-slate-100 text-xs">
+                        <span className="font-extrabold text-[#0055B8] uppercase tracking-wide truncate text-[11px]">
                           {tender.entity}
                         </span>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                          <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                             tender.daysLeft <= 3
                               ? "bg-red-50 text-red-700 border border-red-200"
+                              : tender.daysLeft <= 7
+                              ? "bg-amber-50 text-amber-800 border border-amber-200"
                               : "bg-emerald-50 text-emerald-800 border border-emerald-200"
                           }`}>
                             {tender.daysLeft}d left
@@ -968,7 +994,7 @@ export default function HomePage() {
                             type="button"
                             onClick={(e) => toggleBookmark(e, tender.id)}
                             title={isSaved ? "Remove from watchlist" : "Save to watchlist"}
-                            className="text-gray-400 hover:text-amber-500 font-bold px-1"
+                            className="text-slate-300 hover:text-amber-500 font-bold px-1 transition-colors"
                           >
                             {isSaved ? "★" : "☆"}
                           </button>
@@ -976,36 +1002,36 @@ export default function HomePage() {
                       </div>
 
                       {/* Main Title */}
-                      <h4 className="text-[15px] font-bold text-gray-900 leading-snug mb-3 group-hover:text-[#0055B8] transition-colors line-clamp-2">
+                      <h4 className="text-[15px] font-bold text-slate-900 leading-snug mb-3.5 group-hover:text-[#0055B8] transition-colors line-clamp-2">
                         {tender.title}
                       </h4>
 
-                      {/* Key Meta Badges */}
-                      <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-gray-600 mb-4">
-                        <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-medium">
+                      {/* Color-Coded Key Meta Badges */}
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] mb-4">
+                        <span className={`px-2.5 py-0.5 rounded-md border font-semibold ${categoryClass}`}>
                           {tender.categoryName}
                         </span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-medium">
+                        <span className="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md font-medium border border-slate-200">
                           {tender.district}
                         </span>
-                        <span className="text-gray-400 font-mono text-[10px]">
+                        <span className="text-slate-400 font-mono text-[10px]">
                           Ref: {tender.ref}
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Budget & Action */}
-                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+                    <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between mt-2">
                       <div>
-                        <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">
                           Budget Estimate
                         </div>
-                        <div className="text-base font-black text-gray-900 font-mono">
+                        <div className="text-base font-black text-slate-900 font-mono">
                           {tender.amount}
                         </div>
                       </div>
                       
-                      <span className="text-xs font-bold text-[#0055B8] group-hover:underline flex items-center gap-1">
+                      <span className="text-xs font-bold text-[#0055B8] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                         View Details &rarr;
                       </span>
                     </div>
@@ -1015,54 +1041,61 @@ export default function HomePage() {
             </section>
           ) : (
             /* DENSE TABLE VIEW */
-            <section className="bg-white border border-[#D9DFE7] rounded-lg overflow-hidden mb-12 shadow-2xs">
+            <section className="bg-white border border-slate-200 rounded-2xl overflow-hidden mb-16 shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="bg-[#F8F9FB] border-b border-[#D9DFE7] text-gray-600 font-bold uppercase tracking-wider text-[11px]">
+                  <thead className="bg-[#F8FAFC] border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
                     <tr>
-                      <th className="px-4 py-3">Procuring Entity &amp; Ref</th>
-                      <th className="px-4 py-3">Tender Title</th>
-                      <th className="px-4 py-3">Category</th>
-                      <th className="px-4 py-3">Closing Date</th>
-                      <th className="px-4 py-3 text-right">Value (LKR)</th>
-                      <th className="px-4 py-3 text-center">Action</th>
+                      <th className="px-5 py-3.5">Procuring Entity &amp; Ref</th>
+                      <th className="px-5 py-3.5">Tender Title</th>
+                      <th className="px-5 py-3.5">Category</th>
+                      <th className="px-5 py-3.5">Closing Date</th>
+                      <th className="px-5 py-3.5 text-right">Value (LKR)</th>
+                      <th className="px-5 py-3.5 text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 font-medium text-gray-900">
+                  <tbody className="divide-y divide-slate-200 font-medium text-slate-900">
                     {filteredTenders.map((tender) => {
                       const isSaved = savedTenders.has(tender.id);
+                      const categoryClass = getCategoryBadgeClass(tender.categoryName);
                       return (
                         <tr 
                           key={tender.id}
                           onClick={() => { setQuickViewTender(tender); setDrawerTab("overview"); }}
                           className="hover:bg-blue-50/40 cursor-pointer transition-colors"
                         >
-                          <td className="px-4 py-3">
+                          <td className="px-5 py-3.5">
                             <div className="font-bold text-[#0055B8]">{tender.entity}</div>
-                            <div className="text-[11px] text-gray-500 font-mono">{tender.ref}</div>
+                            <div className="text-[11px] text-slate-400 font-mono">{tender.ref}</div>
                           </td>
-                          <td className="px-4 py-3 font-bold text-gray-900 max-w-sm">
+                          <td className="px-5 py-3.5 font-bold text-slate-900 max-w-sm">
                             {tender.title}
                           </td>
-                          <td className="px-4 py-3 text-xs text-gray-600">
-                            <span className="bg-gray-100 px-2 py-0.5 rounded text-[11px]">
+                          <td className="px-5 py-3.5 text-xs">
+                            <span className={`px-2.5 py-0.5 rounded-md border font-semibold text-[11px] ${categoryClass}`}>
                               {tender.categoryName}
                             </span>
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap font-mono text-xs">
-                            <span className={tender.daysLeft <= 3 ? "text-red-700 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200" : "text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"}>
+                          <td className="px-5 py-3.5 whitespace-nowrap font-mono text-xs">
+                            <span className={
+                              tender.daysLeft <= 3 
+                                ? "text-red-700 font-bold bg-red-50 px-2.5 py-0.5 rounded-full border border-red-200" 
+                                : tender.daysLeft <= 7
+                                ? "text-amber-800 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200"
+                                : "text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200"
+                            }>
                               {tender.endDate} ({tender.daysLeft}d left)
                             </span>
                           </td>
-                          <td className="px-4 py-3 font-mono font-black text-right text-gray-900 whitespace-nowrap">
+                          <td className="px-5 py-3.5 font-mono font-black text-right text-slate-900 whitespace-nowrap">
                             {tender.amount}
                           </td>
-                          <td className="px-4 py-3 text-center whitespace-nowrap">
+                          <td className="px-5 py-3.5 text-center whitespace-nowrap">
                             <div className="flex items-center justify-center gap-2">
                               <button
                                 type="button"
                                 onClick={(e) => toggleBookmark(e, tender.id)}
-                                className="text-gray-400 hover:text-amber-500 font-bold"
+                                className="text-slate-300 hover:text-amber-500 font-bold transition-colors"
                               >
                                 {isSaved ? "★" : "☆"}
                               </button>
