@@ -75,6 +75,43 @@ export default function HomePage() {
   // Modern Dropdown State
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
+  // Dynamic Typing Search Animation
+  const TYPING_SUGGESTIONS = [
+    "Search by tender title, procuring entity, reference code, or keywords...",
+    "Try 'Civil Construction & Road Infrastructure'...",
+    "Try 'Solar Power & Renewable Energy Parks'...",
+    "Try 'Enterprise Server IT & Hardware'...",
+    "Try 'Medical & Hospital Pharmaceutical Supplies'...",
+    "Try 'Registration of Verified Suppliers 2026'...",
+  ];
+  const [typingIndex, setTypingIndex] = useState(0);
+  const [displayedPlaceholder, setDisplayedPlaceholder] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentText = TYPING_SUGGESTIONS[typingIndex];
+    let timer: NodeJS.Timeout;
+
+    if (!isDeleting && displayedPlaceholder === currentText) {
+      timer = setTimeout(() => setIsDeleting(true), 2400);
+    } else if (isDeleting && displayedPlaceholder === "") {
+      setIsDeleting(false);
+      setTypingIndex((prev) => (prev + 1) % TYPING_SUGGESTIONS.length);
+    } else {
+      const speed = isDeleting ? 20 : 40;
+      timer = setTimeout(() => {
+        setDisplayedPlaceholder(
+          currentText.substring(
+            0,
+            displayedPlaceholder.length + (isDeleting ? -1 : 1)
+          )
+        );
+      }, speed);
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayedPlaceholder, isDeleting, typingIndex]);
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const filterBarRef = useRef<HTMLDivElement>(null);
@@ -253,12 +290,19 @@ export default function HomePage() {
         <div className="relative z-10 px-6 sm:px-12 lg:px-20 py-20 sm:py-28 lg:py-32">
           
           {/* Top Hero Header (Grand Scale) */}
-          <div className="max-w-5xl mb-12 sm:mb-16">
-            <div className="flex items-center gap-3 mb-3.5">
-              <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-sm" />
-              <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
-                {t("heroSubtitle")}
-              </span>
+          <div className="max-w-5xl mb-10 sm:mb-12">
+            
+            {/* Top Verification Beacon */}
+            <div className="mb-4">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+                </span>
+                <span className="text-[11px] font-black uppercase tracking-widest text-blue-200">
+                  {t("heroSubtitle")}
+                </span>
+              </div>
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.02] mb-5">
@@ -279,7 +323,7 @@ export default function HomePage() {
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder={t("searchPlaceholder")}
+                  placeholder={language === "en" ? (displayedPlaceholder || t("searchPlaceholder")) : t("searchPlaceholder")}
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
