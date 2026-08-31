@@ -396,7 +396,7 @@ export default function HomePage() {
       textZoom === "large" ? "text-[110%]" : textZoom === "xl" ? "text-[120%]" : "text-[100%]"
     }`}>
       
-      {/* 1. TOP INSTITUTIONAL STATUS STRIP (With Generous Margins) */}
+      {/* 1. TOP INSTITUTIONAL STATUS STRIP */}
       <header className="flex flex-wrap items-center justify-between text-xs pb-4 mb-8 border-b border-[#E2E6ED] gap-4">
         <div className="flex items-center gap-2.5 text-[#374151]">
           <span className="text-[#0055B8] font-extrabold uppercase tracking-wider">NATIONAL PROCUREMENT GAZETTE</span>
@@ -455,58 +455,12 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. HIGH-IMPACT SRI LANKA PROCUREMENT STATS RIBBON */}
-      <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-5 mb-10">
-        <div className="bg-[#0055B8] text-white p-5 rounded-xl shadow-xs flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-wider text-blue-200 font-extrabold">Total Tender Archive</span>
-          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black mt-2 mb-1">39,942+</span>
-          <span className="text-xs text-blue-100 opacity-90">National Gazette Database</span>
-        </div>
-
-        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-5 rounded-xl shadow-2xs flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-wider text-[#4B5563] font-extrabold">Live Active Tenders</span>
-          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#0055B8] mt-2 mb-1">366</span>
-          <span className="text-xs text-gray-500 font-semibold">Open for Bidding Today</span>
-        </div>
-
-        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-5 rounded-xl shadow-2xs flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-wider text-red-600 font-extrabold">Closing This Week</span>
-          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-red-600 mt-2 mb-1">41</span>
-          <span className="text-xs text-gray-500 font-semibold">Urgent Deadlines</span>
-        </div>
-
-        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-5 rounded-xl shadow-2xs flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-wider text-emerald-800 font-extrabold">Verified Suppliers</span>
-          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-800 mt-2 mb-1">3,217+</span>
-          <span className="text-xs text-gray-500 font-semibold">Registered Contractors</span>
-        </div>
-      </section>
-
-      {/* 3. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
+      {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
-        {/* LEFT COLUMN: NAVIGATION + BUYER CTA */}
+        {/* LEFT COLUMN: NAVIGATION */}
         <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col gap-6 sticky top-28">
           
-          {/* Buyer CTA Banner */}
-          <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] text-white p-4 sm:p-5 rounded-xl shadow-sm border border-gray-700">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-blue-300 block mb-1">
-              FOR PROCURING ENTITIES
-            </span>
-            <h4 className="text-sm font-black leading-tight mb-2">
-              Publish Your Tenders Free
-            </h4>
-            <p className="text-xs text-gray-300 mb-3.5 leading-relaxed">
-              Connect with 3,200+ verified Sri Lankan suppliers and contractors.
-            </p>
-            <Link
-              href="/contact-us"
-              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2.5 px-3 rounded uppercase tracking-wider transition-colors shadow-xs"
-            >
-              + Post Tender Notice
-            </Link>
-          </div>
-
           {/* Section A: Document Hierarchy */}
           <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-4 rounded-xl">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#4B5563] block mb-2.5">
@@ -652,7 +606,7 @@ export default function HomePage() {
             </p>
           </section>
 
-          {/* 4. WORKSPACE SEARCH PANEL */}
+          {/* 3. WORKSPACE SEARCH PANEL */}
           <section className="bg-white border-2 border-[#E2E6ED] rounded-xl p-6 lg:p-7 mb-10 shadow-xs">
             
             {/* Primary Search Bar */}
@@ -915,7 +869,7 @@ export default function HomePage() {
 
           </section>
 
-          {/* 5. RESULTS HEADER & CONTROLS */}
+          {/* 4. RESULTS HEADER & CONTROLS */}
           <section className="mb-8">
             
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E2E6ED]">
@@ -1024,7 +978,7 @@ export default function HomePage() {
 
           </section>
 
-          {/* 6. RESULTS DISPLAY: CARDS VIEW OR DENSE TABLE VIEW */}
+          {/* 5. RESULTS DISPLAY: CARDS VIEW OR DENSE TABLE VIEW */}
           {viewMode === "cards" ? (
             /* CARDS VIEW */
             <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-7 mb-16">
@@ -1250,7 +1204,7 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* 7. CLEAN EUROPEAN NUMERIC PAGINATION */}
+          {/* 6. CLEAN EUROPEAN NUMERIC PAGINATION */}
           {filteredTenders.length > 0 && (
             <footer className="flex items-center justify-between pt-8 border-t-2 border-[#E2E6ED] text-sm font-bold text-gray-700">
               <div className="text-gray-500 font-medium">
@@ -1273,7 +1227,7 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* 8. QUICK VIEW SLIDE-OVER DRAWER */}
+      {/* 7. QUICK VIEW SLIDE-OVER DRAWER */}
       {quickViewTender && (
         <div 
           className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex justify-end animate-fadeIn"
