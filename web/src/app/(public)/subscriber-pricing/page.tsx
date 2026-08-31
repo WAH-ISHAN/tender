@@ -12,9 +12,6 @@ export default function PricingPage() {
       
       {/* Header */}
       <header className="mb-10 text-center max-w-3xl mx-auto">
-        <span className="text-xs font-extrabold uppercase tracking-widest text-[#0055B8] bg-blue-50 border border-blue-200 px-3 py-1 rounded-full mb-3 inline-block">
-          TENDERHUB SRI LANKA · PLANS &amp; ENTITLEMENTS (§ 08 &amp; § 16)
-        </span>
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-[#0F172A] uppercase tracking-tight mb-3">
           TRANSPARENT PLANS FOR BIDDERS &amp; BUYERS
         </h1>
