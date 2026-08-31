@@ -34,18 +34,8 @@ interface TenderItem {
   hasDocuments?: boolean;
   docCount?: number;
   description: string;
-  // Auction specific fields (§ 14)
   isAuction?: boolean;
-  assetClass?: "Land & Property" | "Commercial Real Estate" | "Fleet & Heavy Machinery" | "Industrial Scrap";
-  reservePrice?: string;
-  depositRequired?: string;
-  auctionMethod?: "Parate Execution" | "Mortgage Foreclosure" | "Vehicle Recovery" | "State Disposal";
-  auctionVenue?: string;
-  // Award specific fields (§ 20)
   isAwarded?: boolean;
-  winningSupplier?: string;
-  awardedValue?: string;
-  standstillDaysLeft?: number;
 }
 
 const CATEGORIES: Category[] = [
@@ -253,99 +243,9 @@ const TENDERS_DATA: TenderItem[] = [
     docCount: 1,
     description: "Daily hygiene sanitation, waste disposal, and facility maintenance for the 5-story Provincial Secretariat Complex.",
   },
-  {
-    id: "AUC-COMBANK-2026-09",
-    ref: "AUC/CB/2026/09",
-    title: "Public Auction of Prime Commercial Real Estate under Parate Execution",
-    entity: "Commercial Bank of Ceylon PLC",
-    province: "western",
-    district: "Colombo",
-    location: "Kollupitiya, Colombo 03",
-    source: "Daily News & Government Gazette",
-    startDate: "25.08.2026",
-    endDate: "18.10.2026",
-    daysLeft: 8,
-    contractType: "Parate Auction",
-    instrumentType: "Auction",
-    sector: "private",
-    categoryId: "construction",
-    categoryName: "Commercial Real Estate",
-    valueBand: "100M-500M",
-    amount: "Reserve: LKR 145,000,000",
-    amountNumeric: 145000000,
-    bidBond: "LKR 14,500,000 (10% Deposit)",
-    isPromoted: true,
-    isAuction: true,
-    assetClass: "Commercial Real Estate",
-    reservePrice: "LKR 145,000,000",
-    depositRequired: "LKR 14,500,000 (10%)",
-    auctionMethod: "Parate Execution",
-    auctionVenue: "Commercial Bank Head Office Auditorium, Colombo 01",
-    description: "Auction of 3-story commercial building on 24.5 perches prime road frontage under Section 4 of Recovery of Loans by Banks (Special Provisions) Act.",
-  },
-  {
-    id: "AUC-SLTB-FLEET-26",
-    ref: "AUC/SLTB/26/02",
-    title: "Disposal Auction of 42 Decommissioned Heavy Diesel Buses & Spares",
-    entity: "Sri Lanka Transport Board (SLTB)",
-    province: "western",
-    district: "Gampaha",
-    location: "Werellawatta Central Workshop, Gampaha",
-    source: "Dinamina & Silumina",
-    startDate: "01.09.2026",
-    endDate: "05.10.2026",
-    daysLeft: 4,
-    contractType: "State Disposal Auction",
-    instrumentType: "Auction",
-    sector: "government",
-    categoryId: "vehicles",
-    categoryName: "Vehicles & Heavy Machinery",
-    valueBand: "5M-25M",
-    amount: "Reserve: LKR 22,000,000",
-    amountNumeric: 22000000,
-    bidBond: "LKR 2,200,000 (10% Deposit)",
-    isPromoted: false,
-    isUrgent: true,
-    isAuction: true,
-    assetClass: "Fleet & Heavy Machinery",
-    reservePrice: "LKR 22,000,000",
-    depositRequired: "LKR 2,200,000 (10%)",
-    auctionMethod: "State Disposal",
-    auctionVenue: "Werellawatta SLTB Central Yard",
-    description: "Public disposal of 42 Leyland Viking buses, engine assemblies, and transmission scrap by open outcry auction.",
-  },
-  {
-    id: "AWD-CEB-2026-081",
-    ref: "AWD/CEB/2026/081",
-    title: "Awarded: Grid Substation Transformer Augmentation Phase II",
-    entity: "Ceylon Electricity Board (CEB)",
-    province: "central",
-    district: "Kandy",
-    location: "Polpitiya Complex, Central Province",
-    source: "Government Gazette Archive",
-    startDate: "01.06.2026",
-    endDate: "01.08.2026",
-    daysLeft: 0,
-    contractType: "Completed Public Award",
-    instrumentType: "Tender",
-    sector: "government",
-    categoryId: "electrical",
-    categoryName: "Electrical & Power Systems",
-    valueBand: "100M-500M",
-    amount: "Award: LKR 312,000,000",
-    amountNumeric: 312000000,
-    bidBond: "Completed",
-    isAwarded: true,
-    winningSupplier: "Lanka Transformers Limited (LTL)",
-    awardedValue: "LKR 312,000,000",
-    standstillDaysLeft: 0,
-    description: "Official award notification. Evaluation completed by Standing Cabinet Appointed Procurement Committee (SCAPC). Standstill challenge window expired without dispute.",
-  }
 ];
 
 export default function HomePage() {
-  const [domainMode, setDomainMode] = useState<"tenders" | "auctions" | "awards">("tenders");
-
   // Search & Filter State
   const [keyword, setKeyword] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -354,39 +254,19 @@ export default function HomePage() {
   const [selectedValueBand, setSelectedValueBand] = useState<string>("all");
   const [selectedSource, setSelectedSource] = useState<string>("all");
   const [closingWindow, setClosingWindow] = useState<string>("all");
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const [sectorFilter, setSectorFilter] = useState<"all" | "government" | "private" | "donor">("all");
   const [sortBy, setSortBy] = useState("closing");
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
-  // Density Toggle (§ 24)
+  // Density & View Mode
   const [density, setDensity] = useState<"comfortable" | "compact">("comfortable");
-
-  // View Switcher
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
-
-  // Accessibility Font Scaler
   const [textZoom, setTextZoom] = useState<"normal" | "large" | "xl">("normal");
 
   // Interactive Tools
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
   const [quickViewTender, setQuickViewTender] = useState<TenderItem | null>(null);
-  const [alertDays, setAlertDays] = useState<number | null>(null);
   const [copiedRef, setCopiedRef] = useState<string | null>(null);
-
-  // 5 Free Notice Views Counter
-  const [freeViewsLeft, setFreeViewsLeft] = useState(4);
-
-  // Modals
-  const [showBankClaimModal, setShowBankClaimModal] = useState(false);
-  const [showWorkspaceDemoModal, setShowWorkspaceDemoModal] = useState(false);
-  const [showEvidencePackModal, setShowEvidencePackModal] = useState(false);
-  const [showESubmissionReceiptModal, setShowESubmissionReceiptModal] = useState(false);
-  const [showAdminConsoleModal, setShowAdminConsoleModal] = useState(false);
-
-  // Dual-Control Ceremony Simulation State
-  const [ceremonyStage, setCeremonyStage] = useState<"sealed" | "started" | "opened">("sealed");
-  const [hasCOIDeclared, setHasCOIDeclared] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -409,11 +289,6 @@ export default function HomePage() {
       } else if (e.key === "Escape") {
         if (quickViewTender) setQuickViewTender(null);
         if (isSearchFocused) setIsSearchFocused(false);
-        setShowBankClaimModal(false);
-        setShowWorkspaceDemoModal(false);
-        setShowEvidencePackModal(false);
-        setShowESubmissionReceiptModal(false);
-        setShowAdminConsoleModal(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -460,10 +335,6 @@ export default function HomePage() {
 
   const filteredTenders = useMemo(() => {
     let result = TENDERS_DATA.filter((item) => {
-      if (domainMode === "auctions" && !item.isAuction) return false;
-      if (domainMode === "awards" && !item.isAwarded) return false;
-      if (domainMode === "tenders" && (item.isAuction || item.isAwarded)) return false;
-
       const matchKeyword =
         keyword === "" ||
         item.title.toLowerCase().includes(keyword.toLowerCase()) ||
@@ -509,7 +380,7 @@ export default function HomePage() {
     }
 
     return result;
-  }, [domainMode, keyword, selectedCategory, selectedProvince, selectedValueBand, sectorFilter, closingWindow, sortBy, activePreset]);
+  }, [keyword, selectedCategory, selectedProvince, selectedValueBand, sectorFilter, closingWindow, sortBy, activePreset]);
 
   const handleReset = () => {
     setKeyword("");
@@ -537,183 +408,115 @@ export default function HomePage() {
       textZoom === "large" ? "text-[110%]" : textZoom === "xl" ? "text-[120%]" : "text-[100%]"
     }`}>
       
-      {/* 1. CLEAN HIGH-PRECISION INSTITUTIONAL HEADER BAR */}
-      <header className="bg-white border-b-2 border-[#E2E6ED] pb-4 mb-7 flex flex-wrap items-center justify-between gap-4">
-        
-        {/* Left: National Identity */}
-        <div className="flex flex-wrap items-center gap-3 text-xs text-[#374151]">
-          <span className="font-extrabold uppercase tracking-widest text-[#0055B8] flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-            NATIONAL PROCUREMENT &amp; GAZETTE DIRECTORY
-          </span>
+      {/* 1. TOP INSTITUTIONAL STATUS STRIP */}
+      <header className="flex flex-wrap items-center justify-between text-xs pb-3.5 mb-6 border-b border-[#E2E6ED] gap-4">
+        <div className="flex items-center gap-2.5 text-[#374151]">
+          <span className="text-[#0055B8] font-extrabold uppercase tracking-wider">NATIONAL PROCUREMENT GAZETTE</span>
           <span className="text-gray-300">|</span>
-          <span className="font-mono font-bold text-gray-700">Issue No. 2,426</span>
+          <span className="font-semibold">Issue No. 2,426</span>
           <span className="text-gray-300">|</span>
-          <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200 uppercase text-[11px]">
+          <span className="text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 uppercase tracking-wider text-[11px]">
             Verified Daily
           </span>
         </div>
 
-        {/* Right: Live Meta Actions & Font Scaler */}
-        <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[#374151]">
-          
-          <div className="flex items-center gap-2 bg-blue-50/80 border border-blue-200 px-3 py-1 rounded-md text-[#0055B8]">
-            <span>Free Views:</span>
-            <strong className="font-mono text-emerald-800">{freeViewsLeft} / 5</strong>
-            <button 
-              onClick={() => setShowBankClaimModal(true)}
-              className="text-[11px] underline hover:text-blue-900 font-bold ml-1"
-            >
-              Upgrade
-            </button>
-          </div>
-
-          <span className="text-gray-300 hidden sm:inline">|</span>
-
-          <span className="hidden md:inline text-gray-600">
-            Hotline: <strong className="text-gray-900">+94 11 278 5141</strong>
-          </span>
-
-          <span className="text-gray-300 hidden sm:inline">|</span>
+        <div className="flex items-center gap-5 text-[#374151]">
+          <span className="text-gray-600 font-medium">Hotline: <strong className="text-gray-900">+94 11 278 5141</strong></span>
+          <span className="text-gray-300">|</span>
+          {savedTenders.size > 0 && (
+            <>
+              <span className="text-[#0055B8] font-bold">★ {savedTenders.size} Saved</span>
+              <span className="text-gray-300">|</span>
+            </>
+          )}
 
           {/* Accessibility Font Scaler */}
-          <div className="flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
-            <span className="text-[10px] font-bold text-gray-500 px-1.5 uppercase">Text:</span>
+          <div className="hidden sm:flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
+            <span className="text-[11px] font-bold text-gray-500 px-2 uppercase tracking-wider">Text Size:</span>
             <button
               type="button"
               onClick={() => setTextZoom("normal")}
-              className={`px-2 py-0.5 text-xs font-bold rounded ${textZoom === "normal" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
+              title="Standard Font Size"
+              className={`px-2 py-0.5 text-xs font-bold rounded ${
+                textZoom === "normal" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+              }`}
             >
               A
             </button>
             <button
               type="button"
               onClick={() => setTextZoom("large")}
-              className={`px-2 py-0.5 text-xs font-bold rounded ${textZoom === "large" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
+              title="Large Font Size (+10%)"
+              className={`px-2 py-0.5 text-xs font-bold rounded ${
+                textZoom === "large" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+              }`}
             >
               A+
             </button>
             <button
               type="button"
               onClick={() => setTextZoom("xl")}
-              className={`px-2 py-0.5 text-xs font-bold rounded ${textZoom === "xl" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
+              title="Extra Large Font Size (+20%)"
+              className={`px-2 py-0.5 text-xs font-bold rounded ${
+                textZoom === "xl" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+              }`}
             >
               A++
             </button>
           </div>
-
         </div>
       </header>
 
-      {/* 2. COMPLETELY REDESIGNED LIGHT & CRISP COMMAND HERO */}
-      <section className="bg-[#F8F9FB] border-2 border-[#E2E6ED] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          
-          {/* Left Title & Purpose */}
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded">
-                OFFICIAL REPOSITORY
-              </span>
-              <span className="text-xs font-bold text-gray-500 font-mono">
-                SRI LANKA PROCUREMENT DATABASE
-              </span>
-            </div>
+      {/* 2. CINEMATIC HERO BANNER (Clean, High-Contrast Industrial Layout Without Any Cluttering Tags) */}
+      <section className="relative rounded-2xl overflow-hidden mb-10 shadow-lg border border-slate-800 bg-[#0A1128] text-white">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity scale-105"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
+          }}
+        />
+        <div className="absolute inset-0 bg-linear-to-r from-[#070F26] via-[#0A193F]/90 to-[#070F26]/95" />
 
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-[#0F172A] tracking-tight uppercase leading-[1.05] mb-2.5">
-              TENDERS, COMMERCIAL RFPS &amp; AUCTIONS
-            </h1>
+        <div className="relative z-10 px-6 sm:px-12 py-10 sm:py-16 max-w-4xl">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.05] mb-4">
+            FIND GOVERNMENT &amp; COMMERCIAL TENDERS
+          </h1>
 
-            <p className="text-sm sm:text-base text-[#4B5563] font-medium leading-relaxed mb-4">
-              Real-time daily gazette tenders, ministry purchases, parate foreclosure auctions, and verified committee award decisions across all 9 provinces.
-            </p>
-
-            {/* 3 Domain Pill Switcher (§ 11 & § 14) */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <button
-                type="button"
-                onClick={() => setDomainMode("tenders")}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                  domainMode === "tenders"
-                    ? "bg-[#0055B8] text-white shadow-sm font-black"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                📋 Tenders Catalogue (366 Live)
-              </button>
-              <button
-                type="button"
-                onClick={() => setDomainMode("auctions")}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                  domainMode === "auctions"
-                    ? "bg-amber-600 text-white shadow-sm font-black"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                🔨 Auctions &amp; Parate Lots (2)
-              </button>
-              <button
-                type="button"
-                onClick={() => setDomainMode("awards")}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                  domainMode === "awards"
-                    ? "bg-emerald-700 text-white shadow-sm font-black"
-                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                🏆 Awards Archive (Past Standstill)
-              </button>
-            </div>
-          </div>
-
-          {/* Right Live Operational Pulse Badges */}
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 min-w-[260px]">
-            <div className="bg-white border border-[#E2E6ED] p-3 rounded-lg shadow-2xs flex items-center justify-between">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Live Open Notices</span>
-              <span className="font-mono font-black text-xl text-[#0055B8]">366</span>
-            </div>
-            <div className="bg-white border border-[#E2E6ED] p-3 rounded-lg shadow-2xs flex items-center justify-between">
-              <span className="text-xs font-bold text-red-600 uppercase tracking-wider">Closing In ≤ 7 Days</span>
-              <span className="font-mono font-black text-xl text-red-600">41</span>
-            </div>
-            <div className="bg-white border border-[#E2E6ED] p-3 rounded-lg shadow-2xs flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Verified Suppliers</span>
-              <span className="font-mono font-black text-xl text-emerald-800">3,217+</span>
-            </div>
-          </div>
-
+          <p className="text-sm sm:text-base text-gray-200 font-medium leading-relaxed max-w-2xl">
+            Real-time procurement gazettes, ministry purchases, and commercial RFPs across all 9 provinces. Direct specifications, BOQ documents, and deadline alerts.
+          </p>
         </div>
       </section>
 
       {/* 3. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
         
-        {/* LEFT COLUMN: TAXONOMY & VALUE BANDS */}
+        {/* LEFT COLUMN: NAVIGATION & TAXONOMY */}
         <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col gap-5 sticky top-28">
           
-          {/* Buyer Moat CTA Banner (§ 01) */}
+          {/* Buyer CTA Banner */}
           <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] text-white p-4 rounded-xl shadow-sm border border-gray-700">
             <span className="text-[10px] uppercase font-bold tracking-widest text-blue-300 block mb-1">
-              SUPPLY SIDE · BUYERS
+              FOR PROCURING ENTITIES
             </span>
             <h4 className="text-sm font-black leading-tight mb-2">
-              Free Procurement Workspace
+              Publish Your Tenders Free
             </h4>
             <p className="text-xs text-gray-300 mb-3 leading-relaxed">
-              Draft, approve under threshold, sell documents, sealed opening, and score as committee.
+              Connect with 3,200+ verified Sri Lankan suppliers and contractors.
             </p>
-            <button
-              onClick={() => setShowWorkspaceDemoModal(true)}
-              className="w-full text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2 px-3 rounded uppercase tracking-wider transition-colors shadow-xs"
+            <Link
+              href="/register"
+              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2 px-3 rounded uppercase tracking-wider transition-colors shadow-xs"
             >
-              Open Workspace Demo &rarr;
-            </button>
+              + Post Tender Notice
+            </Link>
           </div>
 
-          {/* Fixed Value Band Filter (§ 11) */}
+          {/* Fixed Value Band Filter */}
           <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-3.5 rounded-xl">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#4B5563] block mb-2">
-              VALUE BANDS (LKR)
+              VALUE BANDS
             </span>
             <div className="flex flex-col gap-1 text-xs font-semibold text-[#374151]">
               {VALUE_BANDS.map((band) => {
@@ -778,18 +581,16 @@ export default function HomePage() {
 
         </aside>
 
-        {/* RIGHT COLUMN: SEARCH, FILTERS & CATALOGUE LISTINGS */}
+        {/* RIGHT COLUMN: SEARCH, FILTERS & TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-10">
           
           {/* Breadcrumb Navigation */}
           <nav className="text-xs font-medium text-gray-500 mb-2.5 flex items-center gap-1.5" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-[#0055B8]">Home</Link>
             <span>&rsaquo;</span>
-            <span>National Directory</span>
+            <span>Procurement Gazettes</span>
             <span>&rsaquo;</span>
-            <span className="text-[#0055B8] font-bold uppercase">
-              {domainMode === "tenders" ? "Tenders Catalogue" : domainMode === "auctions" ? "Auctions Domain" : "Awards Archive"}
-            </span>
+            <span className="text-[#0055B8] font-bold">Tenders &amp; Purchases</span>
           </nav>
 
           {/* 4. WORKSPACE SEARCH PANEL */}
@@ -827,10 +628,10 @@ export default function HomePage() {
               {isSearchFocused && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D9DFE7] rounded-lg shadow-lg z-30 p-3 animate-fadeIn">
                   <div className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 mb-2">
-                    Recent Verified Queries
+                    Recent Search Queries
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {["solar infrastructure", "parate execution auction", "road rehabilitation", "pharmaceuticals", "enterprise server hardware"].map((term) => (
+                    {["solar infrastructure", "road rehabilitation", "pharmaceuticals", "enterprise server hardware", "janitorial maintenance"].map((term) => (
                       <button
                         key={term}
                         type="button"
@@ -888,7 +689,7 @@ export default function HomePage() {
                 </select>
               </div>
 
-              {/* Value Band (§ 11 Fixed Boundaries) */}
+              {/* Value Band */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
                   Value Band
@@ -929,7 +730,7 @@ export default function HomePage() {
                   type="button"
                   className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-2.5 px-3 rounded-md transition-colors uppercase tracking-wider shadow-xs whitespace-nowrap"
                 >
-                  Filter Notices
+                  Find Tenders
                 </button>
                 {hasActiveFilters && (
                   <button
@@ -947,7 +748,7 @@ export default function HomePage() {
             {/* Quick Filters Row */}
             <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-[#F1F3F7]">
               <span className="text-xs font-bold uppercase tracking-wider text-[#4B5563] mr-1">
-                QUICK PRESETS:
+                QUICK FILTERS:
               </span>
               <button
                 type="button"
@@ -1003,12 +804,12 @@ export default function HomePage() {
               
               <div>
                 <h3 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight uppercase">
-                  {domainMode === "tenders" ? "TENDER LISTING" : domainMode === "auctions" ? "AUCTION LOTS" : "AWARDED CONTRACTS"}
+                  TENDER RESULTS
                 </h3>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-[#4B5563] font-semibold mt-0.5">
-                  <span className="text-[#0055B8] font-bold">{filteredTenders.length} notices found</span>
+                  <span className="text-[#0055B8] font-bold">{filteredTenders.length} opportunities matching your criteria</span>
                   <span>·</span>
-                  <span className="text-gray-500 font-medium">Verified by TenderHub</span>
+                  <span className="text-gray-500 font-medium">366 live notices</span>
                 </div>
               </div>
 
@@ -1021,13 +822,13 @@ export default function HomePage() {
                     onClick={() => setDensity("comfortable")}
                     className={`px-2.5 py-1 rounded ${density === "comfortable" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
                   >
-                    Comfortable (62px)
+                    Comfortable
                   </button>
                   <button
                     onClick={() => setDensity("compact")}
                     className={`px-2.5 py-1 rounded ${density === "compact" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
                   >
-                    Compact (43px)
+                    Compact
                   </button>
                 </div>
 
@@ -1089,21 +890,11 @@ export default function HomePage() {
                           {tender.entity}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
-                          {tender.isAuction ? (
-                            <span className="bg-amber-600 text-white font-mono font-black px-2 py-0.5 rounded text-[11px] uppercase">
-                              AUCTION LOT
-                            </span>
-                          ) : tender.isAwarded ? (
-                            <span className="bg-emerald-700 text-white font-mono font-black px-2 py-0.5 rounded text-[11px] uppercase">
-                              AWARDED
-                            </span>
-                          ) : (
-                            <span className={`font-mono font-black px-2 py-0.5 rounded text-[11px] ${
-                              tender.daysLeft <= 3 ? "bg-red-600 text-white" : "bg-emerald-700 text-white"
-                            }`}>
-                              {tender.daysLeft}d left
-                            </span>
-                          )}
+                          <span className={`font-mono font-black px-2 py-0.5 rounded text-[11px] ${
+                            tender.daysLeft <= 3 ? "bg-red-600 text-white" : "bg-emerald-700 text-white"
+                          }`}>
+                            {tender.daysLeft}d left
+                          </span>
                           <button
                             type="button"
                             onClick={(e) => toggleBookmark(e, tender.id)}
@@ -1124,7 +915,7 @@ export default function HomePage() {
                         <span>{tender.location}</span> · <span>Ref: {tender.ref}</span>
                         {tender.hasDocuments && (
                           <div className="text-blue-700 font-semibold mt-0.5">
-                            📄 {tender.docCount} Content-Addressed Documents (SHA-256)
+                            📄 {tender.docCount} Content-Addressed Documents
                           </div>
                         )}
                       </div>
@@ -1224,8 +1015,7 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* MODALS */}
-      {/* 7. QUICK VIEW DRAWER & PAYWALL */}
+      {/* 7. QUICK VIEW DRAWER */}
       {quickViewTender && (
         <div 
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end animate-fadeIn"
@@ -1285,36 +1075,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* PAYWALL MASKED PANEL TEASER (§ 10) */}
-              <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-lg mb-5">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
-                    🔒 Protected Documents &amp; Contact Details
-                  </span>
-                  <span className="text-[10px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded">
-                    Free Tier Preview
-                  </span>
-                </div>
-                <p className="text-xs text-amber-800 mb-3 leading-relaxed">
-                  Full bidding documents (SHA-256 signed PDFs, BOQ spreadsheets) and direct procurement officer contact numbers are released under the Business Plan.
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setShowBankClaimModal(true)}
-                    className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wider"
-                  >
-                    Upgrade for Rs. 7,500/Qtr &rarr;
-                  </button>
-                  <button
-                    onClick={() => setShowESubmissionReceiptModal(true)}
-                    className="bg-white hover:bg-gray-100 border border-gray-300 text-gray-800 text-xs font-bold px-3 py-1.5 rounded"
-                  >
-                    View E-Submission Vault Receipt
-                  </button>
-                </div>
-              </div>
-
-              {/* Scope */}
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-800 mb-1.5">
                 Scope &amp; Specifications
               </h3>
@@ -1340,340 +1100,6 @@ export default function HomePage() {
               </button>
             </div>
 
-          </div>
-        </div>
-      )}
-
-      {/* 8. BANK CLAIM MODAL */}
-      {showBankClaimModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-xl bg-white rounded-xl shadow-2xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-200 mb-4">
-              <div>
-                <h3 className="text-lg font-black text-[#0F172A] uppercase">
-                  Bank Transfer Subscription Claim
-                </h3>
-                <span className="text-xs text-gray-500 font-medium">TenderHub Sri Lanka · Section 16 Workflow</span>
-              </div>
-              <button 
-                onClick={() => setShowBankClaimModal(false)}
-                className="text-gray-400 hover:text-black font-bold text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-
-            <div className="bg-[#F8F9FB] border border-[#E2E6ED] rounded-lg p-3.5 mb-4 text-xs text-[#374151]">
-              <span className="font-bold text-[#0055B8] uppercase block mb-1">Official Bank Account:</span>
-              <div className="grid grid-cols-2 gap-2 font-mono">
-                <div>Bank: <strong>Bank of Ceylon (BOC)</strong></div>
-                <div>Account No: <strong>0081294821</strong></div>
-                <div>Branch: <strong>Corporate City Office</strong></div>
-                <div>Account Name: <strong>TenderHub (Pvt) Ltd</strong></div>
-              </div>
-            </div>
-
-            <form onSubmit={(e) => { e.preventDefault(); alert("Bank Transfer Claim filed! Staff will review in payments queue within 2 hours."); setShowBankClaimModal(false); }}>
-              <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
-                <div>
-                  <label className="font-bold text-gray-700 block mb-1">Selected Plan</label>
-                  <select className="w-full bg-white border border-gray-300 rounded p-2 font-bold text-[#0055B8]">
-                    <option>Bidder Business Annual — Rs. 24,000 / Year</option>
-                    <option>Bidder Business Quarterly — Rs. 7,500 / 3 Months</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="font-bold text-gray-700 block mb-1">Bank Transferred From</label>
-                  <input type="text" placeholder="e.g. Commercial Bank / Sampath" required className="w-full bg-white border border-gray-300 rounded p-2" />
-                </div>
-                <div>
-                  <label className="font-bold text-gray-700 block mb-1">Transfer Slip Reference No.</label>
-                  <input type="text" placeholder="e.g. TXN-9948210" required className="w-full bg-white border border-gray-300 rounded p-2 font-mono" />
-                </div>
-                <div>
-                  <label className="font-bold text-gray-700 block mb-1">Confirmation Channel</label>
-                  <select className="w-full bg-white border border-gray-300 rounded p-2">
-                    <option>WhatsApp (+94 77 388 7615)</option>
-                    <option>Email Slip Confirmation</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="bg-blue-50 text-[#0055B8] p-3 rounded text-xs mb-4">
-                ℹ️ Once submitted, your account enters <strong>Pending Confirmation</strong>. Staff activates full document and e-submission access upon statement verification.
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowBankClaimModal(false)}
-                  className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-[#0055B8] hover:bg-[#004394] rounded uppercase tracking-wider shadow-xs"
-                >
-                  Submit Payment Claim &rarr;
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* 9. BUYER WORKSPACE SIMULATION MODAL */}
-      {showWorkspaceDemoModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
-            
-            <div className="flex items-center justify-between pb-3.5 border-b border-gray-200 mb-5">
-              <div>
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-widest block">
-                  SUPPLY-SIDE WORKSPACE DEMO · 7 STAGES
-                </span>
-                <h3 className="text-xl font-black text-[#0F172A] uppercase">
-                  Procurement: SLPA/2026/PT-04 (Rs. 48.5M Dock Repair)
-                </h3>
-              </div>
-              <button 
-                onClick={() => setShowWorkspaceDemoModal(false)}
-                className="text-gray-400 hover:text-black font-bold text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-
-            {/* 7 Stage Lifecycle Stepper */}
-            <div className="grid grid-cols-7 gap-1 text-[10px] font-bold text-center mb-6">
-              {[
-                { stage: "0. Draft", active: true },
-                { stage: "1. Approved", active: true },
-                { stage: "2. Published", active: true },
-                { stage: "3. Closed", active: true },
-                { stage: "4. Dual Opening", active: ceremonyStage === "opened", current: ceremonyStage !== "opened" },
-                { stage: "5. Evaluation", active: hasCOIDeclared },
-                { stage: "6. Award", active: false }
-              ].map((s, idx) => (
-                <div 
-                  key={idx} 
-                  className={`p-2 rounded border ${
-                    s.active 
-                      ? "bg-emerald-50 text-emerald-800 border-emerald-300" 
-                      : s.current 
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "bg-gray-100 text-gray-400 border-gray-200"
-                  }`}
-                >
-                  {s.stage}
-                </div>
-              ))}
-            </div>
-
-            {/* Dual Opening */}
-            <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] rounded-xl p-5 mb-5">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-sm font-extrabold text-[#0F172A] uppercase">
-                  Stage 4: Dual-Control Sealed Bid Opening Ceremony (§ 19)
-                </h4>
-                <span className="text-xs font-mono font-bold text-[#0055B8]">
-                  Status: {ceremonyStage === "sealed" ? "🔒 Sealed (Query-level Withheld)" : ceremonyStage === "started" ? "⏳ Started by Officer A" : "✅ Dual-Signed & Unsealed"}
-                </span>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4">
-                <table className="w-full text-left text-xs font-medium">
-                  <thead className="bg-gray-100 border-b text-gray-600 font-bold uppercase text-[10px]">
-                    <tr>
-                      <th className="p-2.5">Submission Ref</th>
-                      <th className="p-2.5">Size</th>
-                      <th className="p-2.5">Timestamp</th>
-                      <th className="p-2.5">Bidder Identity</th>
-                      <th className="p-2.5 text-right">Total Price</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y font-mono">
-                    <tr>
-                      <td className="p-2.5 text-[#0055B8] font-bold">SUB-3-0001</td>
-                      <td className="p-2.5">2.4 MB</td>
-                      <td className="p-2.5">2026-08-23 17:47Z</td>
-                      <td className="p-2.5 font-sans">
-                        {ceremonyStage === "opened" ? (
-                          <strong className="text-emerald-700">Ranmuthu Engineering (Pvt) Ltd</strong>
-                        ) : (
-                          <span className="text-gray-400 italic font-bold">🔒 Withheld (Sealed)</span>
-                        )}
-                      </td>
-                      <td className="p-2.5 text-right font-black">
-                        {ceremonyStage === "opened" ? (
-                          <span className="text-[#0055B8]">LKR 46,200,000</span>
-                        ) : (
-                          <span className="text-gray-400 italic">🔒 Withheld</span>
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2.5 text-[#0055B8] font-bold">SUB-3-0002</td>
-                      <td className="p-2.5">3.8 MB</td>
-                      <td className="p-2.5">2026-08-23 18:02Z</td>
-                      <td className="p-2.5 font-sans">
-                        {ceremonyStage === "opened" ? (
-                          <strong className="text-emerald-700">Southern Marine Tech Ltd</strong>
-                        ) : (
-                          <span className="text-gray-400 italic font-bold">🔒 Withheld (Sealed)</span>
-                        )}
-                      </td>
-                      <td className="p-2.5 text-right font-black">
-                        {ceremonyStage === "opened" ? (
-                          <span className="text-[#0055B8]">LKR 48,100,000</span>
-                        ) : (
-                          <span className="text-gray-400 italic">🔒 Withheld</span>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {ceremonyStage === "sealed" && (
-                  <button
-                    onClick={() => setCeremonyStage("started")}
-                    className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-bold px-4 py-2 rounded uppercase"
-                  >
-                    1. Officer A: Start Opening (Ref: OFF-0129)
-                  </button>
-                )}
-                {ceremonyStage === "started" && (
-                  <button
-                    onClick={() => setCeremonyStage("opened")}
-                    className="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded uppercase"
-                  >
-                    2. Officer B: Countersign &amp; Unseal Bids (Ref: OFF-0482)
-                  </button>
-                )}
-                {ceremonyStage === "opened" && (
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
-                    <span>✓ Both officers signed. Bids are now unsealed for the evaluation committee.</span>
-                    <button 
-                      onClick={() => setHasCOIDeclared(true)}
-                      className="ml-auto bg-purple-700 text-white px-3 py-1.5 rounded uppercase"
-                    >
-                      Sign Conflict-of-Interest &amp; Score &rarr;
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-3 border-t">
-              <button
-                onClick={() => setShowEvidencePackModal(true)}
-                className="bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded uppercase tracking-wider"
-              >
-                📜 Export Legal Evidence Pack (§ 20)
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* 10. EVIDENCE PACK MODAL */}
-      {showEvidencePackModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-2xl bg-white rounded-xl shadow-2xl p-6 font-mono text-xs text-gray-800">
-            <div className="flex items-center justify-between pb-3 border-b mb-4">
-              <span className="font-bold text-[#0055B8]">TENDERHUB LEGAL EVIDENCE PACK (SHA-256 AUDIT LOG)</span>
-              <button onClick={() => setShowEvidencePackModal(false)} className="font-bold text-lg">&times;</button>
-            </div>
-            
-            <div className="space-y-2 bg-gray-50 p-4 rounded border text-[11px] leading-relaxed">
-              <div>[2026-08-12 08:30Z] CREATED: SLPA/2026/PT-04 by Officer OFF-0129</div>
-              <div>[2026-08-12 11:00Z] APPROVED: Threshold Rs. 48.5M signed by Approver APP-0041</div>
-              <div>[2026-08-12 11:05Z] PUBLISHED: Status live on catalogue</div>
-              <div>[2026-08-20 14:00Z] ADDENDUM 01: Extended closing date by 2 days due to weather report</div>
-              <div>[2026-08-23 17:47Z] SUBMISSION: SUB-3-0001 lodged (SHA-256: e3b0c44298fc1c149afbf4c8996fb924...)</div>
-              <div>[2026-08-24 10:00Z] CLOSED: Submissions locked by server clock</div>
-              <div>[2026-08-24 10:30Z] OPENED: Dual control signed by OFF-0129 &amp; OFF-0482</div>
-              <div>[2026-08-28 16:00Z] AWARDED: Ranmuthu Engineering. Standstill period: 7 Days.</div>
-            </div>
-
-            <div className="mt-4 flex justify-end">
-              <button 
-                onClick={() => { alert("Evidence Pack downloaded as PDF with SHA-256 signature."); setShowEvidencePackModal(false); }}
-                className="bg-[#0055B8] text-white px-4 py-2 rounded text-xs font-bold uppercase"
-              >
-                Download Signed PDF Evidence
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 11. E-SUBMISSION RECEIPT MODAL */}
-      {showESubmissionReceiptModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 border text-xs">
-            <div className="flex items-center justify-between pb-3 border-b mb-3">
-              <span className="font-extrabold text-[#0055B8] uppercase">Electronic Submission Receipt (§ 17)</span>
-              <button onClick={() => setShowESubmissionReceiptModal(false)} className="font-bold text-lg">&times;</button>
-            </div>
-
-            <div className="p-4 bg-gray-50 border rounded-lg font-mono space-y-2 mb-4">
-              <div>Receipt ID: <strong>REC-2026-88419</strong></div>
-              <div>Tender: <strong>MOE/2026/SP-01 (Solar Schools)</strong></div>
-              <div>Lodged By: <strong>Lanka Infrastructure Dynamics (Pvt) Ltd</strong></div>
-              <div>Server Timestamp: <strong>2026-08-31 10:14:22 UTC</strong></div>
-              <div>Payload Hash: <strong className="text-[10px] block break-all text-[#0055B8]">7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069</strong></div>
-            </div>
-
-            <button 
-              onClick={() => setShowESubmissionReceiptModal(false)}
-              className="w-full bg-[#0055B8] text-white py-2 rounded font-bold uppercase"
-            >
-              Close Receipt
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 12. ADMIN CONSOLE MODAL */}
-      {showAdminConsoleModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-3xl bg-white rounded-xl shadow-2xl p-6 border max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b mb-4">
-              <div>
-                <h3 className="text-lg font-black text-[#0F172A] uppercase">Staff Admin Console (§ 22)</h3>
-                <span className="text-xs text-gray-500 font-medium">System Health &amp; Ingestion Monitor</span>
-              </div>
-              <button onClick={() => setShowAdminConsoleModal(false)} className="font-bold text-2xl">&times;</button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 mb-5">
-              <div className="bg-[#F8F9FB] border p-3 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-gray-500 block">Total Ingested</span>
-                <span className="text-2xl font-black font-mono text-[#0055B8]">39,942</span>
-              </div>
-              <div className="bg-[#F8F9FB] border p-3 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-gray-500 block">Human Verified</span>
-                <span className="text-2xl font-black font-mono text-emerald-700">99.4%</span>
-              </div>
-              <div className="bg-[#F8F9FB] border p-3 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-gray-500 block">Payments Waiting Review</span>
-                <span className="text-2xl font-black font-mono text-red-600">3 Claims</span>
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <button 
-                onClick={() => setShowAdminConsoleModal(false)}
-                className="bg-gray-800 text-white px-4 py-2 rounded text-xs font-bold uppercase"
-              >
-                Close Console
-              </button>
-            </div>
           </div>
         </div>
       )}
