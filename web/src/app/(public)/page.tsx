@@ -833,17 +833,14 @@ export default function HomePage() {
           {/* 5. TENDER CATALOGUE: CARDS GRID VS DENSE LIST */}
           {viewMode === "cards" ? (
             <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mb-8 items-stretch">
-              {paginatedTenders.map((tender, index) => {
-                const isFirst = index === 0 && currentPage === 1;
+              {paginatedTenders.map((tender) => {
                 const isSaved = savedTenders.has(tender.id);
 
                 return (
                   <Link
                     key={tender.id}
                     href={`/tender/${tender.id}`}
-                    className={`bg-white rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 cursor-pointer group min-h-[290px] no-underline block transform-gpu ${
-                      isFirst ? "border-2 border-[#0055B8] shadow-lg" : "border-2 border-slate-200/90 hover:border-[#0055B8]"
-                    }`}
+                    className="bg-white rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 cursor-pointer group min-h-[290px] no-underline block transform-gpu border-2 border-slate-200/90 hover:border-[#0055B8]"
                   >
                     <div>
                       {/* Top Authority & Urgency Row */}
