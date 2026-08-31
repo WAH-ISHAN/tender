@@ -2,9 +2,13 @@
   "name": "tender-monorepo",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "web",
+    "api"
+  ],
   "scripts": {
-    "dev": "npm run dev --prefix web",
-    "build": "npm run build --prefix web",
-    "start": "npm start --prefix web"
+    "dev": "npm run dev --workspace=web",
+    "build": "npm run build --workspace=web",
+    "start": "npm run start --workspace=web"
   }
 }
