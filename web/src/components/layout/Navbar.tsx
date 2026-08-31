@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLanguage, Language } from "@/context/LanguageContext";
 
 export default function Navbar() {
-  const [lang, setLang] = useState<"En" | "Si" | "Ta">("En");
+  const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
 
   return (
@@ -12,19 +12,18 @@ export default function Navbar() {
       <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Brand Logo with National Subtitle */}
-        {/* Brand Logo with National Subtitle */}
         <Link href="/" className="flex items-center gap-3">
           <div>
             <span className="font-display font-black text-xl lg:text-2xl tracking-tight text-[#0F172A] block leading-none">
               TENDER<span className="text-[#0055B8]">HUB</span>
             </span>
             <span className="text-[10px] font-bold text-gray-500 tracking-wider uppercase">
-              Sri Lanka National Procurement
+              {t("brandSubtitle")}
             </span>
           </div>
         </Link>
 
-        {/* Clean Essential Navigation matching Rev 3.0 Blueprint */}
+        {/* Clean Essential Navigation */}
         <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-xs sm:text-sm font-bold text-[#374151]">
           <Link
             href="/"
@@ -34,7 +33,7 @@ export default function Navbar() {
                 : "text-gray-700 hover:text-[#0055B8]"
             }`}
           >
-            Catalogue
+            {t("navCatalogue")}
           </Link>
           
           <Link
@@ -45,7 +44,7 @@ export default function Navbar() {
                 : "text-gray-700 hover:text-[#0055B8]"
             }`}
           >
-            Plans &amp; Bank Claim
+            {t("navPlans")}
           </Link>
 
           <Link
@@ -56,7 +55,7 @@ export default function Navbar() {
                 : "text-gray-700 hover:text-[#0055B8]"
             }`}
           >
-            How It Works
+            {t("navHowItWorks")}
           </Link>
 
           <Link
@@ -67,7 +66,7 @@ export default function Navbar() {
                 : "text-gray-700 hover:text-[#0055B8]"
             }`}
           >
-            About
+            {t("navAbout")}
           </Link>
 
           <Link
@@ -78,35 +77,38 @@ export default function Navbar() {
                 : "text-gray-700 hover:text-[#0055B8]"
             }`}
           >
-            Contact
+            {t("navContact")}
           </Link>
         </nav>
 
-        {/* Right Section: Language Switcher + 4 Stakeholder Doors */}
+        {/* Right Section: Interactive Trilingual Switcher + Stakeholder Doors */}
         <div className="flex items-center gap-3.5">
           
-          {/* Segmented Language Switcher */}
-          <div className="hidden sm:flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
+          {/* Segmented Trilingual Language Switcher */}
+          <div className="flex items-center bg-[#F1F3F7] p-1 rounded-xl border border-[#E2E6ED] shadow-2xs">
             <button 
-              onClick={() => setLang("En")}
-              className={`px-2 py-1 text-xs rounded font-bold transition-all ${
-                lang === "En" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+              type="button"
+              onClick={() => setLanguage("en")}
+              className={`px-2.5 py-1 text-xs rounded-lg font-black transition-all cursor-pointer ${
+                language === "en" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
               }`}
             >
               EN
             </button>
             <button 
-              onClick={() => setLang("Si")}
-              className={`px-2 py-1 text-xs rounded font-bold transition-all ${
-                lang === "Si" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+              type="button"
+              onClick={() => setLanguage("si")}
+              className={`px-2.5 py-1 text-xs rounded-lg font-black transition-all cursor-pointer ${
+                language === "si" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
               }`}
             >
               සිං
             </button>
             <button 
-              onClick={() => setLang("Ta")}
-              className={`px-2 py-1 text-xs rounded font-bold transition-all ${
-                lang === "Ta" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
+              type="button"
+              onClick={() => setLanguage("ta")}
+              className={`px-2.5 py-1 text-xs rounded-lg font-black transition-all cursor-pointer ${
+                language === "ta" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
               }`}
             >
               த
@@ -120,7 +122,7 @@ export default function Navbar() {
               className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-black px-4 py-2 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-md whitespace-nowrap flex items-center gap-2"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Workspace Portal</span>
+              <span>{t("navWorkspacePortal")}</span>
             </Link>
           ) : (
             <>
@@ -129,7 +131,7 @@ export default function Navbar() {
                 href="/login"
                 className="text-xs font-bold text-[#0055B8] hover:text-[#004394] bg-[#EFF6FF] hover:bg-blue-100 px-3.5 py-2 rounded-xl transition-colors uppercase tracking-wider border border-[#BFDBFE]"
               >
-                Bidder Login
+                {t("navBidderLogin")}
               </Link>
 
               {/* Door 2: Company / Procuring Entity Free Workspace */}
@@ -137,7 +139,7 @@ export default function Navbar() {
                 href="/register"
                 className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-black px-4 py-2 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-md whitespace-nowrap"
               >
-                Company Workspace
+                {t("navCompanyWorkspace")}
               </Link>
             </>
           )}

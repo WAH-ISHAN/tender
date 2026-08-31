@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MOCK_TENDERS, TenderItem } from "@/data/tenders";
 import { useToast } from "@/components/ui/Toaster";
+import { useLanguage } from "@/context/LanguageContext";
 
 const CATEGORIES = [
   { id: "construction", name: "Civil Construction & Works", count: "7,767" },
@@ -52,6 +53,7 @@ const VALUE_BANDS = [
 export default function HomePage() {
   const router = useRouter();
   const toast = useToast();
+  const { t, language } = useLanguage();
 
   const [keyword, setKeyword] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -258,44 +260,44 @@ export default function HomePage() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
-                  SRI LANKA NATIONAL PROCUREMENT GATEWAY
+                  {t("heroSubtitle")}
                 </span>
               </div>
 
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
-                TENDERS IN SRI LANKA
+                {t("heroTitle")}
               </h1>
 
               <p className="text-xs sm:text-sm text-blue-100 font-normal leading-relaxed max-w-xl">
-                Daily procurement gazettes, municipal RFPs, and corporate tenders published across all 9 provinces. Verified daily at 05:00 AM with cryptographic SHA-256 evidence packs.
+                {t("heroDesc")}
               </p>
             </div>
 
             {/* Right Modern Frosted Metrics Command Card */}
             <div className="lg:col-span-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 sm:p-6 shadow-xl">
               <div className="text-[10px] font-black uppercase tracking-widest text-blue-200 pb-2 mb-3 border-b border-white/15 flex items-center justify-between">
-                <span>NATIONAL PROCUREMENT RADAR</span>
+                <span>{t("radarTitle")}</span>
                 <span className="text-emerald-300 font-bold">&bull; 05:00 AM Daily Sync</span>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Published Today</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricPublishedToday")}</span>
                   <div className="text-xl sm:text-2xl font-black text-white">12 Notices</div>
                 </div>
 
                 <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Active Live Tenders</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricLiveTenders")}</span>
                   <div className="text-xl sm:text-2xl font-black text-emerald-400">366 Live</div>
                 </div>
 
                 <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Closing This Week</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricClosingThisWeek")}</span>
                   <div className="text-xl sm:text-2xl font-black text-amber-300">41 Urgent</div>
                 </div>
 
                 <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
-                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Total Archive</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">{t("metricTotalArchive")}</span>
                   <div className="text-xl sm:text-2xl font-black text-blue-200 font-mono">39,942+</div>
                 </div>
               </div>
@@ -312,7 +314,7 @@ export default function HomePage() {
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Search by tender title, procuring entity, reference code, or keywords..."
+                  placeholder={t("searchPlaceholder")}
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
@@ -459,7 +461,7 @@ export default function HomePage() {
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
-                      VALUE BAND
+                      {t("valueBandLabel")}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
                       {VALUE_BANDS.find(v => v.id === selectedValueBand)?.name || "All Value Bands"}
@@ -498,7 +500,7 @@ export default function HomePage() {
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
-                      DEADLINE WINDOW
+                      {t("deadlineLabel")}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
                       {closingWindow === "all" ? "Any Closing Date" : closingWindow === "3days" ? "Next 3 Days (Urgent)" : closingWindow === "7days" ? "Next 7 Days" : "Next 30 Days"}
@@ -543,7 +545,7 @@ export default function HomePage() {
                   }}
                   className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-3.5 px-4 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
                 >
-                  <span>Search</span>
+                  <span>{t("searchBtn")}</span>
                   <span>&rarr;</span>
                 </button>
 
@@ -587,7 +589,7 @@ export default function HomePage() {
                 OFFICIAL GAZETTE SPECIAL
               </span>
               <span className="text-sm font-black block">
-                Registration of Suppliers
+                {t("spotlightSuppliers")}
               </span>
             </div>
             <span className={`px-2.5 py-1 rounded-xl text-xs font-black font-mono ${
@@ -603,7 +605,7 @@ export default function HomePage() {
               FOR PROCURING BODIES
             </span>
             <h4 className="text-sm font-black leading-tight mb-1.5 text-white">
-              Publish Tender Notices Free
+              {t("publishFreeTitle")}
             </h4>
             <p className="text-xs text-slate-300 mb-4 font-normal leading-relaxed">
               Connect with 3,200+ verified Sri Lankan suppliers &amp; CIDA contractors.
@@ -612,7 +614,7 @@ export default function HomePage() {
               href="/register"
               className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs py-2.5 px-3 rounded-xl uppercase tracking-wider transition-all hover:-translate-y-0.5 active:scale-95 shadow-md"
             >
-              + Upload Your Tenders FREE
+              {t("publishFreeBtn")}
             </Link>
           </div>
 
@@ -620,9 +622,42 @@ export default function HomePage() {
           <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
               <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
-                TENDERS BY SECTOR
+                {t("tendersBySector")}
               </span>
               <span className="text-[11px] text-slate-400 font-mono">39,942</span>
+            </div>
+
+            <nav className="flex flex-col gap-1.5 text-xs text-slate-700">
+              {SECTORS.map((sec) => {
+                const isSelected = sectorFilter === sec.id;
+                return (
+                  <button
+                    key={sec.id}
+                    type="button"
+                    onClick={() => setSectorFilter(sec.id)}
+                    className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
+                      isSelected
+                        ? "bg-[#0055B8] text-white font-black shadow-sm"
+                        : "hover:bg-slate-50 font-bold text-slate-700"
+                    }`}
+                  >
+                    <span className="truncate pr-1">{sec.name}</span>
+                    <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
+                      {sec.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Taxonomy Section 2: Tenders By Categories */}
+          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
+                {t("tendersByCategory")}
+              </span>
+              <span className="text-[11px] text-slate-400 font-mono">12 Sectors</span>
             </div>
 
             <nav className="flex flex-col gap-1.5 text-xs text-slate-700">

@@ -1,6 +1,10 @@
+"use client";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="w-full bg-[#F8FAFC] border-t border-slate-200 mt-24 text-slate-700">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -15,7 +19,7 @@ export default function Footer() {
                 TENDER<span className="text-[#0055B8]">HUB</span>
               </span>
               <span className="text-[10px] font-bold text-slate-500 tracking-wider uppercase block mt-1">
-                Sri Lanka National Procurement &amp; Tender Network
+                {t("brandSubtitle")}
               </span>
             </Link>
 
@@ -60,43 +64,39 @@ export default function Footer() {
               Bidders &amp; Suppliers
             </h4>
             <nav className="flex flex-col gap-2 text-xs font-semibold text-slate-600">
-              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Plans &amp; Subscriptions</Link>
-              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Offline Bank Transfer</Link>
-              <Link href="/how-it-works" className="hover:text-[#0055B8] transition-colors">How It Works &amp; Pipeline</Link>
+              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Commercial Bidder Plans</Link>
+              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Bank Transfer Claim</Link>
               <Link href="/register" className="hover:text-[#0055B8] transition-colors">Supplier Registration</Link>
-              <Link href="/register" className="hover:text-[#0055B8] transition-colors">Post Tender Notice (Free)</Link>
-              <Link href="/about-us" className="hover:text-[#0055B8] transition-colors">About TenderHub</Link>
+              <Link href="/how-it-works" className="hover:text-[#0055B8] transition-colors">Bidding Guide &amp; Rules</Link>
+              <Link href="/blog/essential-parts" className="hover:text-[#0055B8] transition-colors">Procurement Knowledge Hub</Link>
             </nav>
           </div>
 
-          {/* Column 4: Top Sectors (2 Cols) */}
+          {/* Column 4: Procuring Authorities (2 Cols) */}
           <div className="lg:col-span-2 flex flex-col gap-3">
             <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
-              Priority Sectors
+              Procuring Authorities
             </h4>
             <nav className="flex flex-col gap-2 text-xs font-semibold text-slate-600">
-              <Link href="/" className="hover:text-[#0055B8] transition-colors">Civil Construction &amp; Works</Link>
-              <Link href="/" className="hover:text-[#0055B8] transition-colors">Computer, Servers &amp; IT</Link>
-              <Link href="/" className="hover:text-[#0055B8] transition-colors">Renewable Energy &amp; Solar</Link>
-              <Link href="/" className="hover:text-[#0055B8] transition-colors">Medical &amp; Pharmaceuticals</Link>
-              <Link href="/" className="hover:text-[#0055B8] transition-colors">Janitorial &amp; Sanitation</Link>
-              <Link href="/" className="hover:text-[#0055B8] transition-colors">Maritime, Ports &amp; Logistics</Link>
+              <Link href="/register" className="hover:text-[#0055B8] transition-colors">Publisher Free Workspace</Link>
+              <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Notice Submission Desk</Link>
+              <Link href="/how-it-works" className="hover:text-[#0055B8] transition-colors">Audit Trail &amp; Evidence Pack</Link>
+              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Enterprise Partner API</Link>
             </nav>
           </div>
 
-          {/* Column 5: Central Desk & Contact (2 Cols) */}
+          {/* Column 5: Central Dispatch & Contact (2 Cols) */}
           <div className="lg:col-span-2 flex flex-col gap-3">
             <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
-              Procurement Desk
+              Headquarters Desk
             </h4>
-            <div className="text-xs text-slate-600 flex flex-col gap-2 leading-relaxed">
+            <div className="flex flex-col gap-2 text-xs text-slate-600">
               <div>
-                <span className="font-bold text-[#0F172A] block">Central Operations Office</span>
-                <span>Level 14, World Trade Centre, Colombo 01, Sri Lanka</span>
+                <span className="font-bold text-[#0F172A] block">Central Dispatch</span>
+                <span className="font-mono text-slate-800 font-bold block">+94 11 200 8000</span>
               </div>
               <div className="pt-1">
-                <span className="font-bold text-[#0F172A] block">Direct Hotlines</span>
-                <span className="font-mono text-slate-800 font-bold block">+94 11 200 8000</span>
+                <span className="font-bold text-[#0F172A] block">Supplier Support</span>
                 <span className="font-mono text-slate-800 font-bold block">+94 11 200 8001</span>
               </div>
               <div className="pt-1">
@@ -104,9 +104,6 @@ export default function Footer() {
                 <Link href="mailto:tenders@tenderhub.lk" className="text-[#0055B8] font-bold hover:underline">
                   tenders@tenderhub.lk
                 </Link>
-              </div>
-              <div className="pt-1 text-[11px] text-slate-400">
-                Operating: Mon – Fri (08:30 – 17:30 IST)
               </div>
             </div>
           </div>
@@ -117,12 +114,8 @@ export default function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-2">
             <p className="font-semibold text-slate-700">
-              &copy; 2026 TenderHub Sri Lanka. All rights reserved.
+              {t("footerCopyright")}
             </p>
-            <span className="hidden sm:inline text-slate-300">|</span>
-            <span className="text-slate-500">
-              National Procurement Intelligence Gateway
-            </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600">
@@ -131,8 +124,6 @@ export default function Footer() {
             <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Terms of Service</Link>
             <span>&bull;</span>
             <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Gazette Disclaimer</Link>
-            <span>&bull;</span>
-            <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Procurement Guidelines</Link>
             <span>&bull;</span>
             <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Help &amp; Support</Link>
           </div>
