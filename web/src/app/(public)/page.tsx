@@ -38,7 +38,7 @@ interface TenderItem {
   isAuction?: boolean;
   assetClass?: "Land & Property" | "Commercial Real Estate" | "Fleet & Heavy Machinery" | "Industrial Scrap";
   reservePrice?: string;
-  depositRequired?: string; // computed deposit e.g. 10%
+  depositRequired?: string;
   auctionMethod?: "Parate Execution" | "Mortgage Foreclosure" | "Vehicle Recovery" | "State Disposal";
   auctionVenue?: string;
   // Award specific fields (§ 20)
@@ -253,7 +253,6 @@ const TENDERS_DATA: TenderItem[] = [
     docCount: 1,
     description: "Daily hygiene sanitation, waste disposal, and facility maintenance for the 5-story Provincial Secretariat Complex.",
   },
-  // AUCTION ITEMS (§ 14)
   {
     id: "AUC-COMBANK-2026-09",
     ref: "AUC/CB/2026/09",
@@ -315,7 +314,6 @@ const TENDERS_DATA: TenderItem[] = [
     auctionVenue: "Werellawatta SLTB Central Yard",
     description: "Public disposal of 42 Leyland Viking buses, engine assemblies, and transmission scrap by open outcry auction.",
   },
-  // AWARDED NOTICES PAST STANDSTILL (§ 20)
   {
     id: "AWD-CEB-2026-081",
     ref: "AWD/CEB/2026/081",
@@ -346,9 +344,7 @@ const TENDERS_DATA: TenderItem[] = [
 ];
 
 export default function HomePage() {
-  // Domain Tab Switcher: Tenders Catalogue (§ 11) | Auctions Domain (§ 14) | Awards Archive (§ 20)
   const [domainMode, setDomainMode] = useState<"tenders" | "auctions" | "awards">("tenders");
-  const [activeTab, setActiveTab] = useState<"live" | "latest" | "archive">("live");
 
   // Search & Filter State
   const [keyword, setKeyword] = useState("");
@@ -363,39 +359,38 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState("closing");
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
-  // Density Toggle (§ 24): Comfortable (62px) vs Compact (43px)
+  // Density Toggle (§ 24)
   const [density, setDensity] = useState<"comfortable" | "compact">("comfortable");
 
-  // View Switcher: Cards View vs. Table List View
+  // View Switcher
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
 
-  // Accessibility Font Scaler: A / A+ / A++
+  // Accessibility Font Scaler
   const [textZoom, setTextZoom] = useState<"normal" | "large" | "xl">("normal");
 
-  // Interactive Tools: Save/Watch Tender, Quick View Drawer, Alert Selector, Copy Feedback
+  // Interactive Tools
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
   const [quickViewTender, setQuickViewTender] = useState<TenderItem | null>(null);
   const [alertDays, setAlertDays] = useState<number | null>(null);
   const [copiedRef, setCopiedRef] = useState<string | null>(null);
 
-  // Metering (§ 03): 5 Free Notice Views Counter
+  // 5 Free Notice Views Counter
   const [freeViewsLeft, setFreeViewsLeft] = useState(4);
 
-  // Modals for TenderHub Blueprint features
+  // Modals
   const [showBankClaimModal, setShowBankClaimModal] = useState(false);
   const [showWorkspaceDemoModal, setShowWorkspaceDemoModal] = useState(false);
   const [showEvidencePackModal, setShowEvidencePackModal] = useState(false);
   const [showESubmissionReceiptModal, setShowESubmissionReceiptModal] = useState(false);
   const [showAdminConsoleModal, setShowAdminConsoleModal] = useState(false);
 
-  // Interactive Dual-Control Ceremony Simulation State (§ 19)
+  // Dual-Control Ceremony Simulation State
   const [ceremonyStage, setCeremonyStage] = useState<"sealed" | "started" | "opened">("sealed");
   const [hasCOIDeclared, setHasCOIDeclared] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Close search dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
@@ -406,7 +401,6 @@ export default function HomePage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Keyboard Shortcuts: "/" to search, "Esc" to close drawer/dropdown
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "/" && document.activeElement !== searchInputRef.current) {
@@ -466,12 +460,10 @@ export default function HomePage() {
 
   const filteredTenders = useMemo(() => {
     let result = TENDERS_DATA.filter((item) => {
-      // 1. Domain filter (§ 11 & § 14)
       if (domainMode === "auctions" && !item.isAuction) return false;
       if (domainMode === "awards" && !item.isAwarded) return false;
       if (domainMode === "tenders" && (item.isAuction || item.isAwarded)) return false;
 
-      // 2. Keyword filter
       const matchKeyword =
         keyword === "" ||
         item.title.toLowerCase().includes(keyword.toLowerCase()) ||
@@ -545,152 +537,149 @@ export default function HomePage() {
       textZoom === "large" ? "text-[110%]" : textZoom === "xl" ? "text-[120%]" : "text-[100%]"
     }`}>
       
-      {/* 1. TOP INSTITUTIONAL BAR WITH 5-VIEW FREE METER (§ 03 & § 10) */}
-      <header className="flex flex-wrap items-center justify-between text-xs pb-3.5 mb-6 border-b border-[#E2E6ED] gap-4">
-        <div className="flex items-center gap-2.5 text-[#374151]">
-          <span className="text-[#0055B8] font-extrabold uppercase tracking-wider">TENDERHUB SRI LANKA</span>
+      {/* 1. CLEAN HIGH-PRECISION INSTITUTIONAL HEADER BAR */}
+      <header className="bg-white border-b-2 border-[#E2E6ED] pb-4 mb-7 flex flex-wrap items-center justify-between gap-4">
+        
+        {/* Left: National Identity */}
+        <div className="flex flex-wrap items-center gap-3 text-xs text-[#374151]">
+          <span className="font-extrabold uppercase tracking-widest text-[#0055B8] flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+            NATIONAL PROCUREMENT &amp; GAZETTE DIRECTORY
+          </span>
           <span className="text-gray-300">|</span>
-          <span className="font-semibold">Rev 3.0 Platform</span>
+          <span className="font-mono font-bold text-gray-700">Issue No. 2,426</span>
           <span className="text-gray-300">|</span>
+          <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200 uppercase text-[11px]">
+            Verified Daily
+          </span>
+        </div>
+
+        {/* Right: Live Meta Actions & Font Scaler */}
+        <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[#374151]">
           
-          {/* Free View Meter (§ 03) */}
-          <div className="flex items-center gap-1.5 bg-blue-50 text-[#0055B8] px-2.5 py-0.5 rounded border border-blue-200 font-bold">
-            <span>Free Views Meter:</span>
-            <span className="font-mono text-emerald-700 font-black">{freeViewsLeft} / 5</span>
+          <div className="flex items-center gap-2 bg-blue-50/80 border border-blue-200 px-3 py-1 rounded-md text-[#0055B8]">
+            <span>Free Views:</span>
+            <strong className="font-mono text-emerald-800">{freeViewsLeft} / 5</strong>
             <button 
               onClick={() => setShowBankClaimModal(true)}
-              className="underline text-[11px] hover:text-blue-900 ml-1"
+              className="text-[11px] underline hover:text-blue-900 font-bold ml-1"
             >
               Upgrade
             </button>
           </div>
-        </div>
 
-        {/* Action Fast Triggers for Blueprint Modules */}
-        <div className="flex items-center gap-4 text-[#374151]">
-          
-          {/* Interactive Procurement Workspace Modal Trigger (§ 18-20) */}
-          <button
-            onClick={() => setShowWorkspaceDemoModal(true)}
-            className="text-xs font-bold text-[#0055B8] hover:underline flex items-center gap-1"
-          >
-            🏛️ Buyer Workspace Simulation (7 Stages)
-          </button>
+          <span className="text-gray-300 hidden sm:inline">|</span>
 
-          <span className="text-gray-300">|</span>
+          <span className="hidden md:inline text-gray-600">
+            Hotline: <strong className="text-gray-900">+94 11 278 5141</strong>
+          </span>
 
-          {/* Admin Console KPI Trigger (§ 22) */}
-          <button
-            onClick={() => setShowAdminConsoleModal(true)}
-            className="text-xs font-bold text-gray-700 hover:text-[#0055B8] flex items-center gap-1"
-          >
-            📊 Staff Admin Console
-          </button>
-
-          <span className="text-gray-300">|</span>
+          <span className="text-gray-300 hidden sm:inline">|</span>
 
           {/* Accessibility Font Scaler */}
-          <div className="hidden sm:flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
-            <span className="text-[11px] font-bold text-gray-500 px-2 uppercase tracking-wider">Text:</span>
+          <div className="flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
+            <span className="text-[10px] font-bold text-gray-500 px-1.5 uppercase">Text:</span>
             <button
               type="button"
               onClick={() => setTextZoom("normal")}
-              title="Standard Font Size"
-              className={`px-2 py-0.5 text-xs font-bold rounded ${
-                textZoom === "normal" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
-              }`}
+              className={`px-2 py-0.5 text-xs font-bold rounded ${textZoom === "normal" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
             >
               A
             </button>
             <button
               type="button"
               onClick={() => setTextZoom("large")}
-              title="Large Font Size (+10%)"
-              className={`px-2 py-0.5 text-xs font-bold rounded ${
-                textZoom === "large" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
-              }`}
+              className={`px-2 py-0.5 text-xs font-bold rounded ${textZoom === "large" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
             >
               A+
             </button>
             <button
               type="button"
               onClick={() => setTextZoom("xl")}
-              title="Extra Large Font Size (+20%)"
-              className={`px-2 py-0.5 text-xs font-bold rounded ${
-                textZoom === "xl" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
-              }`}
+              className={`px-2 py-0.5 text-xs font-bold rounded ${textZoom === "xl" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
             >
               A++
             </button>
           </div>
+
         </div>
       </header>
 
-      {/* 2. CINEMATIC HERO BANNER BAR (§ 24 FleetOps Tokens) */}
-      <section className="relative rounded-2xl overflow-hidden mb-8 shadow-lg border border-slate-800 bg-[#0A1128] text-white">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-35 mix-blend-luminosity scale-105 transition-transform duration-1000"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
-          }}
-        />
-        <div className="absolute inset-0 bg-linear-to-r from-[#070F26] via-[#0A193F]/90 to-[#070F26]/95" />
+      {/* 2. COMPLETELY REDESIGNED LIGHT & CRISP COMMAND HERO */}
+      <section className="bg-[#F8F9FB] border-2 border-[#E2E6ED] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          
+          {/* Left Title & Purpose */}
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded">
+                OFFICIAL REPOSITORY
+              </span>
+              <span className="text-xs font-bold text-gray-500 font-mono">
+                SRI LANKA PROCUREMENT DATABASE
+              </span>
+            </div>
 
-        <div className="relative z-10 px-6 sm:px-10 py-8 sm:py-12 max-w-4xl">
-          <div className="inline-flex items-center gap-2 bg-[#0055B8]/80 text-white text-[11px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-400/30 mb-3 shadow-xs">
-            <span>●</span> Sri Lanka National Procurement &amp; Tender Network
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-[#0F172A] tracking-tight uppercase leading-[1.05] mb-2.5">
+              TENDERS, COMMERCIAL RFPS &amp; AUCTIONS
+            </h1>
+
+            <p className="text-sm sm:text-base text-[#4B5563] font-medium leading-relaxed mb-4">
+              Real-time daily gazette tenders, ministry purchases, parate foreclosure auctions, and verified committee award decisions across all 9 provinces.
+            </p>
+
+            {/* 3 Domain Pill Switcher (§ 11 & § 14) */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setDomainMode("tenders")}
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  domainMode === "tenders"
+                    ? "bg-[#0055B8] text-white shadow-sm font-black"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
+                }`}
+              >
+                📋 Tenders Catalogue (366 Live)
+              </button>
+              <button
+                type="button"
+                onClick={() => setDomainMode("auctions")}
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  domainMode === "auctions"
+                    ? "bg-amber-600 text-white shadow-sm font-black"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
+                }`}
+              >
+                🔨 Auctions &amp; Parate Lots (2)
+              </button>
+              <button
+                type="button"
+                onClick={() => setDomainMode("awards")}
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  domainMode === "awards"
+                    ? "bg-emerald-700 text-white shadow-sm font-black"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
+                }`}
+              >
+                🏆 Awards Archive (Past Standstill)
+              </button>
+            </div>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.05] mb-3">
-            TENDERS, COMMERCIAL RFPS &amp; AUCTIONS
-          </h1>
-
-          <p className="text-sm sm:text-base text-gray-200 font-medium leading-relaxed max-w-2xl mb-5">
-            Deduplicated daily gazette notices, ministry purchases, parate foreclosure auctions, and committee awards across all 9 provinces.
-          </p>
-
-          {/* 3 Domain Nav Switcher: Tenders | Auctions | Awards Archive (§ 11 & § 14) */}
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setDomainMode("tenders")}
-              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                domainMode === "tenders"
-                  ? "bg-[#0055B8] text-white shadow-md border border-blue-400"
-                  : "bg-white/10 hover:bg-white/20 text-gray-200"
-              }`}
-            >
-              📋 Tenders Catalogue (366 Live)
-            </button>
-            <button
-              type="button"
-              onClick={() => setDomainMode("auctions")}
-              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                domainMode === "auctions"
-                  ? "bg-amber-600 text-white shadow-md border border-amber-400"
-                  : "bg-white/10 hover:bg-white/20 text-gray-200"
-              }`}
-            >
-              🔨 Auctions &amp; Parate (2 Lots)
-            </button>
-            <button
-              type="button"
-              onClick={() => setDomainMode("awards")}
-              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                domainMode === "awards"
-                  ? "bg-emerald-700 text-white shadow-md border border-emerald-400"
-                  : "bg-white/10 hover:bg-white/20 text-gray-200"
-              }`}
-            >
-              🏆 Awards Archive (Standstill Expired)
-            </button>
-            
-            <button
-              onClick={() => setShowBankClaimModal(true)}
-              className="ml-auto bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider transition-colors shadow-xs"
-            >
-              💳 Business Subscription (Rs. 24,000/yr)
-            </button>
+          {/* Right Live Operational Pulse Badges */}
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 min-w-[260px]">
+            <div className="bg-white border border-[#E2E6ED] p-3 rounded-lg shadow-2xs flex items-center justify-between">
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Live Open Notices</span>
+              <span className="font-mono font-black text-xl text-[#0055B8]">366</span>
+            </div>
+            <div className="bg-white border border-[#E2E6ED] p-3 rounded-lg shadow-2xs flex items-center justify-between">
+              <span className="text-xs font-bold text-red-600 uppercase tracking-wider">Closing In ≤ 7 Days</span>
+              <span className="font-mono font-black text-xl text-red-600">41</span>
+            </div>
+            <div className="bg-white border border-[#E2E6ED] p-3 rounded-lg shadow-2xs flex items-center justify-between">
+              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Verified Suppliers</span>
+              <span className="font-mono font-black text-xl text-emerald-800">3,217+</span>
+            </div>
           </div>
 
         </div>
@@ -699,7 +688,7 @@ export default function HomePage() {
       {/* 3. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
         
-        {/* LEFT COLUMN: TAXONOMY & BUYER MOAT BANNER */}
+        {/* LEFT COLUMN: TAXONOMY & VALUE BANDS */}
         <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col gap-5 sticky top-28">
           
           {/* Buyer Moat CTA Banner (§ 01) */}
@@ -1008,7 +997,7 @@ export default function HomePage() {
 
           </section>
 
-          {/* 5. RESULTS HEADER & CONTROLS (With Density Toggle § 24) */}
+          {/* 5. RESULTS HEADER & CONTROLS */}
           <section className="mb-6">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E2E6ED]">
               
@@ -1023,10 +1012,10 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* View Switcher, Density Switcher & Sort Selector (§ 24) */}
+              {/* View Switcher, Density Switcher & Sort Selector */}
               <div className="flex items-center gap-2.5">
                 
-                {/* Density Switcher (§ 24) */}
+                {/* Density Switcher */}
                 <div className="hidden sm:flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED] text-xs font-bold">
                   <button
                     onClick={() => setDensity("comfortable")}
@@ -1164,7 +1153,7 @@ export default function HomePage() {
               })}
             </section>
           ) : (
-            /* DENSE TABLE VIEW (§ 24) */
+            /* DENSE TABLE VIEW */
             <section className="bg-white border-2 border-[#E2E6ED] rounded-xl overflow-hidden mb-14 shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
@@ -1235,9 +1224,8 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* ========================================================================= */}
-      {/* 7. MODALS: QUICK VIEW DRAWER & PAYWALL (§ 10) */}
-      {/* ========================================================================= */}
+      {/* MODALS */}
+      {/* 7. QUICK VIEW DRAWER & PAYWALL */}
       {quickViewTender && (
         <div 
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end animate-fadeIn"
@@ -1356,9 +1344,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 8. MODAL: BANK TRANSFER SUBSCRIPTION CLAIM (§ 16) */}
-      {/* ========================================================================= */}
+      {/* 8. BANK CLAIM MODAL */}
       {showBankClaimModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
           <div className="w-full max-w-xl bg-white rounded-xl shadow-2xl p-6 border border-gray-200">
@@ -1377,7 +1363,6 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Bank Accounts Box */}
             <div className="bg-[#F8F9FB] border border-[#E2E6ED] rounded-lg p-3.5 mb-4 text-xs text-[#374151]">
               <span className="font-bold text-[#0055B8] uppercase block mb-1">Official Bank Account:</span>
               <div className="grid grid-cols-2 gap-2 font-mono">
@@ -1438,9 +1423,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 9. MODAL: INTERACTIVE PROCUREMENT WORKSPACE SIMULATION (§ 18, 19, 20) */}
-      {/* ========================================================================= */}
+      {/* 9. BUYER WORKSPACE SIMULATION MODAL */}
       {showWorkspaceDemoModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
           <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
@@ -1462,7 +1445,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* 7 Stage Lifecycle Stepper (§ 18) */}
+            {/* 7 Stage Lifecycle Stepper */}
             <div className="grid grid-cols-7 gap-1 text-[10px] font-bold text-center mb-6">
               {[
                 { stage: "0. Draft", active: true },
@@ -1488,7 +1471,7 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Stage 4: Dual-Control Opening Ceremony (§ 19) */}
+            {/* Dual Opening */}
             <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] rounded-xl p-5 mb-5">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-sm font-extrabold text-[#0F172A] uppercase">
@@ -1499,11 +1482,6 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <p className="text-xs text-gray-600 mb-4 leading-relaxed">
-                Prior to two officers countersigning, identifying columns (bidder, total_price, security) are never read from database.
-              </p>
-
-              {/* Sealed Submissions Table (§ 19) */}
               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4">
                 <table className="w-full text-left text-xs font-medium">
                   <thead className="bg-gray-100 border-b text-gray-600 font-bold uppercase text-[10px]">
@@ -1558,7 +1536,6 @@ export default function HomePage() {
                 </table>
               </div>
 
-              {/* Action Controls for Dual Opening */}
               <div className="flex flex-wrap gap-2">
                 {ceremonyStage === "sealed" && (
                   <button
@@ -1590,7 +1567,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Evidence Pack Button */}
             <div className="flex justify-end gap-3 pt-3 border-t">
               <button
                 onClick={() => setShowEvidencePackModal(true)}
@@ -1604,9 +1580,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 10. MODAL: LEGAL EVIDENCE PACK (§ 20) */}
-      {/* ========================================================================= */}
+      {/* 10. EVIDENCE PACK MODAL */}
       {showEvidencePackModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
           <div className="w-full max-w-2xl bg-white rounded-xl shadow-2xl p-6 font-mono text-xs text-gray-800">
@@ -1638,9 +1612,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 11. MODAL: E-SUBMISSION RECEIPT (§ 17) */}
-      {/* ========================================================================= */}
+      {/* 11. E-SUBMISSION RECEIPT MODAL */}
       {showESubmissionReceiptModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
           <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 border text-xs">
@@ -1657,10 +1629,6 @@ export default function HomePage() {
               <div>Payload Hash: <strong className="text-[10px] block break-all text-[#0055B8]">7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069</strong></div>
             </div>
 
-            <p className="text-[11px] text-gray-500 mb-4">
-              This receipt is legally binding under Section 11 of the Electronic Transactions Act No. 19 of 2006.
-            </p>
-
             <button 
               onClick={() => setShowESubmissionReceiptModal(false)}
               className="w-full bg-[#0055B8] text-white py-2 rounded font-bold uppercase"
@@ -1671,9 +1639,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 12. MODAL: STAFF ADMIN CONSOLE KPI MONITOR (§ 22) */}
-      {/* ========================================================================= */}
+      {/* 12. ADMIN CONSOLE MODAL */}
       {showAdminConsoleModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
           <div className="w-full max-w-3xl bg-white rounded-xl shadow-2xl p-6 border max-h-[85vh] overflow-y-auto">
@@ -1698,36 +1664,6 @@ export default function HomePage() {
                 <span className="text-[10px] uppercase font-bold text-gray-500 block">Payments Waiting Review</span>
                 <span className="text-2xl font-black font-mono text-red-600">3 Claims</span>
               </div>
-            </div>
-
-            <h4 className="text-xs font-extrabold uppercase tracking-wider text-gray-700 mb-2">
-              Ingestion Source Baseline Health (§ 12)
-            </h4>
-            <div className="border rounded-lg overflow-hidden text-xs font-mono mb-4">
-              <table className="w-full text-left">
-                <thead className="bg-gray-100 border-b text-[10px] uppercase text-gray-600">
-                  <tr>
-                    <th className="p-2">Source</th>
-                    <th className="p-2">Weekly Baseline</th>
-                    <th className="p-2">Last Fetch</th>
-                    <th className="p-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  <tr>
-                    <td className="p-2 font-sans font-bold">Government Gazette (Weekly)</td>
-                    <td className="p-2">120 notices/wk</td>
-                    <td className="p-2">42 mins ago</td>
-                    <td className="p-2 text-emerald-700 font-bold">HEALTHY</td>
-                  </tr>
-                  <tr>
-                    <td className="p-2 font-sans font-bold">Daily News &amp; Sunday Observer</td>
-                    <td className="p-2">85 notices/wk</td>
-                    <td className="p-2">18 mins ago</td>
-                    <td className="p-2 text-emerald-700 font-bold">HEALTHY</td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
 
             <div className="flex justify-end">
