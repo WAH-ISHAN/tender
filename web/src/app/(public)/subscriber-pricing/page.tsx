@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useToast } from "@/components/ui/Toaster";
 
 const PLANS = [
   "Bidder Business Annual — Rs. 24,000 / 12 Months",
@@ -13,6 +14,7 @@ const CHANNELS = [
 ];
 
 export default function PricingPage() {
+  const toast = useToast();
   const [billingCycle, setBillingCycle] = useState<"annual" | "quarterly">("annual");
   const [showBankClaim, setShowBankClaim] = useState(false);
   const [claimSubmitted, setClaimSubmitted] = useState(false);
@@ -22,9 +24,29 @@ export default function PricingPage() {
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const planRef = useRef<HTMLDivElement>(null);
 
+  const [bankTransferredFrom, setBankTransferredFrom] = useState("");
+  const [slipReference, setSlipReference] = useState("");
+
   const [confirmChannel, setConfirmChannel] = useState(CHANNELS[0]);
   const [isChannelOpen, setIsChannelOpen] = useState(false);
   const channelRef = useRef<HTMLDivElement>(null);
+
+  const handleClaimSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!bankTransferredFrom.trim() || bankTransferredFrom.trim().length < 2) {
+      toast.error("Validation Required", "Please specify the bank name you transferred from.");
+      return;
+    }
+    if (!slipReference.trim() || slipReference.trim().length < 4) {
+      toast.error("Validation Required", "Please enter a valid bank slip reference / TXN ID (minimum 4 characters).");
+      return;
+    }
+    setClaimSubmitted(true);
+    toast.success(
+      "Claim Registered",
+      `Bank transfer slip ${slipReference} has been queued for verification.`
+    );
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -327,7 +349,7 @@ export default function PricingPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setClaimSubmitted(true); }} className="flex flex-col gap-4">
+              <form onSubmit={handleClaimSubmit} className="flex flex-col gap-4">
                 
                 {/* 1. Selected Plan (Modern Dropdown) */}
                 <div className="flex flex-col gap-1.5 relative" ref={planRef}>
@@ -372,6 +394,8 @@ export default function PricingPage() {
                   <input
                     type="text"
                     required
+                    value={bankTransferredFrom}
+                    onChange={(e) => setBankTransferredFrom(e.target.value)}
                     placeholder="e.g. Commercial Bank / Sampath / BOC"
                     className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                   />
@@ -385,6 +409,8 @@ export default function PricingPage() {
                   <input
                     type="text"
                     required
+                    value={slipReference}
+                    onChange={(e) => setSlipReference(e.target.value)}
                     placeholder="e.g. TXN-8849102 or Bank Slip No"
                     className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-mono font-bold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                   />

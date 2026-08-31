@@ -1,17 +1,54 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/Toaster";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const toast = useToast();
+
   const [isResetMode, setIsResetMode] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim() || !email.includes("@") || !email.includes(".")) {
+      toast.error("Invalid Credentials", "Please enter a valid authorized supplier email address.");
+      return;
+    }
+    if (!password || password.length < 6) {
+      toast.error("Invalid Credentials", "Password must be at least 6 characters.");
+      return;
+    }
+
+    setIsLoading(true);
+    // Set authenticated session cookie for route protection middleware
+    document.cookie = "tenderhub_auth=authenticated; path=/; max-age=86400; SameSite=Strict";
+
+    toast.success(
+      "Authorization Verified",
+      "Welcome back! Redirecting to your procurement dashboard..."
+    );
+
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 1200);
+  };
 
   const handleResetSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (resetEmail.trim()) {
-      setResetSent(true);
+    if (!resetEmail.trim() || !resetEmail.includes("@") || !resetEmail.includes(".")) {
+      toast.error("Invalid Email Format", "Please provide a valid registered corporate email address.");
+      return;
     }
+    setResetSent(true);
+    toast.success("Recovery Dispatched", `A reset link was generated for ${resetEmail}.`);
   };
 
   return (
@@ -28,7 +65,7 @@ export default function LoginPage() {
               Enter your authorized credentials to access live tender gazettes
             </p>
 
-            <form className="flex flex-col gap-4">
+            <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
                   Email Address
@@ -36,6 +73,8 @@ export default function LoginPage() {
                 <input 
                   type="email" 
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="supplier@company.lk" 
                   className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                 />
@@ -60,16 +99,19 @@ export default function LoginPage() {
                 <input 
                   type="password" 
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••" 
                   className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                 />
               </div>
 
               <button
-                type="button"
-                className="w-full bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md mt-2 uppercase tracking-wider cursor-pointer"
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#0055B8] hover:bg-[#004394] disabled:opacity-50 text-white font-extrabold text-xs sm:text-sm py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md mt-2 uppercase tracking-wider cursor-pointer"
               >
-                Sign In to Portal
+                {isLoading ? "Authenticating..." : "Sign In to Portal"}
               </button>
             </form>
 

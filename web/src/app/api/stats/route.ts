@@ -12,3 +12,10 @@ export async function GET() {
     }
   });
 }
+
+export async function POST() {
+  return NextResponse.json(
+    { success: false, error: "Unauthorized endpoint mutation. Procurement statistics are automated." },
+    { status: 401 }
+  );
+}

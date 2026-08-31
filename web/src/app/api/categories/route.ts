@@ -17,3 +17,10 @@ export async function GET() {
     data: categories
   });
 }
+
+export async function POST() {
+  return NextResponse.json(
+    { success: false, error: "Unauthorized endpoint mutation. Category classification is system managed." },
+    { status: 401 }
+  );
+}

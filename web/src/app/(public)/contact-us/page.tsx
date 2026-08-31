@@ -1,14 +1,24 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useToast } from "@/components/ui/Toaster";
 
 type SubnavTab = "contact" | "hq" | "submissions" | "billing";
 
 export default function ContactUsPage() {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<SubnavTab>("contact");
   const [department, setDepartment] = useState("General Inquiries & Information");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  
+  // Form fields
+  const [fullName, setFullName] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,7 +42,30 @@ export default function ContactUsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!fullName.trim() || fullName.trim().length < 2) {
+      toast.error("Validation Required", "Please provide your full legal name (minimum 2 characters).");
+      return;
+    }
+    if (!company.trim() || company.trim().length < 2) {
+      toast.error("Validation Required", "Please provide your registered company or organization.");
+      return;
+    }
+    if (!email.trim() || !email.includes("@") || !email.includes(".")) {
+      toast.error("Invalid Email Format", "Please provide a valid corporate email address.");
+      return;
+    }
+    if (!phone.trim() || phone.replace(/[^0-9+]/g, "").length < 9) {
+      toast.error("Invalid Contact Number", "Please provide a valid phone number (+94 ...).");
+      return;
+    }
+    if (!message.trim() || message.trim().length < 10) {
+      toast.error("Message Too Brief", "Please provide detailed inquiry instructions (minimum 10 characters).");
+      return;
+    }
+
     setSubmitted(true);
+    toast.success("Inquiry Dispatched", `Your transmission has been forwarded to the ${department} desk.`);
   };
 
   return (
@@ -141,6 +174,8 @@ export default function ContactUsPage() {
                       <input
                         type="text"
                         required
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
                         placeholder="John Silva"
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
@@ -150,6 +185,8 @@ export default function ContactUsPage() {
                       <input
                         type="text"
                         required
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
                         placeholder="Silva Enterprises Ltd"
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
@@ -162,6 +199,8 @@ export default function ContactUsPage() {
                       <input
                         type="email"
                         required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="john@silva.lk"
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
@@ -171,6 +210,8 @@ export default function ContactUsPage() {
                       <input
                         type="tel"
                         required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                         placeholder="+94 77 XXX XXXX"
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
@@ -228,6 +269,8 @@ export default function ContactUsPage() {
                     <textarea
                       rows={5}
                       required
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
                       placeholder="Describe your request..."
                       className="search-input-box w-full resize-y rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm font-normal outline-none transition-all"
                     ></textarea>

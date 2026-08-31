@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/Toaster";
 
 const CATEGORIES = [
   "Civil Construction & Infrastructure",
@@ -12,9 +14,20 @@ const CATEGORIES = [
 ];
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const toast = useToast();
+
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Form states
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -25,6 +38,41 @@ export default function RegisterPage() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!firstName.trim() || firstName.trim().length < 2) {
+      toast.error("Validation Required", "Please enter your first name (minimum 2 characters).");
+      return;
+    }
+    if (!lastName.trim() || lastName.trim().length < 2) {
+      toast.error("Validation Required", "Please enter your last name (minimum 2 characters).");
+      return;
+    }
+    if (!businessName.trim() || businessName.trim().length < 3) {
+      toast.error("Validation Required", "Please enter your registered legal company name.");
+      return;
+    }
+    if (!email.trim() || !email.includes("@") || !email.includes(".")) {
+      toast.error("Invalid Corporate Email", "Please enter a valid business email address.");
+      return;
+    }
+    if (!password || password.length < 8) {
+      toast.error("Password Too Weak", "Password must be at least 8 characters in length.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    toast.success(
+      "Registration Successful",
+      `Welcome ${firstName}! Your supplier workspace for "${businessName}" is ready.`
+    );
+
+    setTimeout(() => {
+      router.push("/login?registered=true");
+    }, 1500);
+  };
 
   return (
     <div className="max-w-[540px] mx-auto px-6 py-16">
@@ -37,12 +85,15 @@ export default function RegisterPage() {
           Register your company to receive daily procurement notifications &amp; tender RFPs
         </p>
 
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">First Name</label>
               <input
                 type="text"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Kamal"
                 className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
               />
@@ -51,6 +102,9 @@ export default function RegisterPage() {
               <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Last Name</label>
               <input
                 type="text"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 placeholder="Perera"
                 className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
               />
@@ -61,6 +115,9 @@ export default function RegisterPage() {
             <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Registered Business Name</label>
             <input
               type="text"
+              required
+              value={businessName}
+              onChange={(e) => setBusinessName(e.target.value)}
               placeholder="Perera Engineering (Pvt) Ltd"
               className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
             />
@@ -110,6 +167,9 @@ export default function RegisterPage() {
             <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Corporate Email Address</label>
             <input
               type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="kamal@perera.lk"
               className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
             />
@@ -119,16 +179,20 @@ export default function RegisterPage() {
             <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Create Password</label>
             <input
               type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
             />
           </div>
 
           <button
-            type="button"
-            className="w-full bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md mt-2 uppercase tracking-wider cursor-pointer"
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-[#0055B8] hover:bg-[#004394] disabled:opacity-50 text-white font-extrabold text-xs sm:text-sm py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md mt-2 uppercase tracking-wider cursor-pointer"
           >
-            Complete Free Registration
+            {isSubmitting ? "Creating Workspace..." : "Complete Free Registration"}
           </button>
         </form>
 

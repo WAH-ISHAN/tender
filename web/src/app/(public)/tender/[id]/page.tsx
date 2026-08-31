@@ -3,8 +3,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { MOCK_TENDERS } from "@/data/tenders";
+import { useToast } from "@/components/ui/Toaster";
 
 export default function TenderDetailPage() {
+  const toast = useToast();
   const params = useParams();
   const rawId = typeof params?.id === "string" ? params.id : Array.isArray(params?.id) ? params.id[0] : "";
   
@@ -20,12 +22,24 @@ export default function TenderDetailPage() {
 
   const simulateDownload = (filename: string) => {
     setDownloadSuccess(filename);
+    toast.success("Document Downloaded", `${filename} (Official Gazette PDF) downloaded successfully.`);
     setTimeout(() => setDownloadSuccess(null), 2500);
+  };
+
+  const handleBookmarkToggle = () => {
+    const nextState = !isBookmarked;
+    setIsBookmarked(nextState);
+    if (nextState) {
+      toast.info("Saved to Watchlist", `Notice ${tender.ref} has been added to your procurement watchlist.`);
+    } else {
+      toast.info("Removed from Watchlist", `Notice ${tender.ref} was removed from your watchlist.`);
+    }
   };
 
   const handleCopyRef = () => {
     navigator.clipboard.writeText(tender.ref);
     setCopiedRef(true);
+    toast.success("Reference Copied", `Tender reference "${tender.ref}" copied to clipboard.`);
     setTimeout(() => setCopiedRef(false), 2000);
   };
 
@@ -132,7 +146,7 @@ export default function TenderDetailPage() {
 
             <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col gap-2 font-sans">
               <button 
-                onClick={() => setIsBookmarked(!isBookmarked)}
+                onClick={handleBookmarkToggle}
                 className={`w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border ${
                   isBookmarked ? "bg-[#EFF6FF] text-[#0055B8] border-[#BFDBFE]" : "bg-[#F8FAFC] text-slate-700 border-slate-200 hover:bg-slate-100"
                 }`}

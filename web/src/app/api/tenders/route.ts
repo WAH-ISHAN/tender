@@ -166,3 +166,24 @@ export async function GET(request: Request) {
     metrics: { liveCount: 366, closingThisWeek: 41, totalPublished: 39942 }
   });
 }
+
+export async function POST() {
+  return NextResponse.json(
+    { success: false, error: "Unauthorized endpoint mutation. Public API access is read-only." },
+    { status: 401 }
+  );
+}
+
+export async function PUT() {
+  return NextResponse.json(
+    { success: false, error: "Method Not Allowed. Tender modifications require authorized CIDA administrator session." },
+    { status: 405 }
+  );
+}
+
+export async function DELETE() {
+  return NextResponse.json(
+    { success: false, error: "Method Not Allowed. Deletion of official gazette procurement records is prohibited." },
+    { status: 405 }
+  );
+}

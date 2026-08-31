@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WebLoader from "@/components/layout/WebLoader";
+import { ToastProvider } from "@/components/ui/Toaster";
 
 const barlowCondensed = Barlow_Condensed({
   weight: ["600", "700", "800"],
@@ -30,10 +31,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${barlowCondensed.variable} ${plusJakartaSans.variable}`}>
       <body className="antialiased min-h-screen flex flex-col bg-white text-[#111827]">
-        <WebLoader />
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <ToastProvider>
+          <WebLoader />
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </ToastProvider>
       </body>
     </html>
   );
