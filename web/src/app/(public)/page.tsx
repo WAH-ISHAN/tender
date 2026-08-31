@@ -701,7 +701,7 @@ export default function HomePage() {
         <main className="lg:col-span-9 xl:col-span-9">
 
           {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-2 mb-6 shadow-sm flex items-center gap-1.5 overflow-x-auto">
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 mb-8 sm:mb-10 shadow-sm flex items-center gap-2 overflow-x-auto">
             {[
               { id: "live", label: "Live Tenders", count: "366" },
               { id: "today", label: "Today's Tenders", count: "12" },
@@ -733,8 +733,8 @@ export default function HomePage() {
           </div>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
-          <section id="tender-results-section" className="mb-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <section id="tender-results-section" className="mb-8">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-200">
               
               <div className="flex items-baseline gap-3">
                 <h3 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
