@@ -74,9 +74,9 @@ export const DICTIONARY: Translations = {
     ta: "இலங்கையின் அனைத்து டெண்டர் அறிவிப்புகள்",
   },
   heroDesc: {
-    en: "Daily procurement gazettes, municipal RFPs, and corporate tenders published across all 9 provinces. Verified daily at 05:00 AM with cryptographic SHA-256 evidence packs.",
-    si: "දිවයිනේ පළාත් 9 ම ආවරණය වන පරිදි රජයේ ගැසට් නිවේදන, අමාත්‍යාංශ හා සංස්ථා ටෙන්ඩර් දිනපතා උදෑසන 05:00 ට තහවුරු කර ප්‍රකාශයට පත් කෙරේ.",
-    ta: "இலங்கையின் 9 மாகாணங்களையும் உள்ளடக்கிய அரசாங்க மற்றும் தனியார் கொள்முதல் டெண்டர்கள் தினமும் காலை 05:00 மணிக்கு சரிபார்க்கப்பட்டு வெளியிடப்படுகின்றன.",
+    en: "Official government gazettes, ministry RFPs, provincial notices, and corporate tenders published across all 9 provinces in Sri Lanka. Verified daily at 05:00 AM directly from official government sources.",
+    si: "දිවයිනේ සියලුම පළාත් 9 ම ආවරණය වන පරිදි රජයේ නිල ගැසට් නිවේදන, අමාත්‍යාංශ, පළාත් සභා හා සංස්ථා ටෙන්ඩර් දිනපතා උදෑසන 05:00 ට සෘජුවම නිල මූලාශ්‍ර මඟින් තහවුරු කර ප්‍රකාශයට පත් කෙරේ.",
+    ta: "இலங்கையின் 9 மாகாணங்களையும் உள்ளடக்கிய அரசாங்க வர்த்தமானி மற்றும் பொதுத்துறை கொள்முதல் டெண்டர்கள் தினமும் காலை 05:00 மணிக்கு அதிகாரப்பூர்வமாக சரிபார்க்கப்பட்டு வெளியிடப்படுகின்றன.",
   },
 
   // Hero Radar Metrics
