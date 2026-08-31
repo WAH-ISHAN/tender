@@ -549,53 +549,21 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-linear-to-r from-[#004DA8]/95 via-[#005BBF]/85 to-[#004DA8]/90 pointer-events-none" />
 
-        {/* Top Right Accreditation Badge */}
-        <div className="absolute top-0 right-0 hidden md:flex items-center gap-3 bg-white text-gray-800 px-5 py-2.5 rounded-bl-2xl shadow-md border-b border-l border-gray-100 z-10">
-          <div className="text-right">
-            <div className="text-[11px] font-black text-[#0055B8] uppercase tracking-wider leading-none">
-              National Directory
-            </div>
-            <div className="text-[10px] text-gray-500 font-semibold">
-              Verified Gazette Mirror
-            </div>
-          </div>
-          <div className="w-7 h-7 rounded bg-blue-50 border border-blue-200 flex items-center justify-center text-[#0055B8] font-black text-xs">
-            LK
-          </div>
-        </div>
-
         <div className="relative z-10 px-6 sm:px-10 lg:px-12 pt-8 pb-7">
           
-          {/* Top Row: Heading on Left + Diamond Frame on Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
-            <div className="lg:col-span-8">
-              <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-200 mb-1.5">
-                THE LARGEST COLLECTION OF
-              </div>
-
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-2.5">
-                TENDERS IN SRI LANKA
-              </h1>
-
-              <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed max-w-2xl">
-                We take pride in our verified procurement services which we have had the pleasure of providing to our valued contractors &amp; suppliers across Sri Lanka.
-              </p>
+          {/* Top Heading */}
+          <div className="mb-6 max-w-3xl">
+            <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-200 mb-1.5">
+              THE LARGEST COLLECTION OF
             </div>
 
-            <div className="lg:col-span-4 hidden lg:flex justify-end pr-4">
-              <div className="relative w-36 h-36 flex items-center justify-center">
-                <div className="absolute inset-0 border-4 border-[#00B843] rounded-3xl rotate-45 shadow-2xl transition-transform duration-700 hover:rotate-[48deg]" />
-                <div className="absolute -top-2.5 -left-2.5 w-7 h-7 border-4 border-[#00B843] rounded-lg rotate-45 bg-[#0055B8]" />
-                <div className="relative w-28 h-28 rounded-2xl rotate-45 overflow-hidden shadow-inner border-2 border-white/40">
-                  <div 
-                    className="absolute -inset-6 bg-cover bg-center -rotate-45"
-                    style={{
-                      backgroundImage: `url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop')`,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-2.5">
+              TENDERS IN SRI LANKA
+            </h1>
+
+            <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed max-w-2xl">
+              We take pride in our verified procurement services which we have had the pleasure of providing to our valued contractors &amp; suppliers across Sri Lanka.
+            </p>
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
