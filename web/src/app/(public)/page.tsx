@@ -537,12 +537,12 @@ export default function HomePage() {
   return (
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
       
-      {/* 1. eTenders STYLE HERO BANNER WITH INTEGRATED SEARCH & DIAMOND IMAGE FRAME */}
-      <section className="relative rounded-2xl overflow-hidden mb-10 shadow-xl bg-linear-to-r from-[#0055B8] via-[#0066E0] to-[#004CA3] text-white min-h-[380px] flex items-center">
+      {/* 1. eTenders STYLE HERO BANNER WITH INTEGRATED FULL SEARCH FILTER ENGINE */}
+      <section className="relative rounded-2xl overflow-hidden mb-8 shadow-xl bg-linear-to-r from-[#0055B8] via-[#0066E0] to-[#004CA3] text-white">
         
         {/* Background Lotus Tower / City Silhouette */}
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
+          className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity pointer-events-none"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
           }}
@@ -564,50 +564,110 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Main Grid Content */}
-        <div className="relative z-10 w-full px-6 sm:px-10 lg:px-12 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="relative z-10 px-6 sm:px-10 lg:px-12 pt-8 pb-7">
           
-          {/* Left Column: Heading, Subtitle & Integrated Search */}
-          <div className="lg:col-span-7 xl:col-span-8">
-            <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-200 mb-2">
-              THE LARGEST COLLECTION OF
-            </div>
-
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
-              TENDERS IN SRI LANKA
-            </h1>
-
-            <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed max-w-xl mb-6">
-              We take pride in our verified procurement services which we have had the pleasure of providing to our valued contractors &amp; suppliers across Sri Lanka.
-            </p>
-
-            {/* Integrated White Search Container */}
-            <div className="bg-white p-2 sm:p-2.5 rounded-xl shadow-2xl flex flex-col sm:flex-row items-center gap-2 max-w-2xl border border-white/20 mb-3">
-              
-              {/* Input: Find Tender Here */}
-              <div className="flex-1 w-full relative">
-                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
-                  🔍
-                </div>
-                <input
-                  type="text"
-                  placeholder="Find tender here..."
-                  value={keyword}
-                  onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-transparent pl-10 pr-3 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none"
-                />
+          {/* Top Row: Heading on Left + Diamond Frame on Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
+            <div className="lg:col-span-8">
+              <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-200 mb-1.5">
+                THE LARGEST COLLECTION OF
               </div>
 
-              <div className="hidden sm:block w-[1px] h-8 bg-gray-200" />
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-2.5">
+                TENDERS IN SRI LANKA
+              </h1>
 
-              {/* Input: Select Category */}
-              <div className="w-full sm:w-56">
+              <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed max-w-2xl">
+                We take pride in our verified procurement services which we have had the pleasure of providing to our valued contractors &amp; suppliers across Sri Lanka.
+              </p>
+            </div>
+
+            <div className="lg:col-span-4 hidden lg:flex justify-end pr-4">
+              <div className="relative w-36 h-36 flex items-center justify-center">
+                <div className="absolute inset-0 border-4 border-[#00B843] rounded-3xl rotate-45 shadow-2xl transition-transform duration-700 hover:rotate-[48deg]" />
+                <div className="absolute -top-2.5 -left-2.5 w-7 h-7 border-4 border-[#00B843] rounded-lg rotate-45 bg-[#0055B8]" />
+                <div className="relative w-28 h-28 rounded-2xl rotate-45 overflow-hidden shadow-inner border-2 border-white/40">
+                  <div 
+                    className="absolute -inset-6 bg-cover bg-center -rotate-45"
+                    style={{
+                      backgroundImage: `url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop')`,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
+          <div className="bg-white rounded-xl p-4 sm:p-5 shadow-2xl text-gray-900 border border-white/30">
+            
+            {/* Primary Search Bar */}
+            <div className="mb-3 relative" ref={searchContainerRef}>
+              <div className="relative">
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search by tender title, procuring entity, reference code, or keywords..."
+                  value={keyword}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  className="w-full bg-[#F8F9FB] border border-[#D9DFE7] focus:border-[#0055B8] focus:bg-white rounded-lg py-2.5 pl-4 pr-16 text-xs sm:text-sm font-semibold text-[#111827] outline-none transition-all placeholder:text-gray-400 placeholder:font-normal"
+                />
+                
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                  {keyword && (
+                    <button
+                      onClick={() => setKeyword("")}
+                      className="text-gray-400 hover:text-gray-700 font-black text-lg mr-1"
+                    >
+                      &times;
+                    </button>
+                  )}
+                  <kbd className="hidden sm:inline-block bg-gray-200 text-gray-600 text-[10px] font-mono px-1.5 py-0.5 rounded border border-gray-300">
+                    /
+                  </kbd>
+                </div>
+              </div>
+
+              {/* On-Focus Popover */}
+              {isSearchFocused && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D9DFE7] rounded-lg shadow-lg z-30 p-3 animate-fadeIn">
+                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 mb-2">
+                    Recent Search Queries
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["solar infrastructure", "road rehabilitation", "pharmaceuticals", "enterprise server hardware", "janitorial maintenance"].map((term) => (
+                      <button
+                        key={term}
+                        type="button"
+                        onClick={() => {
+                          setKeyword(term);
+                          setIsSearchFocused(false);
+                        }}
+                        className="bg-[#F3F5F8] hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-2.5 py-1 rounded transition-colors text-gray-700"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 4 Core Dropdowns + Action CTA */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 mb-2.5">
+              
+              {/* Category */}
+              <div>
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                  CATEGORY
+                </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-transparent py-2.5 px-3 text-xs sm:text-sm font-semibold text-gray-800 cursor-pointer outline-none truncate"
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
                 >
-                  <option value="all">Select Category</option>
+                  <option value="all">All Categories ({CATEGORIES.length})</option>
                   {CATEGORIES.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
@@ -616,45 +676,135 @@ export default function HomePage() {
                 </select>
               </div>
 
-            </div>
+              {/* Province */}
+              <div>
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                  PROVINCE
+                </label>
+                <select
+                  value={selectedProvince}
+                  onChange={(e) => setSelectedProvince(e.target.value)}
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                >
+                  {PROVINCES.map((prov) => (
+                    <option key={prov.id} value={prov.id}>
+                      {prov.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Vibrant Green FIND TENDER Action Button */}
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  const element = document.getElementById("tender-results-section");
-                  element?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="bg-[#00B843] hover:bg-[#009E38] text-white font-black text-xs sm:text-sm px-8 py-3 rounded-lg uppercase tracking-wider shadow-lg transition-all transform hover:-translate-y-0.5"
-              >
-                FIND TENDER
-              </button>
-            </div>
+              {/* Value Band */}
+              <div>
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                  VALUE BAND
+                </label>
+                <select
+                  value={selectedValueBand}
+                  onChange={(e) => setSelectedValueBand(e.target.value)}
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                >
+                  {VALUE_BANDS.map((band) => (
+                    <option key={band.id} value={band.id}>
+                      {band.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          </div>
+              {/* Closing Date Window */}
+              <div>
+                <label className="text-[10px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-1">
+                  CLOSING DEADLINE
+                </label>
+                <select
+                  value={closingWindow}
+                  onChange={(e) => setClosingWindow(e.target.value)}
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none"
+                >
+                  <option value="all">Any Closing Date</option>
+                  <option value="3days">Next 3 Days (Urgent)</option>
+                  <option value="7days">Next 7 Days</option>
+                  <option value="30days">Next 30 Days</option>
+                </select>
+              </div>
 
-          {/* Right Column: Diamond Green Frame with Contractor Image */}
-          <div className="lg:col-span-5 xl:col-span-4 hidden lg:flex justify-center items-center">
-            <div className="relative w-64 h-64 flex items-center justify-center">
-              
-              {/* Outer Green Accent Diamond */}
-              <div className="absolute inset-0 border-4 border-[#00B843] rounded-3xl rotate-45 shadow-2xl transition-transform duration-700 hover:rotate-[48deg]" />
-              
-              {/* Small Top-Left Green Accent Box */}
-              <div className="absolute -top-4 -left-4 w-12 h-12 border-4 border-[#00B843] rounded-xl rotate-45 bg-[#0055B8]" />
-
-              {/* Inner Clipped Image */}
-              <div className="relative w-56 h-56 rounded-2xl rotate-45 overflow-hidden shadow-inner border-2 border-white/40">
-                <div 
-                  className="absolute -inset-10 bg-cover bg-center -rotate-45"
-                  style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop')`,
+              {/* Action Buttons */}
+              <div className="flex items-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const element = document.getElementById("tender-results-section");
+                    element?.scrollIntoView({ behavior: "smooth" });
                   }}
-                />
+                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-2.5 px-3 rounded-md transition-colors uppercase tracking-wider shadow-xs whitespace-nowrap"
+                >
+                  FIND TENDERS
+                </button>
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="h-[38px] px-3 border-2 border-[#D9DFE7] hover:bg-gray-100 text-[#374151] text-xs font-extrabold rounded-md transition-colors whitespace-nowrap"
+                  >
+                    Clear
+                  </button>
+                )}
               </div>
 
             </div>
+
+            {/* Quick Filters Row */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-[#F1F3F7]">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#4B5563] mr-1">
+                QUICK FILTERS:
+              </span>
+              <button
+                type="button"
+                onClick={() => applyPreset("urgent")}
+                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                  activePreset === "urgent"
+                    ? "bg-red-600 text-white border-red-600 shadow-xs font-bold"
+                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                }`}
+              >
+                Closing in ≤ 7 Days
+              </button>
+              <button
+                type="button"
+                onClick={() => applyPreset("gov")}
+                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                  activePreset === "gov"
+                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
+                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                }`}
+              >
+                Central Government
+              </button>
+              <button
+                type="button"
+                onClick={() => applyPreset("highValue")}
+                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                  activePreset === "highValue"
+                    ? "bg-emerald-700 text-white border-emerald-700 shadow-xs font-bold"
+                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                }`}
+              >
+                High Value (&gt; 30M LKR)
+              </button>
+              <button
+                type="button"
+                onClick={() => applyPreset("western")}
+                className={`text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors ${
+                  activePreset === "western"
+                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
+                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
+                }`}
+              >
+                Western Province
+              </button>
+            </div>
+
           </div>
 
         </div>
@@ -753,222 +903,17 @@ export default function HomePage() {
 
         </aside>
 
-        {/* RIGHT COLUMN: SEARCH, FILTERS & TENDER RESULTS */}
+        {/* RIGHT COLUMN: DIRECT TENDER RESULTS (NO DUPLICATE SEARCH BAR) */}
         <main className="lg:col-span-9 xl:col-span-10">
           
           {/* Breadcrumb Navigation */}
-          <nav className="text-xs font-medium text-gray-500 mb-2.5 flex items-center gap-1.5" aria-label="Breadcrumb">
+          <nav className="text-xs font-medium text-gray-500 mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-[#0055B8]">Home</Link>
             <span>&rsaquo;</span>
             <span>Procurement Gazettes</span>
             <span>&rsaquo;</span>
             <span className="text-[#0055B8] font-bold">National Tenders &amp; RFPs</span>
           </nav>
-
-          {/* 3. WORKSPACE SEARCH PANEL */}
-          <section className="bg-white border-2 border-[#E2E6ED] rounded-xl p-5 sm:p-6 mb-7 shadow-xs">
-            
-            {/* Primary Search Bar */}
-            <div className="mb-4 relative" ref={searchContainerRef}>
-              <div className="relative">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="Search by tender title, procuring entity, reference code, or keywords..."
-                  value={keyword}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-[#F8F9FB] border border-[#D9DFE7] focus:border-[#0055B8] focus:bg-white rounded-lg py-3 pl-4 pr-16 text-sm font-semibold text-[#111827] outline-none transition-all placeholder:text-gray-400 placeholder:font-normal"
-                />
-                
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-                  {keyword && (
-                    <button
-                      onClick={() => setKeyword("")}
-                      className="text-gray-400 hover:text-gray-700 font-black text-lg mr-1"
-                    >
-                      &times;
-                    </button>
-                  )}
-                  <kbd className="hidden sm:inline-block bg-gray-200 text-gray-600 text-[10px] font-mono px-1.5 py-0.5 rounded border border-gray-300">
-                    /
-                  </kbd>
-                </div>
-              </div>
-
-              {/* On-Focus Popover */}
-              {isSearchFocused && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D9DFE7] rounded-lg shadow-lg z-30 p-3 animate-fadeIn">
-                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 mb-2">
-                    Recent Search Queries
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["solar infrastructure", "road rehabilitation", "pharmaceuticals", "enterprise server hardware", "janitorial maintenance"].map((term) => (
-                      <button
-                        key={term}
-                        type="button"
-                        onClick={() => {
-                          setKeyword(term);
-                          setIsSearchFocused(false);
-                        }}
-                        className="bg-[#F3F5F8] hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-2.5 py-1 rounded transition-colors text-gray-700"
-                      >
-                        {term}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Core 4 Dropdowns (Category, Province, Value Band, Closing Date) + Action CTA */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
-              
-              {/* Category */}
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
-                  Category
-                </label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
-                >
-                  <option value="all">All Categories ({CATEGORIES.length})</option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Province */}
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
-                  Province
-                </label>
-                <select
-                  value={selectedProvince}
-                  onChange={(e) => setSelectedProvince(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
-                >
-                  {PROVINCES.map((prov) => (
-                    <option key={prov.id} value={prov.id}>
-                      {prov.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Value Band */}
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
-                  Value Band
-                </label>
-                <select
-                  value={selectedValueBand}
-                  onChange={(e) => setSelectedValueBand(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
-                >
-                  {VALUE_BANDS.map((band) => (
-                    <option key={band.id} value={band.id}>
-                      {band.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Closing Date Window */}
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
-                  Closing Deadline
-                </label>
-                <select
-                  value={closingWindow}
-                  onChange={(e) => setClosingWindow(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none"
-                >
-                  <option value="all">Any Closing Date</option>
-                  <option value="3days">Next 3 Days (Urgent)</option>
-                  <option value="7days">Next 7 Days</option>
-                  <option value="30days">Next 30 Days</option>
-                </select>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-end gap-2">
-                <button
-                  type="button"
-                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-2.5 px-3 rounded-md transition-colors uppercase tracking-wider shadow-xs whitespace-nowrap"
-                >
-                  Find Tenders
-                </button>
-                {hasActiveFilters && (
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="h-[38px] px-3 border-2 border-[#D9DFE7] hover:bg-gray-100 text-[#374151] text-xs font-extrabold rounded-md transition-colors whitespace-nowrap"
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
-
-            </div>
-
-            {/* Quick Filters Row */}
-            <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-[#F1F3F7]">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#4B5563] mr-1">
-                QUICK FILTERS:
-              </span>
-              <button
-                type="button"
-                onClick={() => applyPreset("urgent")}
-                className={`text-xs font-bold px-3 py-1 rounded-md border transition-colors ${
-                  activePreset === "urgent"
-                    ? "bg-red-600 text-white border-red-600 shadow-xs"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
-                }`}
-              >
-                Closing in ≤ 7 Days
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("gov")}
-                className={`text-xs font-bold px-3 py-1 rounded-md border transition-colors ${
-                  activePreset === "gov"
-                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
-                }`}
-              >
-                Central Government
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("highValue")}
-                className={`text-xs font-bold px-3 py-1 rounded-md border transition-colors ${
-                  activePreset === "highValue"
-                    ? "bg-emerald-700 text-white border-emerald-700 shadow-xs"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
-                }`}
-              >
-                High Value (&gt; 30M LKR)
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("western")}
-                className={`text-xs font-bold px-3 py-1 rounded-md border transition-colors ${
-                  activePreset === "western"
-                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs"
-                    : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
-                }`}
-              >
-                Western Province
-              </button>
-            </div>
-
-          </section>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
           <section id="tender-results-section" className="mb-5">
