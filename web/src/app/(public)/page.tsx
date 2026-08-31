@@ -804,54 +804,60 @@ export default function HomePage() {
             /* DENSE TABLE VIEW WITH DIRECT FULL PAGE LINK */
             <section className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden mb-16 shadow-lg">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="bg-[#F8FAFC] border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                  <thead className="bg-[#F8FAFC] border-b border-slate-200 text-slate-500 font-black uppercase tracking-wider text-[11px]">
                     <tr>
-                      <th className="px-5 py-3.5">Procuring Entity &amp; Ref</th>
-                      <th className="px-5 py-3.5">Tender Title</th>
-                      <th className="px-5 py-3.5">Category</th>
-                      <th className="px-5 py-3.5">Closing Date</th>
-                      <th className="px-5 py-3.5 text-right">Value (LKR)</th>
-                      <th className="px-5 py-3.5 text-center">Action</th>
+                      <th className="px-5 py-4 w-[22%] min-w-[180px] align-middle">Procuring Entity &amp; Ref</th>
+                      <th className="px-5 py-4 w-[32%] min-w-[240px] align-middle">Tender Title</th>
+                      <th className="px-5 py-4 w-[18%] min-w-[170px] align-middle text-center">Category</th>
+                      <th className="px-5 py-4 w-[14%] min-w-[140px] align-middle text-center">Closing Date</th>
+                      <th className="px-5 py-4 w-[10%] min-w-[110px] align-middle text-right">Value (LKR)</th>
+                      <th className="px-5 py-4 w-[4%] min-w-[90px] align-middle text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 font-medium text-slate-900">
+                  <tbody className="divide-y divide-slate-100 font-medium text-slate-900">
                     {filteredTenders.map((tender) => {
                       const isSaved = savedTenders.has(tender.id);
                       return (
                         <tr 
                           key={tender.id}
                           onClick={() => router.push(`/tender/${tender.id}`)}
-                          className="hover:bg-blue-50/40 cursor-pointer transition-colors"
+                          className="hover:bg-blue-50/40 cursor-pointer transition-colors duration-150"
                         >
-                          <td className="px-5 py-3.5">
-                            <div className="font-bold text-[#0055B8]">{tender.entity}</div>
-                            <div className="text-[11px] text-slate-400 font-mono">{tender.ref}</div>
+                          <td className="px-5 py-4 align-middle">
+                            <div className="font-extrabold text-[#0055B8] leading-snug">{tender.entity}</div>
+                            <div className="text-[11px] text-slate-400 font-mono mt-0.5">{tender.ref}</div>
                           </td>
-                          <td className="px-5 py-3.5 font-black text-[#0F172A] max-w-sm">
-                            <Link href={`/tender/${tender.id}`} className="hover:text-[#0055B8] transition-colors">
+                          
+                          <td className="px-5 py-4 align-middle font-black text-[#0F172A] leading-snug">
+                            <Link href={`/tender/${tender.id}`} className="hover:text-[#0055B8] transition-colors block">
                               {tender.title}
                             </Link>
                           </td>
-                          <td className="px-5 py-3.5 text-xs">
-                            <span className="bg-[#F1F5F9] text-[#0055B8] border border-[#E2E8F0] px-3 py-1 rounded-xl font-bold text-xs shadow-2xs">
+                          
+                          <td className="px-5 py-4 align-middle text-center whitespace-nowrap">
+                            <span className="inline-flex items-center justify-center bg-[#F1F5F9] text-[#0055B8] border border-[#E2E8F0] px-3.5 py-1.5 rounded-xl font-bold text-xs shadow-2xs whitespace-nowrap">
                               {tender.categoryName}
                             </span>
                           </td>
-                          <td className="px-5 py-3.5 whitespace-nowrap font-mono text-xs">
-                            <span className="text-[#0055B8] font-bold bg-[#F1F5F9] px-3 py-1 rounded-xl border border-[#E2E8F0] shadow-2xs">
+                          
+                          <td className="px-5 py-4 align-middle text-center whitespace-nowrap font-mono text-xs">
+                            <span className="inline-flex items-center justify-center text-[#0055B8] font-bold bg-[#F1F5F9] px-3 py-1.5 rounded-xl border border-[#E2E8F0] shadow-2xs whitespace-nowrap">
                               {tender.endDate} ({tender.daysLeft}d left)
                             </span>
                           </td>
-                          <td className="px-5 py-3.5 font-mono font-black text-right text-[#0F172A] whitespace-nowrap">
+                          
+                          <td className="px-5 py-4 align-middle font-mono font-black text-right text-[#0F172A] whitespace-nowrap text-sm">
                             {tender.amount}
                           </td>
-                          <td className="px-5 py-3.5 text-center whitespace-nowrap">
-                            <div className="flex items-center justify-center gap-2">
+                          
+                          <td className="px-5 py-4 align-middle text-center whitespace-nowrap">
+                            <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
                               <button
                                 type="button"
                                 onClick={(e) => toggleBookmark(e, tender.id)}
-                                className="p-1.5 rounded-lg bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] text-slate-400 hover:text-[#0055B8] transition-all"
+                                title={isSaved ? "Remove from watchlist" : "Save to watchlist"}
+                                className="p-2 rounded-xl bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] text-slate-400 hover:text-[#0055B8] transition-all hover:scale-105 active:scale-95 shadow-2xs cursor-pointer"
                               >
                                 <svg 
                                   className={`w-3.5 h-3.5 ${isSaved ? "fill-[#0055B8] text-[#0055B8]" : "fill-none text-slate-400"}`} 
@@ -864,7 +870,7 @@ export default function HomePage() {
                               </button>
                               <Link 
                                 href={`/tender/${tender.id}`}
-                                className="px-3 py-1 bg-[#F1F5F9] hover:bg-[#0055B8] hover:text-white text-[#0055B8] font-bold text-xs rounded-xl border border-[#E2E8F0] transition-all shadow-2xs"
+                                className="px-3.5 py-1.5 bg-[#F1F5F9] hover:bg-[#0055B8] hover:text-white text-[#0055B8] font-black text-xs rounded-xl border border-[#E2E8F0] hover:border-[#0055B8] transition-all shadow-2xs hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                               >
                                 Details &rarr;
                               </Link>
