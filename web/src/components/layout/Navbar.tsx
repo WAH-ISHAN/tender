@@ -113,21 +113,34 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Door 1: Bidder Sign-in */}
-          <Link
-            href="/login"
-            className="text-xs font-extrabold text-[#0055B8] hover:text-[#004394] bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-md transition-colors uppercase tracking-wider border border-blue-200"
-          >
-            Bidder Login
-          </Link>
+          {/* Dynamic Auth State Doors */}
+          {pathname.startsWith("/dashboard") || pathname.startsWith("/favorites") || pathname.startsWith("/related-tenders") || pathname.startsWith("/settings") ? (
+            <Link
+              href="/dashboard"
+              className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-black px-4 py-2 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-md whitespace-nowrap flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Workspace Portal</span>
+            </Link>
+          ) : (
+            <>
+              {/* Door 1: Bidder Sign-in */}
+              <Link
+                href="/login"
+                className="text-xs font-bold text-[#0055B8] hover:text-[#004394] bg-[#EFF6FF] hover:bg-blue-100 px-3.5 py-2 rounded-xl transition-colors uppercase tracking-wider border border-[#BFDBFE]"
+              >
+                Bidder Login
+              </Link>
 
-          {/* Door 2: Company / Procuring Entity Free Workspace */}
-          <Link
-            href="/register"
-            className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-extrabold px-3.5 py-2 rounded-md transition-colors uppercase tracking-wider shadow-xs whitespace-nowrap"
-          >
-            Company Workspace
-          </Link>
+              {/* Door 2: Company / Procuring Entity Free Workspace */}
+              <Link
+                href="/register"
+                className="bg-[#0055B8] hover:bg-[#004394] text-white text-xs font-black px-4 py-2 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-md whitespace-nowrap"
+              >
+                Company Workspace
+              </Link>
+            </>
+          )}
 
         </div>
 
