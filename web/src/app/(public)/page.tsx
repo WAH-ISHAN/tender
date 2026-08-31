@@ -187,6 +187,28 @@ export default function HomePage() {
     return result;
   }, [keyword, selectedCategory, selectedProvince, selectedValueBand, sectorFilter, closingWindow, sortBy, activePreset]);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [keyword, selectedCategory, selectedProvince, selectedValueBand, sectorFilter, closingWindow, sortBy, statusTab]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTenders.length / itemsPerPage));
+  const paginatedTenders = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredTenders.slice(start, start + itemsPerPage);
+  }, [filteredTenders, currentPage, itemsPerPage]);
+
+  const startIndex = filteredTenders.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const endIndex = Math.min(currentPage * itemsPerPage, filteredTenders.length);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    document.getElementById("tender-results-section")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const handleReset = () => {
     setKeyword("");
     setSelectedCategory("all");
@@ -196,6 +218,7 @@ export default function HomePage() {
     setSectorFilter("all");
     setStatusTab("live");
     setActivePreset(null);
+    setCurrentPage(1);
   };
 
   const hasActiveFilters =
@@ -798,9 +821,9 @@ export default function HomePage() {
 
           {/* 5. TENDER CATALOGUE: CARDS GRID VS DENSE LIST */}
           {viewMode === "cards" ? (
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mb-16 items-stretch">
-              {filteredTenders.map((tender, index) => {
-                const isFirst = index === 0;
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mb-8 items-stretch">
+              {paginatedTenders.map((tender, index) => {
+                const isFirst = index === 0 && currentPage === 1;
                 const isSaved = savedTenders.has(tender.id);
 
                 return (
@@ -880,7 +903,7 @@ export default function HomePage() {
             </section>
           ) : (
             /* DENSE TABLE VIEW WITH DIRECT FULL PAGE LINK */
-            <section className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden mb-16 shadow-lg">
+            <section className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden mb-8 shadow-lg">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm border-collapse">
                   <thead className="bg-[#F8FAFC] border-b border-slate-200 text-slate-500 font-black uppercase tracking-wider text-[11px]">
@@ -894,7 +917,7 @@ export default function HomePage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium text-slate-900">
-                    {filteredTenders.map((tender) => {
+                    {paginatedTenders.map((tender) => {
                       const isSaved = savedTenders.has(tender.id);
                       return (
                         <tr 
@@ -962,6 +985,68 @@ export default function HomePage() {
               </div>
             </section>
           )}
+
+          {/* 6. MODERN LOAD BALANCED PAGINATION CONTROL BAR */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-16">
+            <div className="text-xs text-slate-500 font-medium">
+              Showing <strong className="font-bold text-[#0F172A]">{startIndex}</strong> to <strong className="font-bold text-[#0F172A]">{endIndex}</strong> of <strong className="font-bold text-[#0055B8]">{filteredTenders.length}</strong> Notices
+            </div>
+
+            {/* Page Navigation Switcher */}
+            <div className="flex items-center gap-1.5 self-center sm:self-auto">
+              <button
+                type="button"
+                disabled={currentPage <= 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-3 py-1.5 bg-[#F1F5F9] hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-2xs"
+              >
+                &larr; Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                <button
+                  key={pageNum}
+                  type="button"
+                  onClick={() => handlePageChange(pageNum)}
+                  className={`w-8 h-8 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                    currentPage === pageNum
+                      ? "bg-[#0055B8] text-white shadow-md scale-105"
+                      : "bg-[#F8FAFC] text-slate-700 hover:bg-slate-200 border border-slate-200"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                disabled={currentPage >= totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-3 py-1.5 bg-[#F1F5F9] hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-2xs"
+              >
+                Next &rarr;
+              </button>
+            </div>
+
+            {/* Items Per Page Selector */}
+            <div className="flex items-center gap-2 self-end sm:self-auto text-xs">
+              <span className="text-slate-400 font-medium">Per Page:</span>
+              <div className="inline-flex p-0.5 bg-[#F1F5F9] rounded-xl border border-slate-200">
+                {[6, 12, 24].map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => { setItemsPerPage(size); setCurrentPage(1); }}
+                    className={`px-2.5 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
+                      itemsPerPage === size ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
         </main>
       </div>
