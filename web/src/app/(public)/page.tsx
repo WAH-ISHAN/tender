@@ -392,18 +392,18 @@ export default function HomePage() {
   const visibleCategories = showAllCategories ? CATEGORIES : CATEGORIES.slice(0, 5);
 
   return (
-    <div className={`max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-6 transition-all ${
+    <div className={`max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all ${
       textZoom === "large" ? "text-[110%]" : textZoom === "xl" ? "text-[120%]" : "text-[100%]"
     }`}>
       
-      {/* 1. TOP INSTITUTIONAL STATUS STRIP */}
-      <header className="flex flex-wrap items-center justify-between text-xs pb-3 mb-5 border-b border-[#E2E6ED] gap-3">
+      {/* 1. TOP INSTITUTIONAL STATUS STRIP (With Generous Margins) */}
+      <header className="flex flex-wrap items-center justify-between text-xs pb-4 mb-8 border-b border-[#E2E6ED] gap-4">
         <div className="flex items-center gap-2.5 text-[#374151]">
           <span className="text-[#0055B8] font-extrabold uppercase tracking-wider">NATIONAL PROCUREMENT GAZETTE</span>
           <span className="text-gray-300">|</span>
           <span className="font-semibold">Issue No. 2,426</span>
           <span className="text-gray-300">|</span>
-          <span className="text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 uppercase tracking-wider text-[11px]">
+          <span className="text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 uppercase tracking-wider text-[11px]">
             Verified Daily
           </span>
         </div>
@@ -455,93 +455,93 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. HIGH-IMPACT SRI LANKA PROCUREMENT STATS RIBBON (Inspired by Tenders.lk & SmartTenders) */}
-      <section className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-7">
-        <div className="bg-[#0055B8] text-white p-4 rounded-lg shadow-xs flex flex-col justify-between">
+      {/* 2. HIGH-IMPACT SRI LANKA PROCUREMENT STATS RIBBON */}
+      <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-5 mb-10">
+        <div className="bg-[#0055B8] text-white p-5 rounded-xl shadow-xs flex flex-col justify-between">
           <span className="text-xs uppercase tracking-wider text-blue-200 font-extrabold">Total Tender Archive</span>
-          <span className="font-display text-3xl sm:text-4xl font-black mt-1">39,942+</span>
-          <span className="text-[11px] text-blue-100 opacity-90 mt-0.5">National Gazette Database</span>
+          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black mt-2 mb-1">39,942+</span>
+          <span className="text-xs text-blue-100 opacity-90">National Gazette Database</span>
         </div>
 
-        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-4 rounded-lg shadow-2xs flex flex-col justify-between">
+        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-5 rounded-xl shadow-2xs flex flex-col justify-between">
           <span className="text-xs uppercase tracking-wider text-[#4B5563] font-extrabold">Live Active Tenders</span>
-          <span className="font-display text-3xl sm:text-4xl font-black text-[#0055B8] mt-1">366</span>
-          <span className="text-[11px] text-gray-500 font-semibold mt-0.5">Open for Bidding Today</span>
+          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#0055B8] mt-2 mb-1">366</span>
+          <span className="text-xs text-gray-500 font-semibold">Open for Bidding Today</span>
         </div>
 
-        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-4 rounded-lg shadow-2xs flex flex-col justify-between">
+        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-5 rounded-xl shadow-2xs flex flex-col justify-between">
           <span className="text-xs uppercase tracking-wider text-red-600 font-extrabold">Closing This Week</span>
-          <span className="font-display text-3xl sm:text-4xl font-black text-red-600 mt-1">41</span>
-          <span className="text-[11px] text-gray-500 font-semibold mt-0.5">Urgent Deadlines</span>
+          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-red-600 mt-2 mb-1">41</span>
+          <span className="text-xs text-gray-500 font-semibold">Urgent Deadlines</span>
         </div>
 
-        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-4 rounded-lg shadow-2xs flex flex-col justify-between">
+        <div className="bg-[#F8F9FB] border-2 border-[#E2E6ED] p-5 rounded-xl shadow-2xs flex flex-col justify-between">
           <span className="text-xs uppercase tracking-wider text-emerald-800 font-extrabold">Verified Suppliers</span>
-          <span className="font-display text-3xl sm:text-4xl font-black text-emerald-800 mt-1">3,217+</span>
-          <span className="text-[11px] text-gray-500 font-semibold mt-0.5">Registered Contractors</span>
+          <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-800 mt-2 mb-1">3,217+</span>
+          <span className="text-xs text-gray-500 font-semibold">Registered Contractors</span>
         </div>
       </section>
 
       {/* 3. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
         {/* LEFT COLUMN: NAVIGATION + BUYER CTA */}
-        <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col gap-5 sticky top-28">
+        <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col gap-6 sticky top-28">
           
-          {/* Buyer CTA Banner (Inspired by SmartTenders / Tenders.lk) */}
-          <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] text-white p-4 rounded-lg shadow-sm border border-gray-700">
+          {/* Buyer CTA Banner */}
+          <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] text-white p-4 sm:p-5 rounded-xl shadow-sm border border-gray-700">
             <span className="text-[10px] uppercase font-bold tracking-widest text-blue-300 block mb-1">
               FOR PROCURING ENTITIES
             </span>
             <h4 className="text-sm font-black leading-tight mb-2">
               Publish Your Tenders Free
             </h4>
-            <p className="text-xs text-gray-300 mb-3 leading-relaxed">
+            <p className="text-xs text-gray-300 mb-3.5 leading-relaxed">
               Connect with 3,200+ verified Sri Lankan suppliers and contractors.
             </p>
             <Link
               href="/contact-us"
-              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2 px-3 rounded uppercase tracking-wider transition-colors shadow-xs"
+              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2.5 px-3 rounded uppercase tracking-wider transition-colors shadow-xs"
             >
               + Post Tender Notice
             </Link>
           </div>
 
           {/* Section A: Document Hierarchy */}
-          <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-3.5 rounded-lg">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#4B5563] block mb-2">
+          <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-4 rounded-xl">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#4B5563] block mb-2.5">
               DOCUMENTS
             </span>
-            <nav className="flex flex-col gap-0.5 text-xs font-semibold text-[#374151]">
-              <Link href="#" className="py-1.5 px-2 rounded hover:bg-gray-200 transition-colors flex items-center justify-between">
+            <nav className="flex flex-col gap-1 text-xs font-semibold text-[#374151]">
+              <Link href="#" className="py-1.5 px-2.5 rounded hover:bg-gray-200 transition-colors flex items-center justify-between">
                 <span>Development Index</span>
                 <span className="text-gray-400">&rarr;</span>
               </Link>
-              <Link href="#" className="py-1.5 px-2 rounded hover:bg-gray-200 transition-colors flex items-center justify-between">
+              <Link href="#" className="py-1.5 px-2.5 rounded hover:bg-gray-200 transition-colors flex items-center justify-between">
                 <span>Procurement Gazettes</span>
                 <span className="text-gray-400">&rarr;</span>
               </Link>
-              <Link href="/tenders-sri-lanka" className="py-1.5 px-2 rounded bg-white text-[#0055B8] font-bold border border-[#E2E6ED] shadow-xs flex items-center justify-between">
+              <Link href="/tenders-sri-lanka" className="py-1.5 px-2.5 rounded bg-white text-[#0055B8] font-bold border border-[#E2E6ED] shadow-xs flex items-center justify-between">
                 <span>Tenders &amp; Purchases</span>
-                <span className="text-[10px] bg-blue-50 text-[#0055B8] px-1 rounded">Active</span>
+                <span className="text-[10px] bg-blue-50 text-[#0055B8] px-1.5 py-0.5 rounded font-bold">Active</span>
               </Link>
             </nav>
           </div>
 
           {/* Section B: Compact Category Navigation */}
-          <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-3.5 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#4B5563]">
+          <div className="bg-[#F8F9FB] border border-[#E2E6ED] p-4 rounded-xl">
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#4B5563]">
                 CATEGORIES
               </span>
-              <span className="text-[10px] text-gray-400 font-mono">39,942 total</span>
+              <span className="text-[11px] text-gray-400 font-mono">39,942 total</span>
             </div>
 
-            <nav className="flex flex-col gap-0.5 text-xs text-[#374151]">
+            <nav className="flex flex-col gap-1 text-xs text-[#374151]">
               <button
                 type="button"
                 onClick={() => setSelectedCategory("all")}
-                className={`py-1.5 px-2 rounded text-left flex items-center justify-between transition-colors ${
+                className={`py-2 px-2.5 rounded text-left flex items-center justify-between transition-colors ${
                   selectedCategory === "all"
                     ? "bg-[#0055B8] text-white font-bold shadow-xs"
                     : "hover:bg-gray-200 font-semibold"
@@ -558,7 +558,7 @@ export default function HomePage() {
                     key={cat.id}
                     type="button"
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`py-1.5 px-2 rounded text-left flex items-center justify-between transition-colors ${
+                    className={`py-2 px-2.5 rounded text-left flex items-center justify-between transition-colors ${
                       isSelected
                         ? "bg-[#0055B8] text-white font-bold shadow-xs"
                         : "hover:bg-gray-200 font-semibold"
@@ -573,7 +573,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => setShowAllCategories(!showAllCategories)}
-                className="mt-1.5 pt-1.5 border-t border-[#E5E7EB] text-left text-xs font-bold text-[#0055B8] hover:underline"
+                className="mt-2 pt-2 border-t border-[#E5E7EB] text-left text-xs font-bold text-[#0055B8] hover:underline"
               >
                 {showAllCategories ? "− Show less categories" : `+ View all categories (${CATEGORIES.length})`}
               </button>
@@ -586,7 +586,7 @@ export default function HomePage() {
         <main className="lg:col-span-9 xl:col-span-10">
           
           {/* Breadcrumb Navigation */}
-          <nav className="text-xs font-medium text-gray-500 mb-2.5 flex items-center gap-1.5" aria-label="Breadcrumb">
+          <nav className="text-xs font-medium text-gray-500 mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-[#0055B8]">Home</Link>
             <span>&rsaquo;</span>
             <span>Procurement Gazettes</span>
@@ -602,19 +602,19 @@ export default function HomePage() {
             )}
           </nav>
 
-          {/* Heading and Live/Expired Tabs (Inspired by eTenders.lk) */}
-          <section className="mb-5">
-            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
+          {/* Heading and Live/Expired Tabs */}
+          <section className="mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-3">
               <h1 className="font-display text-4xl sm:text-5xl font-black text-[#0F172A] tracking-tight uppercase leading-none">
                 TENDERS &amp; PURCHASES
               </h1>
               
-              {/* Live / Latest / Expired / Supplier Tabs */}
-              <div className="flex items-center gap-1 text-xs font-bold">
+              {/* Live / Latest / Expired Tabs */}
+              <div className="flex items-center gap-1.5 text-xs font-bold">
                 <button
                   type="button"
                   onClick={() => setActiveTab("live")}
-                  className={`px-3 py-1.5 rounded transition-all ${
+                  className={`px-3.5 py-2 rounded-md transition-all ${
                     activeTab === "live"
                       ? "bg-[#0055B8] text-white shadow-xs"
                       : "bg-[#F3F5F8] text-gray-700 hover:bg-gray-200"
@@ -625,7 +625,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("latest")}
-                  className={`px-3 py-1.5 rounded transition-all ${
+                  className={`px-3.5 py-2 rounded-md transition-all ${
                     activeTab === "latest"
                       ? "bg-[#0055B8] text-white shadow-xs"
                       : "bg-[#F3F5F8] text-gray-700 hover:bg-gray-200"
@@ -636,7 +636,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("archive")}
-                  className={`px-3 py-1.5 rounded transition-all ${
+                  className={`px-3.5 py-2 rounded-md transition-all ${
                     activeTab === "archive"
                       ? "bg-[#0055B8] text-white shadow-xs"
                       : "bg-[#F3F5F8] text-gray-700 hover:bg-gray-200"
@@ -647,16 +647,16 @@ export default function HomePage() {
               </div>
             </div>
             
-            <p className="text-sm text-[#4B5563] max-w-3xl font-medium">
+            <p className="text-sm sm:text-base text-[#4B5563] max-w-3xl font-medium">
               National procurement directory. Search gazette tenders, newspaper notices, and corporate RFPs across Sri Lanka.
             </p>
           </section>
 
-          {/* 4. WORKSPACE SEARCH PANEL (With Gazette / Newspaper Source Filter) */}
-          <section className="bg-white border-2 border-[#E2E6ED] rounded-xl p-5 sm:p-6 mb-7 shadow-xs">
+          {/* 4. WORKSPACE SEARCH PANEL */}
+          <section className="bg-white border-2 border-[#E2E6ED] rounded-xl p-6 lg:p-7 mb-10 shadow-xs">
             
-            {/* Primary Search Bar with On-Focus Dropdown for Recent Searches */}
-            <div className="mb-4 relative" ref={searchContainerRef}>
+            {/* Primary Search Bar */}
+            <div className="mb-5 relative" ref={searchContainerRef}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -685,10 +685,10 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* On-Focus Popover for Recent Search History */}
+              {/* On-Focus Popover */}
               {isSearchFocused && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#D9DFE7] rounded-lg shadow-lg z-30 p-3 animate-fadeIn">
-                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 mb-2">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#D9DFE7] rounded-lg shadow-lg z-30 p-4 animate-fadeIn">
+                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 mb-2.5">
                     Recent Search Queries
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -700,7 +700,7 @@ export default function HomePage() {
                           setKeyword(term);
                           setIsSearchFocused(false);
                         }}
-                        className="bg-[#F3F5F8] hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-2.5 py-1 rounded transition-colors text-gray-700"
+                        className="bg-[#F3F5F8] hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-3 py-1.5 rounded transition-colors text-gray-700"
                       >
                         {term}
                       </button>
@@ -710,18 +710,18 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* Core 4 Dropdowns (Category, Province, Source Newspaper, Closing Date) + Action CTA */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3.5">
+            {/* Core 4 Dropdowns + Action CTA */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-5">
               
               {/* Category */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1.5">
                   Category
                 </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2.5 px-3 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
                 >
                   <option value="all">All Categories ({CATEGORIES.length})</option>
                   {CATEGORIES.map((cat) => (
@@ -734,13 +734,13 @@ export default function HomePage() {
 
               {/* Province */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1.5">
                   Province
                 </label>
                 <select
                   value={selectedProvince}
                   onChange={(e) => setSelectedProvince(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2.5 px-3 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
                 >
                   {PROVINCES.map((prov) => (
                     <option key={prov.id} value={prov.id}>
@@ -750,15 +750,15 @@ export default function HomePage() {
                 </select>
               </div>
 
-              {/* Source Newspaper / Gazette (Sri Lanka specific) */}
+              {/* Source Newspaper / Gazette */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1.5">
                   Source / Gazette
                 </label>
                 <select
                   value={selectedSource}
                   onChange={(e) => setSelectedSource(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2.5 px-3 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none truncate"
                 >
                   {SOURCES.map((src) => (
                     <option key={src} value={src}>
@@ -770,13 +770,13 @@ export default function HomePage() {
 
               {/* Closing Date Window */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#374151] block mb-1.5">
                   Closing Date
                 </label>
                 <select
                   value={closingWindow}
                   onChange={(e) => setClosingWindow(e.target.value)}
-                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2 px-2.5 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none"
+                  className="w-full bg-white border border-[#D9DFE7] focus:border-[#0055B8] rounded-md py-2.5 px-3 text-xs sm:text-sm font-semibold text-[#111827] cursor-pointer outline-none"
                 >
                   <option value="all">Any Closing Date</option>
                   <option value="3days">Next 3 Days (Urgent)</option>
@@ -797,7 +797,7 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="h-[38px] px-3 border-2 border-[#D9DFE7] hover:bg-gray-100 text-[#374151] text-xs font-extrabold rounded-md transition-colors whitespace-nowrap"
+                    className="h-[42px] px-3 border-2 border-[#D9DFE7] hover:bg-gray-100 text-[#374151] text-xs font-extrabold rounded-md transition-colors whitespace-nowrap"
                   >
                     Clear
                   </button>
@@ -807,14 +807,14 @@ export default function HomePage() {
             </div>
 
             {/* Quick Filters Row */}
-            <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-[#F1F3F7]">
+            <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-[#F1F3F7]">
               <span className="text-xs font-bold uppercase tracking-wider text-[#4B5563] mr-1">
                 QUICK FILTERS:
               </span>
               <button
                 type="button"
                 onClick={() => applyPreset("urgent")}
-                className={`text-xs font-bold px-3 py-1.5 rounded-md border transition-colors ${
+                className={`text-xs font-bold px-3.5 py-1.5 rounded-md border transition-colors ${
                   activePreset === "urgent"
                     ? "bg-red-600 text-white border-red-600 shadow-xs"
                     : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
@@ -825,7 +825,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => applyPreset("gov")}
-                className={`text-xs font-bold px-3 py-1.5 rounded-md border transition-colors ${
+                className={`text-xs font-bold px-3.5 py-1.5 rounded-md border transition-colors ${
                   activePreset === "gov"
                     ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs"
                     : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
@@ -836,7 +836,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => applyPreset("highValue")}
-                className={`text-xs font-bold px-3 py-1.5 rounded-md border transition-colors ${
+                className={`text-xs font-bold px-3.5 py-1.5 rounded-md border transition-colors ${
                   activePreset === "highValue"
                     ? "bg-emerald-700 text-white border-emerald-700 shadow-xs"
                     : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
@@ -847,7 +847,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => applyPreset("western")}
-                className={`text-xs font-bold px-3 py-1.5 rounded-md border transition-colors ${
+                className={`text-xs font-bold px-3.5 py-1.5 rounded-md border transition-colors ${
                   activePreset === "western"
                     ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs"
                     : "bg-[#F8F9FB] text-[#374151] border-gray-300 hover:bg-gray-200"
@@ -858,19 +858,19 @@ export default function HomePage() {
             </div>
 
             {/* Expandable Advanced Filters Button */}
-            <div className="pt-3 mt-3 border-t border-[#F1F3F7]">
+            <div className="pt-4 mt-4 border-t border-[#F1F3F7]">
               <button
                 type="button"
                 onClick={() => setShowAdvanced(!showAdvanced)}
-                className="bg-[#F3F5F8] hover:bg-[#E5E9F0] border border-[#D9DFE7] text-[#0055B8] text-xs font-extrabold px-3.5 py-2 rounded-md flex items-center gap-2 transition-colors uppercase tracking-wider"
+                className="bg-[#F3F5F8] hover:bg-[#E5E9F0] border border-[#D9DFE7] text-[#0055B8] text-xs font-extrabold px-4 py-2 rounded-md flex items-center gap-2 transition-colors uppercase tracking-wider"
               >
                 <span>{showAdvanced ? "▲ Collapse Advanced Filters" : "+ More Filters (Sector, Publication Date, Minimum Value)"}</span>
               </button>
 
               {showAdvanced && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 mt-3 bg-[#F8F9FB] p-4 rounded-lg border border-[#E2E6ED] animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 mt-3 bg-[#F8F9FB] p-5 rounded-lg border border-[#E2E6ED] animate-fadeIn">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#4B5563] block mb-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#4B5563] block mb-1.5">
                       Sector Division
                     </label>
                     <select
@@ -885,7 +885,7 @@ export default function HomePage() {
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#4B5563] block mb-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#4B5563] block mb-1.5">
                       Procedure Date Range
                     </label>
                     <input
@@ -898,7 +898,7 @@ export default function HomePage() {
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#4B5563] block mb-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#4B5563] block mb-1.5">
                       Minimum Contract Budget (LKR)
                     </label>
                     <input
@@ -916,7 +916,7 @@ export default function HomePage() {
           </section>
 
           {/* 5. RESULTS HEADER & CONTROLS */}
-          <section className="mb-6">
+          <section className="mb-8">
             
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E2E6ED]">
               
@@ -925,7 +925,7 @@ export default function HomePage() {
                 <h2 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
                   TENDER RESULTS
                 </h2>
-                <div className="flex flex-wrap items-center gap-2 text-sm text-[#4B5563] font-semibold mt-0.5">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-[#4B5563] font-semibold mt-1">
                   <span className="text-[#0055B8] font-bold">{filteredTenders.length} opportunities matching your criteria</span>
                   <span>·</span>
                   <span className="text-gray-500 font-medium">366 live notices</span>
@@ -981,7 +981,7 @@ export default function HomePage() {
 
             {/* Active Filter Tags Bar */}
             {hasActiveFilters && (
-              <div className="flex flex-wrap items-center gap-2 pt-3 text-xs text-[#0055B8]">
+              <div className="flex flex-wrap items-center gap-2 pt-3.5 text-xs text-[#0055B8]">
                 <span className="font-bold uppercase tracking-wider text-gray-500 text-[11px]">Active Filters:</span>
                 {keyword && (
                   <span className="bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200 flex items-center gap-1 font-bold">
@@ -1026,23 +1026,23 @@ export default function HomePage() {
 
           {/* 6. RESULTS DISPLAY: CARDS VIEW OR DENSE TABLE VIEW */}
           {viewMode === "cards" ? (
-            /* CARDS VIEW: Natural Eye Flow (Who → What → Source & Location → When & Value → Action) */
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
+            /* CARDS VIEW */
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-7 mb-16">
               {filteredTenders.map((tender) => {
                 const isSaved = savedTenders.has(tender.id);
 
                 if (tender.isPromoted) {
-                  // PROMOTED NATIONAL NOTICE (Clean Blue Card with Explicit Label)
+                  // PROMOTED NATIONAL NOTICE
                   return (
                     <div
                       key={tender.id}
                       onClick={() => setQuickViewTender(tender)}
-                      className="bg-[#0055B8] text-white rounded-lg p-6 flex flex-col justify-between min-h-[280px] shadow-md hover:shadow-lg transition-all cursor-pointer group relative"
+                      className="bg-[#0055B8] text-white rounded-xl p-6 lg:p-7 flex flex-col justify-between min-h-[290px] shadow-md hover:shadow-xl transition-all cursor-pointer group relative"
                     >
                       <div>
                         {/* 1. Who + Promoted Badge + Countdown */}
-                        <div className="flex items-center justify-between text-xs mb-2.5 text-blue-100">
-                          <span className="bg-white/20 text-white font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded">
+                        <div className="flex items-center justify-between text-xs mb-3 text-blue-100">
+                          <span className="bg-white/20 text-white font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded">
                             PROMOTED NATIONAL TENDER
                           </span>
                           <div className="flex items-center gap-2">
@@ -1070,13 +1070,13 @@ export default function HomePage() {
                         </h3>
 
                         {/* 3. Source & Location */}
-                        <div className="text-xs text-blue-100 opacity-95 mb-4 font-mono">
+                        <div className="text-xs text-blue-100 opacity-95 mb-5 font-mono">
                           <span>{tender.location}</span> · <span>Source: {tender.source}</span>
                         </div>
                       </div>
 
                       {/* 4. Value & Action */}
-                      <div className="pt-4 border-t border-blue-400/30 flex items-end justify-between">
+                      <div className="pt-5 border-t border-blue-400/30 flex items-end justify-between">
                         <div>
                           <div className="text-[11px] text-blue-200 uppercase font-bold tracking-wider mb-0.5">
                             {tender.contractType} · Closes {tender.endDate}
@@ -1099,11 +1099,11 @@ export default function HomePage() {
                   <div
                     key={tender.id}
                     onClick={() => setQuickViewTender(tender)}
-                    className="bg-[#F8F9FB] border-2 border-[#E2E6ED] hover:border-[#0055B8] rounded-lg p-6 flex flex-col justify-between min-h-[280px] shadow-2xs hover:shadow-md transition-all cursor-pointer group"
+                    className="bg-[#F8F9FB] border-2 border-[#E2E6ED] hover:border-[#0055B8] rounded-xl p-6 lg:p-7 flex flex-col justify-between min-h-[290px] shadow-2xs hover:shadow-md transition-all cursor-pointer group"
                   >
                     <div>
                       {/* 1. Who + Urgency Badge + Save */}
-                      <div className="flex items-center justify-between text-xs mb-2.5">
+                      <div className="flex items-center justify-between text-xs mb-3">
                         <span className="font-extrabold text-xs text-[#0055B8] uppercase tracking-wider truncate pr-2">
                           {tender.entity}
                         </span>
@@ -1120,7 +1120,7 @@ export default function HomePage() {
                           <button
                             type="button"
                             onClick={(e) => toggleBookmark(e, tender.id)}
-                            title={isSaved ? "Saved" : "Save Tender"}
+                            title={isSaved ? "Saved to Watchlist" : "Save Tender"}
                             className="text-gray-400 hover:text-yellow-500 text-base font-bold p-0.5 transition-colors"
                           >
                             {isSaved ? "★" : "☆"}
@@ -1134,14 +1134,14 @@ export default function HomePage() {
                       </h3>
 
                       {/* 3. Source & Location */}
-                      <div className="text-xs text-[#4B5563] font-medium mb-4 font-mono">
+                      <div className="text-xs text-[#4B5563] font-medium mb-5 font-mono">
                         <span>{tender.location}</span> · <span>Ref: {tender.ref}</span>
                         <div className="text-gray-500 mt-0.5">Source: {tender.source}</div>
                       </div>
                     </div>
 
                     {/* 4. Value & Action Button */}
-                    <div className="pt-4 border-t border-[#E5E7EB] flex items-end justify-between">
+                    <div className="pt-5 border-t border-[#E5E7EB] flex items-end justify-between">
                       <div>
                         <div className="text-[11px] text-[#4B5563] uppercase font-bold tracking-wider mb-0.5">
                           {tender.contractType} · Closes {tender.endDate}
@@ -1153,7 +1153,7 @@ export default function HomePage() {
                       
                       <button
                         type="button"
-                        className="bg-white group-hover:bg-[#0055B8] group-hover:text-white border border-[#D9DFE7] text-[#0055B8] text-xs font-bold px-3 py-2 rounded transition-colors uppercase tracking-wider shadow-2xs"
+                        className="bg-white group-hover:bg-[#0055B8] group-hover:text-white border border-[#D9DFE7] text-[#0055B8] text-xs font-bold px-3.5 py-2 rounded transition-colors uppercase tracking-wider shadow-2xs"
                       >
                         View Notice &rarr;
                       </button>
@@ -1164,18 +1164,18 @@ export default function HomePage() {
             </section>
           ) : (
             /* HIGH-UTILITY COMPARISON TABLE VIEW */
-            <section className="bg-white border-2 border-[#E2E6ED] rounded-xl overflow-hidden mb-12 shadow-xs">
+            <section className="bg-white border-2 border-[#E2E6ED] rounded-xl overflow-hidden mb-16 shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead className="bg-[#F8F9FB] border-b-2 border-[#E2E6ED] text-[#4B5563] font-bold uppercase tracking-wider text-[11px]">
                     <tr>
-                      <th className="py-3.5 px-4">Organization &amp; Ref</th>
-                      <th className="py-3.5 px-4">Tender Subject &amp; Scope</th>
-                      <th className="py-3.5 px-4">Newspaper / Source</th>
-                      <th className="py-3.5 px-4">Location</th>
-                      <th className="py-3.5 px-4">Closing Deadline</th>
-                      <th className="py-3.5 px-4 text-right">Value (LKR)</th>
-                      <th className="py-3.5 px-4 text-center">Action</th>
+                      <th className="py-4 px-4">Organization &amp; Ref</th>
+                      <th className="py-4 px-4">Tender Subject &amp; Scope</th>
+                      <th className="py-4 px-4">Newspaper / Source</th>
+                      <th className="py-4 px-4">Location</th>
+                      <th className="py-4 px-4">Closing Deadline</th>
+                      <th className="py-4 px-4 text-right">Value (LKR)</th>
+                      <th className="py-4 px-4 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E7EB] font-medium text-[#111827]">
@@ -1187,30 +1187,30 @@ export default function HomePage() {
                           onClick={() => setQuickViewTender(tender)}
                           className="hover:bg-blue-50/50 cursor-pointer transition-colors"
                         >
-                          <td className="py-3.5 px-4">
+                          <td className="py-4 px-4">
                             <div className="font-bold text-[#0055B8]">{tender.entity}</div>
                             <div className="text-xs text-gray-500 font-mono">{tender.ref}</div>
                           </td>
-                          <td className="py-3.5 px-4 font-bold text-[#0F172A] max-w-sm">
+                          <td className="py-4 px-4 font-bold text-[#0F172A] max-w-sm">
                             {tender.title}
                           </td>
-                          <td className="py-3.5 px-4 text-xs font-semibold text-gray-600">
+                          <td className="py-4 px-4 text-xs font-semibold text-gray-600">
                             <span className="bg-gray-100 px-2 py-0.5 rounded text-[11px]">
                               {tender.source}
                             </span>
                           </td>
-                          <td className="py-3.5 px-4 text-xs font-semibold text-gray-600 whitespace-nowrap">
+                          <td className="py-4 px-4 text-xs font-semibold text-gray-600 whitespace-nowrap">
                             {tender.location}
                           </td>
-                          <td className="py-3.5 px-4 whitespace-nowrap font-mono text-xs">
+                          <td className="py-4 px-4 whitespace-nowrap font-mono text-xs">
                             <span className={tender.daysLeft <= 5 ? "text-red-700 font-bold bg-red-100 px-2 py-0.5 rounded" : "text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded"}>
                               {tender.endDate} ({tender.daysLeft}d remaining)
                             </span>
                           </td>
-                          <td className="py-3.5 px-4 font-mono font-black text-right text-base text-[#0055B8] whitespace-nowrap">
+                          <td className="py-4 px-4 font-mono font-black text-right text-base text-[#0055B8] whitespace-nowrap">
                             {tender.amount}
                           </td>
-                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                          <td className="py-4 px-4 text-center whitespace-nowrap">
                             <div className="flex items-center justify-center gap-2.5">
                               <button
                                 type="button"
@@ -1236,7 +1236,7 @@ export default function HomePage() {
 
           {/* Empty State */}
           {filteredTenders.length === 0 && (
-            <div className="text-center py-16 bg-[#F8F9FB] rounded-xl border-2 border-[#E2E6ED] mb-12">
+            <div className="text-center py-16 bg-[#F8F9FB] rounded-xl border-2 border-[#E2E6ED] mb-16">
               <h3 className="text-xl font-bold text-[#111827] mb-2">No matching tenders found</h3>
               <p className="text-sm text-gray-600 mb-6 font-medium">
                 We couldn't find tenders matching your search filters. Try broadening your keywords or selecting another source.
@@ -1252,7 +1252,7 @@ export default function HomePage() {
 
           {/* 7. CLEAN EUROPEAN NUMERIC PAGINATION */}
           {filteredTenders.length > 0 && (
-            <footer className="flex items-center justify-between pt-6 border-t-2 border-[#E2E6ED] text-sm font-bold text-gray-700">
+            <footer className="flex items-center justify-between pt-8 border-t-2 border-[#E2E6ED] text-sm font-bold text-gray-700">
               <div className="text-gray-500 font-medium">
                 Page 1 of 42
               </div>
@@ -1273,7 +1273,7 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* 8. QUICK VIEW SLIDE-OVER DRAWER WITH GAZETTE SOURCES & RFPs */}
+      {/* 8. QUICK VIEW SLIDE-OVER DRAWER */}
       {quickViewTender && (
         <div 
           className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex justify-end animate-fadeIn"
