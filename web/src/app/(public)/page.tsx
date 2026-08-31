@@ -869,58 +869,40 @@ export default function HomePage() {
           </section>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
-          <section className="mb-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E2E6ED]">
+          <section className="mb-5">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-[#E2E6ED]">
               
-              <div>
-                <h3 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight uppercase">
-                  TENDER RESULTS
+              <div className="flex items-baseline gap-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">
+                  Tender Notices ({filteredTenders.length})
                 </h3>
-                <div className="flex flex-wrap items-center gap-2 text-sm text-[#4B5563] font-semibold mt-0.5">
-                  <span className="text-[#0055B8] font-bold">{filteredTenders.length} opportunities matching criteria</span>
-                  <span>·</span>
-                  <span className="text-gray-500 font-medium">366 live notices</span>
-                </div>
+                <span className="text-xs text-gray-500 font-medium hidden sm:inline">
+                  Verified procurement publications
+                </span>
               </div>
 
               {/* View Switcher, Density Switcher & Sort Selector */}
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2">
                 
-                {/* Density Switcher */}
-                <div className="hidden sm:flex items-center bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED] text-xs font-bold">
-                  <button
-                    onClick={() => setDensity("comfortable")}
-                    className={`px-2.5 py-1 rounded ${density === "comfortable" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
-                  >
-                    Comfortable
-                  </button>
-                  <button
-                    onClick={() => setDensity("compact")}
-                    className={`px-2.5 py-1 rounded ${density === "compact" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"}`}
-                  >
-                    Compact
-                  </button>
-                </div>
-
                 {/* View Switcher */}
-                <div className="segmented-bar p-0.5">
+                <div className="flex bg-[#F1F3F7] p-0.5 rounded border border-[#E2E6ED]">
                   <button
                     type="button"
                     onClick={() => setViewMode("cards")}
-                    className={`px-3 py-1 text-xs font-bold rounded ${
-                      viewMode === "cards" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"
+                    className={`px-3 py-1 text-xs font-bold rounded transition-all ${
+                      viewMode === "cards" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
                     }`}
                   >
-                    Cards
+                    Grid Cards
                   </button>
                   <button
                     type="button"
                     onClick={() => setViewMode("list")}
-                    className={`px-3 py-1 text-xs font-bold rounded ${
-                      viewMode === "list" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600"
+                    className={`px-3 py-1 text-xs font-bold rounded transition-all ${
+                      viewMode === "list" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black"
                     }`}
                   >
-                    Table
+                    Dense List
                   </button>
                 </div>
 
@@ -928,12 +910,12 @@ export default function HomePage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-[#F8F9FB] border border-[#D9DFE7] rounded px-2.5 py-1.5 text-xs font-bold text-[#111827]"
+                  className="bg-white border border-[#D9DFE7] rounded px-3 py-1.5 text-xs font-semibold text-[#111827] outline-none"
                 >
-                  <option value="closing">Closing Soonest</option>
-                  <option value="newest">Newly Published</option>
-                  <option value="amountDesc">Highest Budget</option>
-                  <option value="amountAsc">Lowest Budget</option>
+                  <option value="closing">Sort: Closing Soonest</option>
+                  <option value="newest">Sort: Newly Published</option>
+                  <option value="amountDesc">Sort: Budget (High to Low)</option>
+                  <option value="amountAsc">Sort: Budget (Low to High)</option>
                 </select>
 
               </div>
@@ -941,130 +923,131 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* 5. RESULTS DISPLAY: CARDS VIEW OR DENSE TABLE VIEW */}
+          {/* 5. RESULTS DISPLAY: PROFESSIONAL HUMAN-DESIGNED CARDS OR TABLE */}
           {viewMode === "cards" ? (
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-14">
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-12">
               {filteredTenders.map((tender) => {
                 const isSaved = savedTenders.has(tender.id);
 
                 return (
-                  <div
+                  <article
                     key={tender.id}
                     onClick={() => { setQuickViewTender(tender); setDrawerTab("overview"); }}
-                    className="bg-[#F8F9FB] border-2 border-[#E2E6ED] hover:border-[#0055B8] rounded-xl p-5 flex flex-col justify-between min-h-[280px] shadow-2xs hover:shadow-md transition-all cursor-pointer group"
+                    className="bg-white border border-[#D9DFE7] hover:border-[#0055B8] rounded-lg p-5 flex flex-col justify-between transition-all hover:shadow-sm cursor-pointer group"
                   >
                     <div>
-                      {/* Who + Badge */}
-                      <div className="flex items-center justify-between text-xs mb-2.5">
-                        <span className="font-extrabold text-xs text-[#0055B8] uppercase tracking-wider truncate pr-2">
+                      {/* Top Authority & Urgency Row */}
+                      <div className="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-gray-100 text-xs">
+                        <span className="font-bold text-[#0055B8] uppercase tracking-wide truncate">
                           {tender.entity}
                         </span>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <span className={`font-mono font-black px-2 py-0.5 rounded text-[11px] ${
-                            tender.daysLeft <= 3 ? "bg-red-600 text-white" : "bg-emerald-700 text-white"
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                            tender.daysLeft <= 3
+                              ? "bg-red-50 text-red-700 border border-red-200"
+                              : "bg-emerald-50 text-emerald-800 border border-emerald-200"
                           }`}>
                             {tender.daysLeft}d left
                           </span>
                           <button
                             type="button"
                             onClick={(e) => toggleBookmark(e, tender.id)}
-                            className="text-gray-400 hover:text-yellow-500 text-base font-bold"
+                            title={isSaved ? "Remove from watchlist" : "Save to watchlist"}
+                            className="text-gray-400 hover:text-amber-500 font-bold px-1"
                           >
                             {isSaved ? "★" : "☆"}
                           </button>
                         </div>
                       </div>
 
-                      {/* Title */}
-                      <h4 className="text-lg font-bold leading-snug text-[#0F172A] mb-2.5 group-hover:text-[#0055B8] transition-colors">
+                      {/* Main Title */}
+                      <h4 className="text-[15px] font-bold text-gray-900 leading-snug mb-3 group-hover:text-[#0055B8] transition-colors line-clamp-2">
                         {tender.title}
                       </h4>
 
-                      {/* Location & Ref */}
-                      <div className="text-xs text-[#4B5563] font-medium mb-4 font-mono">
-                        <span>{tender.location}</span> · <span>Ref: {tender.ref}</span>
-                        {tender.hasDocuments && (
-                          <div className="text-blue-700 font-semibold mt-0.5">
-                            📄 {tender.docCount} Verified Bidding Documents (SHA-256)
-                          </div>
-                        )}
+                      {/* Key Meta Badges */}
+                      <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-gray-600 mb-4">
+                        <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-medium">
+                          {tender.categoryName}
+                        </span>
+                        <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-medium">
+                          {tender.district}
+                        </span>
+                        <span className="text-gray-400 font-mono text-[10px]">
+                          Ref: {tender.ref}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Value & Action */}
-                    <div className="pt-3.5 border-t border-[#E5E7EB] flex items-end justify-between">
+                    {/* Bottom Budget & Action */}
+                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
                       <div>
-                        <div className="text-[10px] text-[#4B5563] uppercase font-bold tracking-wider mb-0.5">
-                          {tender.contractType} · Closes {tender.endDate}
+                        <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                          Budget Estimate
                         </div>
-                        <div className="text-xl font-black text-[#0055B8] font-mono tracking-tight">
+                        <div className="text-base font-black text-gray-900 font-mono">
                           {tender.amount}
                         </div>
                       </div>
                       
-                      <button
-                        type="button"
-                        className="bg-white group-hover:bg-[#0055B8] group-hover:text-white border border-[#D9DFE7] text-[#0055B8] text-xs font-bold px-3 py-1.5 rounded transition-colors uppercase tracking-wider"
-                      >
-                        Full Details &rarr;
-                      </button>
+                      <span className="text-xs font-bold text-[#0055B8] group-hover:underline flex items-center gap-1">
+                        View Details &rarr;
+                      </span>
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </section>
           ) : (
             /* DENSE TABLE VIEW */
-            <section className="bg-white border-2 border-[#E2E6ED] rounded-xl overflow-hidden mb-14 shadow-xs">
+            <section className="bg-white border border-[#D9DFE7] rounded-lg overflow-hidden mb-12 shadow-2xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="bg-[#F8F9FB] border-b-2 border-[#E2E6ED] text-[#4B5563] font-bold uppercase tracking-wider text-[11px]">
+                  <thead className="bg-[#F8F9FB] border-b border-[#D9DFE7] text-gray-600 font-bold uppercase tracking-wider text-[11px]">
                     <tr>
-                      <th className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"}`}>Organization &amp; Ref</th>
-                      <th className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"}`}>Scope &amp; Title</th>
-                      <th className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"}`}>Category / Type</th>
-                      <th className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"}`}>Closing / Status</th>
-                      <th className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"} text-right`}>Value (LKR)</th>
-                      <th className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"} text-center`}>Action</th>
+                      <th className="px-4 py-3">Procuring Entity &amp; Ref</th>
+                      <th className="px-4 py-3">Tender Title</th>
+                      <th className="px-4 py-3">Category</th>
+                      <th className="px-4 py-3">Closing Date</th>
+                      <th className="px-4 py-3 text-right">Value (LKR)</th>
+                      <th className="px-4 py-3 text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E5E7EB] font-medium text-[#111827]">
+                  <tbody className="divide-y divide-gray-200 font-medium text-gray-900">
                     {filteredTenders.map((tender) => {
                       const isSaved = savedTenders.has(tender.id);
                       return (
                         <tr 
                           key={tender.id}
                           onClick={() => { setQuickViewTender(tender); setDrawerTab("overview"); }}
-                          className="hover:bg-blue-50/50 cursor-pointer transition-colors"
+                          className="hover:bg-blue-50/40 cursor-pointer transition-colors"
                         >
-                          <td className={`px-4 ${density === "compact" ? "py-2" : "py-3.5"}`}>
+                          <td className="px-4 py-3">
                             <div className="font-bold text-[#0055B8]">{tender.entity}</div>
-                            {density === "comfortable" && (
-                              <div className="text-xs text-gray-500 font-mono">{tender.ref}</div>
-                            )}
+                            <div className="text-[11px] text-gray-500 font-mono">{tender.ref}</div>
                           </td>
-                          <td className={`px-4 font-bold text-[#0F172A] max-w-sm ${density === "compact" ? "py-2 truncate" : "py-3.5"}`}>
+                          <td className="px-4 py-3 font-bold text-gray-900 max-w-sm">
                             {tender.title}
                           </td>
-                          <td className={`px-4 text-xs font-semibold text-gray-600 ${density === "compact" ? "py-2" : "py-3.5"}`}>
+                          <td className="px-4 py-3 text-xs text-gray-600">
                             <span className="bg-gray-100 px-2 py-0.5 rounded text-[11px]">
                               {tender.categoryName}
                             </span>
                           </td>
-                          <td className={`px-4 whitespace-nowrap font-mono text-xs ${density === "compact" ? "py-2" : "py-3.5"}`}>
-                            <span className={tender.daysLeft <= 3 ? "text-red-700 font-bold bg-red-100 px-2 py-0.5 rounded" : "text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded"}>
+                          <td className="px-4 py-3 whitespace-nowrap font-mono text-xs">
+                            <span className={tender.daysLeft <= 3 ? "text-red-700 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200" : "text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"}>
                               {tender.endDate} ({tender.daysLeft}d left)
                             </span>
                           </td>
-                          <td className={`px-4 font-mono font-black text-right text-[#0055B8] whitespace-nowrap ${density === "compact" ? "py-2 text-sm" : "py-3.5 text-base"}`}>
+                          <td className="px-4 py-3 font-mono font-black text-right text-gray-900 whitespace-nowrap">
                             {tender.amount}
                           </td>
-                          <td className={`px-4 text-center whitespace-nowrap ${density === "compact" ? "py-2" : "py-3.5"}`}>
+                          <td className="px-4 py-3 text-center whitespace-nowrap">
                             <div className="flex items-center justify-center gap-2">
                               <button
                                 type="button"
                                 onClick={(e) => toggleBookmark(e, tender.id)}
-                                className="text-gray-400 hover:text-yellow-500 font-bold"
+                                className="text-gray-400 hover:text-amber-500 font-bold"
                               >
                                 {isSaved ? "★" : "☆"}
                               </button>
