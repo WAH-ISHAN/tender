@@ -236,10 +236,10 @@ export default function HomePage() {
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
       {/* 1. HERO BANNER WITH DYNAMIC METRICS OVERLAY & INTEGRATED SEARCH ENGINE */}
-      <section className="relative rounded-3xl mb-12 shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-20">
+      <section className="relative rounded-3xl sm:rounded-[36px] mb-16 sm:mb-20 shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-20 overflow-hidden">
         
         {/* Full Section Background Image Container */}
-        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none">
           <div 
             className="absolute inset-0 bg-cover bg-center opacity-75 scale-105 transition-transform duration-1000"
             style={{
@@ -250,31 +250,31 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/85 via-[#0A1E4A]/65 to-[#07132F]/80" />
         </div>
 
-        <div className="relative z-10 px-6 sm:px-12 lg:px-16 py-14 sm:py-20 lg:py-24">
+        <div className="relative z-10 px-6 sm:px-12 lg:px-20 py-20 sm:py-28 lg:py-32">
           
           {/* Top Hero Header (Grand Scale) */}
-          <div className="max-w-5xl mb-10 sm:mb-12">
-            <div className="flex items-center gap-2.5 mb-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="max-w-5xl mb-12 sm:mb-16">
+            <div className="flex items-center gap-3 mb-3.5">
+              <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-sm" />
               <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
                 {t("heroSubtitle")}
               </span>
             </div>
 
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.04] mb-4">
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.02] mb-5">
               {t("heroTitle")}
             </h1>
 
-            <p className="text-sm sm:text-base text-blue-100 font-normal leading-relaxed max-w-3xl">
+            <p className="text-base sm:text-lg text-blue-100 font-normal leading-relaxed max-w-3xl">
               {t("heroDesc")}
             </p>
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
-          <div className="bg-white rounded-3xl p-7 sm:p-9 lg:p-10 shadow-2xl text-slate-900 border border-slate-100">
+          <div className="bg-white rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl text-slate-900 border border-slate-100">
             
             {/* Primary Search Bar */}
-            <div className="mb-5 relative" ref={searchContainerRef}>
+            <div className="mb-6 relative" ref={searchContainerRef}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -283,7 +283,7 @@ export default function HomePage() {
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-2xl py-4 sm:py-4.5 pl-5 sm:pl-6 pr-16 text-sm sm:text-base font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal shadow-2xs"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-2xl py-4.5 sm:py-5 pl-6 sm:pl-7 pr-16 text-base sm:text-lg font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal shadow-2xs"
                 />
                 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
