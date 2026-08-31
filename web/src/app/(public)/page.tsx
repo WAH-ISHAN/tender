@@ -3,18 +3,28 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MOCK_TENDERS, TenderItem } from "@/data/tenders";
+import { useToast } from "@/components/ui/Toaster";
 
 const CATEGORIES = [
   { id: "construction", name: "Civil Construction & Works", count: "7,767" },
   { id: "it", name: "Computer, Servers & IT", count: "3,694" },
   { id: "suppliers", name: "Registration of Suppliers", count: "3,217" },
+  { id: "electrical", name: "Electrical & Power Distribution", count: "2,850" },
+  { id: "electronics", name: "Electronic & Telecom Equipment", count: "2,209" },
   { id: "medical", name: "Medical & Pharmaceuticals", count: "1,991" },
   { id: "cleaning", name: "Janitorial & Facilities", count: "1,916" },
-  { id: "energy", name: "Renewable Energy & Solar", count: "1,248" },
-  { id: "consultancy", name: "Consultancy & Legal", count: "982" },
-  { id: "transport", name: "Transport & Logistics", count: "890" },
-  { id: "security", name: "Security & Guarding", count: "743" },
-  { id: "food", name: "Food, Catering & Agri", count: "650" },
+  { id: "security", name: "Security & Guarding Services", count: "1,736" },
+  { id: "hardware", name: "Hardware & Machinery", count: "1,613" },
+  { id: "vehicles", name: "Vehicles & Auto Parts", count: "1,566" },
+  { id: "printing", name: "Printing, Media & Advertising", count: "1,230" },
+  { id: "solar", name: "Renewable Energy & Solar", count: "186" },
+];
+
+const SECTORS = [
+  { id: "all", name: "All Procurement Sectors", count: "39,942" },
+  { id: "government", name: "Government & Ministries", count: "32,480" },
+  { id: "semi-government", name: "Semi-Gov & State Boards", count: "6,725" },
+  { id: "private", name: "Private Corporates & Commercial", count: "737" },
 ];
 
 const PROVINCES = [
@@ -41,13 +51,16 @@ const VALUE_BANDS = [
 
 export default function HomePage() {
   const router = useRouter();
+  const toast = useToast();
+
   const [keyword, setKeyword] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedProvince, setSelectedProvince] = useState<string>("all");
   const [selectedValueBand, setSelectedValueBand] = useState<string>("all");
   const [closingWindow, setClosingWindow] = useState<string>("all");
-  const [sectorFilter, setSectorFilter] = useState<"all" | "government" | "private" | "donor">("all");
+  const [sectorFilter, setSectorFilter] = useState<string>("all");
+  const [statusTab, setStatusTab] = useState<"all" | "today" | "live" | "closing" | "suppliers">("live");
   const [sortBy, setSortBy] = useState("closing");
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
@@ -55,9 +68,9 @@ export default function HomePage() {
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
 
   // Bookmarking Watchlist
-  const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
+  const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set(["SLPA-2026-PT-04"]));
 
-  // Modern Dropdown State (Category, Province, Value Band, Deadline)
+  // Modern Dropdown State
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -96,30 +109,34 @@ export default function HomePage() {
   const toggleBookmark = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     e.stopPropagation();
+    const isSaved = savedTenders.has(id);
     setSavedTenders((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+        toast.info("Watchlist Updated", "Notice removed from your saved watchlist.");
+      } else {
+        next.add(id);
+        toast.success("Saved to Watchlist", "Notice added to your workspace watchlist.");
+      }
       return next;
     });
   };
 
-  const applyPreset = (preset: string) => {
-    if (activePreset === preset) {
-      setActivePreset(null);
-      setSectorFilter("all");
-      setSelectedProvince("all");
+  const handleStatusTabChange = (tab: "all" | "today" | "live" | "closing" | "suppliers") => {
+    setStatusTab(tab);
+    if (tab === "suppliers") {
+      setSelectedCategory("suppliers");
       setClosingWindow("all");
-      return;
-    }
-    setActivePreset(preset);
-    if (preset === "urgent") {
+    } else if (tab === "closing") {
       setClosingWindow("7days");
-      setSortBy("closing");
-    } else if (preset === "gov") {
-      setSectorFilter("government");
-    } else if (preset === "western") {
-      setSelectedProvince("western");
+      setSelectedCategory("all");
+    } else if (tab === "today") {
+      setClosingWindow("all");
+      setSelectedCategory("all");
+    } else {
+      setClosingWindow("all");
+      setSelectedCategory("all");
     }
   };
 
@@ -177,6 +194,7 @@ export default function HomePage() {
     setSelectedValueBand("all");
     setClosingWindow("all");
     setSectorFilter("all");
+    setStatusTab("live");
     setActivePreset(null);
   };
 
@@ -192,10 +210,10 @@ export default function HomePage() {
   return (
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
-      {/* 1. ELEGANT HERO BANNER WITH FULL SECTION BACKGROUND IMAGE & INTEGRATED SEARCH ENGINE */}
+      {/* 1. HERO BANNER WITH DYNAMIC METRICS OVERLAY & INTEGRATED SEARCH ENGINE */}
       <section className="relative rounded-3xl mb-12 shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-20">
         
-        {/* Full Section Background Image Container (Rounded & Isolated so dropdowns never get clipped) */}
+        {/* Full Section Background Image Container */}
         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
           <div 
             className="absolute inset-0 bg-cover bg-center opacity-75 scale-105 transition-transform duration-1000"
@@ -204,24 +222,62 @@ export default function HomePage() {
             }}
           />
           {/* Soft Contrast Gradient Overlay */}
-          <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/80 via-[#0A1E4A]/55 to-[#07132F]/75" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/85 via-[#0A1E4A]/65 to-[#07132F]/80" />
         </div>
 
         <div className="relative z-10 px-6 sm:px-12 py-10 sm:py-14">
           
-          {/* Top Heading */}
-          <div className="mb-8 max-w-3xl">
-            <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300 mb-2">
-              THE LARGEST COLLECTION OF
+          {/* Top 2-Column Hero Header with Live Command Stats */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-8">
+            
+            {/* Left Title & Mandate */}
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
+                  SRI LANKA NATIONAL PROCUREMENT GATEWAY
+                </span>
+              </div>
+
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
+                TENDERS IN SRI LANKA
+              </h1>
+
+              <p className="text-xs sm:text-sm text-blue-100 font-normal leading-relaxed max-w-xl">
+                Daily procurement gazettes, municipal RFPs, and corporate tenders published across all 9 provinces. Verified daily at 05:00 AM with cryptographic SHA-256 evidence packs.
+              </p>
             </div>
 
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
-              TENDERS IN SRI LANKA
-            </h1>
+            {/* Right Modern Frosted Metrics Command Card */}
+            <div className="lg:col-span-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 sm:p-6 shadow-xl">
+              <div className="text-[10px] font-black uppercase tracking-widest text-blue-200 pb-2 mb-3 border-b border-white/15 flex items-center justify-between">
+                <span>NATIONAL PROCUREMENT RADAR</span>
+                <span className="text-emerald-300 font-bold">&bull; 05:00 AM Daily Sync</span>
+              </div>
 
-            <p className="text-xs sm:text-sm text-blue-100 font-normal leading-relaxed max-w-2xl">
-              We take pride in our verified procurement services which we have had the pleasure of providing to our valued contractors &amp; suppliers across Sri Lanka.
-            </p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Published Today</span>
+                  <div className="text-xl sm:text-2xl font-black text-white">12 Notices</div>
+                </div>
+
+                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Active Live Tenders</span>
+                  <div className="text-xl sm:text-2xl font-black text-emerald-400">366 Live</div>
+                </div>
+
+                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Closing This Week</span>
+                  <div className="text-xl sm:text-2xl font-black text-amber-300">41 Urgent</div>
+                </div>
+
+                <div className="bg-[#07132F]/60 border border-white/10 p-3 rounded-2xl">
+                  <span className="text-[10px] font-bold uppercase text-slate-300 block">Total Archive</span>
+                  <div className="text-xl sm:text-2xl font-black text-blue-200 font-mono">39,942+</div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
@@ -237,14 +293,14 @@ export default function HomePage() {
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 pl-4 pr-16 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3.5 pl-4 pr-16 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                 />
                 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                   {keyword && (
                     <button
                       onClick={() => setKeyword("")}
-                      className="text-slate-400 hover:text-slate-700 font-black text-lg mr-1"
+                      className="text-slate-400 hover:text-slate-700 font-black text-lg mr-1 cursor-pointer"
                     >
                       &times;
                     </button>
@@ -270,7 +326,7 @@ export default function HomePage() {
                           setKeyword(term);
                           setIsSearchFocused(false);
                         }}
-                        className="bg-slate-100 hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors text-slate-700"
+                        className="bg-slate-100 hover:bg-blue-50 hover:text-[#0055B8] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors text-slate-700 cursor-pointer"
                       >
                         {term}
                       </button>
@@ -280,7 +336,7 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* 4 Core Dropdowns + Action CTA (Modernized Custom UI) */}
+            {/* 4 Core Dropdowns + Action CTA */}
             <div ref={filterBarRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-4">
               
               {/* Modern Category Dropdown */}
@@ -410,29 +466,27 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Modern Closing Deadline Dropdown */}
+              {/* Modern Closing Window Dropdown */}
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => setActiveDropdown(activeDropdown === "deadline" ? null : "deadline")}
+                  onClick={() => setActiveDropdown(activeDropdown === "closing" ? null : "closing")}
                   className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-xl p-2.5 sm:p-3 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
-                      CLOSING DEADLINE
+                      DEADLINE WINDOW
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
-                      {closingWindow === "3days" ? "Next 3 Days (Urgent)" :
-                       closingWindow === "7days" ? "Next 7 Days" :
-                       closingWindow === "30days" ? "Next 30 Days" : "Any Closing Date"}
+                      {closingWindow === "all" ? "Any Closing Date" : closingWindow === "3days" ? "Next 3 Days (Urgent)" : closingWindow === "7days" ? "Next 7 Days" : "Next 30 Days"}
                     </span>
                   </div>
-                  <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "deadline" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
+                  <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "closing" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                   </svg>
                 </button>
 
-                {activeDropdown === "deadline" && (
+                {activeDropdown === "closing" && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
                     {[
                       { id: "all", label: "Any Closing Date" },
@@ -456,80 +510,32 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-end gap-2">
+              {/* Action Buttons: Search CTA & Clear Filters */}
+              <div className="flex gap-2 items-center">
                 <button
                   type="button"
                   onClick={() => {
-                    const element = document.getElementById("tender-results-section");
-                    element?.scrollIntoView({ behavior: "smooth" });
+                    const el = document.getElementById("tender-results-section");
+                    el?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-2.5 px-4 rounded-lg transition-all hover:-translate-y-0.5 active:scale-95 hover:shadow-md uppercase tracking-wider shadow-sm whitespace-nowrap cursor-pointer"
+                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-3.5 px-4 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
                 >
-                  FIND TENDERS
+                  <span>Search</span>
+                  <span>&rarr;</span>
                 </button>
+
                 {hasActiveFilters && (
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="h-[40px] px-3.5 border-2 border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-extrabold rounded-lg transition-all hover:-translate-y-0.5 active:scale-95 whitespace-nowrap cursor-pointer"
+                    title="Reset all filters"
+                    className="p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all hover:scale-105 active:scale-95 text-xs font-bold cursor-pointer"
                   >
-                    Clear
+                    Reset
                   </button>
                 )}
               </div>
 
-            </div>
-
-            {/* Quick Filters Row */}
-            <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mr-1">
-                QUICK FILTERS:
-              </span>
-              <button
-                type="button"
-                onClick={() => applyPreset("urgent")}
-                className={`text-xs px-3 py-1.5 rounded-lg border transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer ${
-                  activePreset === "urgent"
-                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 font-medium"
-                }`}
-              >
-                Closing in ≤ 7 Days
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("gov")}
-                className={`text-xs px-3 py-1.5 rounded-lg border transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer ${
-                  activePreset === "gov"
-                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 font-medium"
-                }`}
-              >
-                Central Government
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("highValue")}
-                className={`text-xs px-3 py-1.5 rounded-lg border transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer ${
-                  activePreset === "highValue"
-                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 font-medium"
-                }`}
-              >
-                High Value (&gt; 30M LKR)
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("western")}
-                className={`text-xs px-3 py-1.5 rounded-lg border transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer ${
-                  activePreset === "western"
-                    ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xs font-bold"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 font-medium"
-                }`}
-              >
-                Western Province
-              </button>
             </div>
 
           </div>
@@ -537,101 +543,171 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT WITH AMPLE BREATHING ROOM */}
+      {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
         
-        {/* LEFT COLUMN: NAVIGATION & TAXONOMY */}
-        <aside className="lg:col-span-3 xl:col-span-2 hidden lg:flex flex-col space-y-6 sticky top-28">
+        {/* LEFT COLUMN: SIDEBAR BREAKDOWNS & TAXONOMY */}
+        <aside className="lg:col-span-3 xl:col-span-3 flex flex-col space-y-6 sticky top-28">
           
-          {/* Buyer CTA Banner */}
-          <div className="bg-[#0F172A] text-white p-5 rounded-2xl shadow-lg border border-slate-700 hover:-translate-y-1 transition-all duration-300">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-blue-300 block mb-1.5">
-              FOR PROCURING ENTITIES
+          {/* Spotlight 1: Prominent "Registration of Suppliers" Action Button */}
+          <button
+            type="button"
+            onClick={() => handleStatusTabChange("suppliers")}
+            className={`w-full p-4 rounded-2xl border-2 transition-all text-left shadow-md flex items-center justify-between cursor-pointer hover:-translate-y-0.5 active:scale-98 ${
+              selectedCategory === "suppliers"
+                ? "bg-[#0055B8] text-white border-[#0055B8] shadow-xl"
+                : "bg-white text-slate-900 border-slate-200 hover:border-[#0055B8]"
+            }`}
+          >
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-widest block opacity-80">
+                OFFICIAL GAZETTE SPECIAL
+              </span>
+              <span className="text-sm font-black block">
+                Registration of Suppliers
+              </span>
+            </div>
+            <span className={`px-2.5 py-1 rounded-xl text-xs font-black font-mono ${
+              selectedCategory === "suppliers" ? "bg-white/20 text-white" : "bg-[#EFF6FF] text-[#0055B8]"
+            }`}>
+              3,217
             </span>
-            <h4 className="text-sm font-black leading-tight mb-2 text-white">
-              Publish Your Tenders Free
+          </button>
+
+          {/* Spotlight 2: Publisher / Buyer Door */}
+          <div className="bg-[#0F172A] text-white p-5 rounded-2xl shadow-lg border border-slate-700 hover:-translate-y-0.5 transition-all duration-200">
+            <span className="text-[10px] uppercase font-black tracking-widest text-blue-300 block mb-1.5">
+              FOR PROCURING BODIES
+            </span>
+            <h4 className="text-sm font-black leading-tight mb-1.5 text-white">
+              Publish Tender Notices Free
             </h4>
-            <p className="text-xs text-slate-300 mb-4 leading-relaxed">
-              Connect with 3,200+ verified Sri Lankan suppliers and contractors.
+            <p className="text-xs text-slate-300 mb-4 font-normal leading-relaxed">
+              Connect with 3,200+ verified Sri Lankan suppliers &amp; CIDA contractors.
             </p>
             <Link
               href="/register"
-              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-bold text-xs py-2.5 px-3 rounded-lg uppercase tracking-wider transition-all hover:-translate-y-0.5 active:scale-95 shadow-md"
+              className="block text-center bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs py-2.5 px-3 rounded-xl uppercase tracking-wider transition-all hover:-translate-y-0.5 active:scale-95 shadow-md"
             >
-              + Post Tender Notice
+              + Upload Your Tenders FREE
             </Link>
           </div>
 
-          {/* Fixed Value Band Filter */}
+          {/* Taxonomy Section 1: Tenders By Sectors */}
           <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-3">
-              VALUE BANDS
-            </span>
-            <div className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700">
-              {VALUE_BANDS.map((band) => {
-                const isSelected = selectedValueBand === band.id;
-                return (
-                  <button
-                    key={band.id}
-                    type="button"
-                    onClick={() => setSelectedValueBand(band.id)}
-                    className={`py-2 px-3 rounded-lg text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
-                      isSelected
-                        ? "bg-[#0055B8] text-white font-bold shadow-sm"
-                        : "hover:bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    <span>{band.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Categories Taxonomy */}
-          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
-                CATEGORIES
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
+                TENDERS BY SECTOR
               </span>
               <span className="text-[11px] text-slate-400 font-mono">39,942</span>
             </div>
 
             <nav className="flex flex-col gap-1.5 text-xs text-slate-700">
+              {SECTORS.map((sec) => {
+                const isSelected = sectorFilter === sec.id;
+                return (
+                  <button
+                    key={sec.id}
+                    type="button"
+                    onClick={() => setSectorFilter(sec.id)}
+                    className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
+                      isSelected
+                        ? "bg-[#0055B8] text-white font-black shadow-sm"
+                        : "hover:bg-slate-50 font-bold text-slate-700"
+                    }`}
+                  >
+                    <span className="truncate pr-1">{sec.name}</span>
+                    <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
+                      {sec.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Taxonomy Section 2: Tenders By Categories */}
+          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
+                TENDERS BY CATEGORY
+              </span>
+              <span className="text-[11px] text-slate-400 font-mono">12 Sectors</span>
+            </div>
+
+            <nav className="flex flex-col gap-1.5 text-xs text-slate-700 max-h-96 overflow-y-auto pr-1">
               <button
                 type="button"
                 onClick={() => setSelectedCategory("all")}
-                className={`py-2 px-3 rounded-lg text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
+                className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
                   selectedCategory === "all"
-                    ? "bg-[#0055B8] text-white font-bold shadow-sm"
-                    : "hover:bg-slate-100 font-semibold"
+                    ? "bg-[#0055B8] text-white font-black shadow-sm"
+                    : "hover:bg-slate-50 font-bold text-slate-700"
                 }`}
               >
                 <span>All Categories</span>
+                <span className="font-mono text-[11px] opacity-80">39,942</span>
               </button>
 
-              {CATEGORIES.slice(0, 7).map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`py-2 px-3 rounded-lg text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
-                    selectedCategory === cat.id
-                      ? "bg-[#0055B8] text-white font-bold shadow-sm"
-                      : "hover:bg-slate-100 font-semibold text-slate-700"
-                  }`}
-                >
-                  <span className="truncate pr-1">{cat.name}</span>
-                  <span className="opacity-70 font-mono text-[11px]">{cat.count}</span>
-                </button>
-              ))}
+              {CATEGORIES.map((cat) => {
+                const isSelected = selectedCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
+                      isSelected
+                        ? "bg-[#0055B8] text-white font-black shadow-sm"
+                        : "hover:bg-slate-50 font-bold text-slate-700"
+                    }`}
+                  >
+                    <span className="truncate pr-1">{cat.name}</span>
+                    <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
+                      {cat.count}
+                    </span>
+                  </button>
+                );
+              })}
             </nav>
           </div>
 
         </aside>
 
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
-        <main className="lg:col-span-9 xl:col-span-10">
+        <main className="lg:col-span-9 xl:col-span-9">
+
+          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-2 mb-6 shadow-sm flex items-center gap-1.5 overflow-x-auto">
+            {[
+              { id: "live", label: "Live Tenders", count: "366" },
+              { id: "today", label: "Today's Tenders", count: "12" },
+              { id: "closing", label: "Closing This Week", count: "41" },
+              { id: "suppliers", label: "Supplier Registrations", count: "3,217" },
+              { id: "all", label: "All Gazette Notices", count: "39,942" },
+            ].map((tab) => {
+              const isActive = statusTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => handleStatusTabChange(tab.id as any)}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer ${
+                    isActive
+                      ? "bg-[#0055B8] text-white shadow-md"
+                      : "text-slate-700 hover:bg-slate-100 font-bold"
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono ${
+                    isActive ? "bg-white/20 text-white" : "bg-[#F1F5F9] text-slate-600 font-bold"
+                  }`}>
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
           <section id="tender-results-section" className="mb-6">
@@ -649,64 +725,66 @@ export default function HomePage() {
               {/* View Switcher & Sort Selector */}
               <div className="flex items-center gap-3">
                 
-                {/* Capsule View Switcher (Exact Screenshot Match) */}
-                <div className="inline-flex bg-[#F1F5F9] border border-[#E2E8F0] p-1 rounded-xl shadow-sm">
+                {/* Modern Capsule View Switcher (Rule #8) */}
+                <div className="inline-flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] shadow-2xs">
                   <button
                     type="button"
                     onClick={() => setViewMode("cards")}
-                    className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all hover:-translate-y-0.5 active:scale-95 ${
-                      viewMode === "cards" ? "bg-white text-[#0055B8] shadow-sm" : "text-slate-600 hover:text-slate-900"
+                    className={`px-3.5 py-1.5 text-xs font-black rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                      viewMode === "cards"
+                        ? "bg-[#0055B8] text-white shadow-xs"
+                        : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    Grid Cards
+                    <span>Card Grid</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setViewMode("list")}
-                    className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all hover:-translate-y-0.5 active:scale-95 ${
-                      viewMode === "list" ? "bg-white text-[#0055B8] shadow-sm" : "text-slate-600 hover:text-slate-900"
+                    className={`px-3.5 py-1.5 text-xs font-black rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                      viewMode === "list"
+                        ? "bg-[#0055B8] text-white shadow-xs"
+                        : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    Dense List
+                    <span>Dense List</span>
                   </button>
                 </div>
 
-                {/* Modern Custom Sort Dropdown */}
-                <div ref={sortDropdownRef} className="relative">
+                {/* Modern Sort Dropdown */}
+                <div className="relative" ref={sortDropdownRef}>
                   <button
                     type="button"
                     onClick={() => setActiveDropdown(activeDropdown === "sort" ? null : "sort")}
-                    className="bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] hover:border-[#0055B8] focus:border-[#0055B8] rounded-xl px-4 py-2 text-xs font-black text-slate-800 outline-none shadow-sm cursor-pointer transition-all flex items-center justify-between gap-2.5 hover:-translate-y-0.5 active:scale-95"
+                    className="bg-[#F8FAFC] hover:bg-white border border-slate-200 hover:border-[#0055B8] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] transition-all flex items-center gap-2 cursor-pointer shadow-2xs"
                   >
-                    <span>
-                      {sortBy === "closing" ? "Sort: Closing Soonest" :
-                       sortBy === "newest" ? "Sort: Newly Published" :
-                       sortBy === "amountDesc" ? "Sort: Budget (High to Low)" :
-                       "Sort: Budget (Low to High)"}
+                    <span className="text-slate-400 font-normal">Sort:</span>
+                    <span className="font-black">
+                      {sortBy === "closing" ? "Closing Soon" : sortBy === "newest" ? "Newest First" : sortBy === "amountDesc" ? "Highest Budget" : "Lowest Budget"}
                     </span>
-                    <svg className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "sort" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                     </svg>
                   </button>
 
                   {activeDropdown === "sort" && (
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
                       {[
-                        { id: "closing", label: "Sort: Closing Soonest" },
-                        { id: "newest", label: "Sort: Newly Published" },
-                        { id: "amountDesc", label: "Sort: Budget (High to Low)" },
-                        { id: "amountAsc", label: "Sort: Budget (Low to High)" },
-                      ].map((opt) => (
+                        { id: "closing", label: "Closing Soon (Urgent)" },
+                        { id: "newest", label: "Newest Published" },
+                        { id: "amountDesc", label: "Highest Budget (LKR)" },
+                        { id: "amountAsc", label: "Lowest Budget (LKR)" },
+                      ].map((item) => (
                         <button
-                          key={opt.id}
+                          key={item.id}
                           type="button"
-                          onClick={() => { setSortBy(opt.id); setActiveDropdown(null); }}
-                          className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
-                            sortBy === opt.id ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
+                          onClick={() => { setSortBy(item.id); setActiveDropdown(null); }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                            sortBy === item.id ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                           }`}
                         >
-                          <span>{opt.label}</span>
-                          {sortBy === opt.id && <span className="w-1.5 h-1.5 rounded-full bg-[#0055B8]" />}
+                          <span>{item.label}</span>
+                          {sortBy === item.id && <span className="w-1.5 h-1.5 rounded-full bg-[#0055B8]" />}
                         </button>
                       ))}
                     </div>
@@ -718,12 +796,12 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* 5. RESULTS DISPLAY: DIRECT NAVIGATION TO FULL PAGE ON CLICK */}
+          {/* 5. TENDER CATALOGUE: CARDS GRID VS DENSE LIST */}
           {viewMode === "cards" ? (
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mb-16 items-stretch">
               {filteredTenders.map((tender, index) => {
-                const isSaved = savedTenders.has(tender.id);
                 const isFirst = index === 0;
+                const isSaved = savedTenders.has(tender.id);
 
                 return (
                   <Link
@@ -734,7 +812,7 @@ export default function HomePage() {
                     }`}
                   >
                     <div>
-                      {/* Top Authority (30% Blue) & Urgency Row */}
+                      {/* Top Authority & Urgency Row */}
                       <div className="flex items-center justify-between gap-2 pb-3 mb-3.5 border-b border-slate-100 text-xs">
                         <span className="font-extrabold text-[#0055B8] uppercase tracking-wider truncate text-[11px]">
                           {tender.entity}
@@ -747,7 +825,7 @@ export default function HomePage() {
                             type="button"
                             onClick={(e) => toggleBookmark(e, tender.id)}
                             title={isSaved ? "Remove from watchlist" : "Save to watchlist"}
-                            className="p-1.5 rounded-lg bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] text-slate-400 hover:text-[#0055B8] transition-all hover:scale-110 active:scale-90 shadow-2xs"
+                            className="p-1.5 rounded-lg bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] text-slate-400 hover:text-[#0055B8] transition-all hover:scale-110 active:scale-90 shadow-2xs cursor-pointer"
                           >
                             <svg 
                               className={`w-3.5 h-3.5 ${isSaved ? "fill-[#0055B8] text-[#0055B8]" : "fill-none text-slate-400"}`} 
@@ -761,12 +839,12 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      {/* Main Title (20% Black) */}
+                      {/* Main Title */}
                       <h4 className="text-[15px] sm:text-base font-extrabold text-[#0F172A] leading-snug mb-3.5 group-hover:text-[#0055B8] transition-colors line-clamp-2">
                         {tender.title}
                       </h4>
 
-                      {/* Key Meta Badges with Unified Capsule Look */}
+                      {/* Key Meta Badges */}
                       <div className="flex flex-wrap items-center gap-2 text-xs mb-4">
                         <span className="bg-[#F1F5F9] group-hover:bg-blue-50/90 text-[#0055B8] border border-[#E2E8F0] px-3 py-1 rounded-xl font-bold transition-all shadow-2xs group-hover:shadow-xs">
                           {tender.categoryName}
@@ -780,7 +858,7 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* Bottom Budget (20% Black) & Action (30% Blue) */}
+                    {/* Bottom Budget & Action */}
                     <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between mt-2">
                       <div>
                         <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">
