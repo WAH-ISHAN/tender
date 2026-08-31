@@ -46,7 +46,6 @@ function SupplierDashboardContent() {
   }, [tabParam]);
 
   const handleLogout = () => {
-    // Clear session cookie
     document.cookie = "tenderhub_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     toast.info("Logged Out", "You have been safely signed out of your supplier workspace.");
     setTimeout(() => {
@@ -57,10 +56,10 @@ function SupplierDashboardContent() {
   const toggleBookmark = (id: string, refCode: string) => {
     if (watchlist.includes(id)) {
       setWatchlist((prev) => prev.filter((item) => item !== id));
-      toast.info("Removed from Watchlist", `Tender notice ${refCode} removed from your watchlist.`);
+      toast.info("Watchlist Updated", `Notice ${refCode} removed from your watchlist.`);
     } else {
       setWatchlist((prev) => [...prev, id]);
-      toast.success("Added to Watchlist", `Tender notice ${refCode} saved to your procurement watchlist.`);
+      toast.success("Saved to Watchlist", `Notice ${refCode} added to your procurement watchlist.`);
     }
   };
 
@@ -85,77 +84,181 @@ function SupplierDashboardContent() {
   const favoriteTenders = MOCK_TENDERS.filter((tender) => watchlist.includes(tender.id));
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      
-      {/* Top Corporate Workspace Banner */}
-      <div className="bg-[#0A1633] text-white border-b border-slate-800">
-        <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+    <div className="min-h-screen bg-[#F8FAFC] py-8">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        {/* 1. EXECUTIVE HERO BOX (Box-wise Architectural Card with Context Image & Ample Breathing Room) */}
+        <section className="relative rounded-3xl shadow-2xl bg-[#0A1633] text-white border border-slate-800 overflow-hidden">
+          
+          {/* Context Architectural Engineering Image Container (Rule #3) */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-40 scale-105 transition-transform duration-1000"
+              style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1541888946425-d0fbb186156f?q=80&w=2000&auto=format&fit=crop')`,
+              }}
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/95 via-[#0A1E4A]/80 to-[#07132F]/90" />
+          </div>
+
+          {/* Hero Content Grid */}
+          <div className="relative z-10 p-6 sm:p-10 lg:p-12">
+            
+            {/* Top Verification & Plan Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b border-white/15 text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm" />
                 <span className="text-[11px] font-black uppercase tracking-widest text-blue-200">
-                  SUPPLIER ENTERPRISE WORKSPACE
+                  CIDA VERIFIED SUPPLIER WORKSPACE
                 </span>
                 <span className="text-slate-500">&bull;</span>
-                <span className="text-[11px] font-bold text-slate-300">
-                  CIDA ID: {userProfile.brn}
+                <span className="font-mono text-slate-300 font-bold text-[11px]">
+                  BRN: {userProfile.brn}
                 </span>
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase">
-                {userProfile.company}
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-400 font-normal mt-1">
-                Authorized Officer: <strong className="text-white font-bold">{userProfile.name}</strong> &bull; {userProfile.cidaGrade}
-              </p>
+
+              <div className="flex items-center gap-3">
+                <span className="px-3.5 py-1.5 bg-white/10 border border-white/20 rounded-xl text-xs font-black text-white">
+                  Business Bidder (Annual Active)
+                </span>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="px-3.5 py-1.5 bg-white/10 hover:bg-white text-white hover:text-[#0F172A] border border-white/20 font-black text-xs rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer uppercase tracking-wider"
+                >
+                  Sign Out
+                </button>
+              </div>
             </div>
 
-            {/* Quick Action Badges */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="bg-white/10 backdrop-blur-xs border border-white/15 px-4 py-2.5 rounded-2xl text-left">
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-200 block">
-                  SUBSCRIPTION TIER
+            {/* Main Company Title & Quick Actions Row */}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="space-y-2 max-w-3xl">
+                <span className="text-[11px] font-black uppercase tracking-widest text-blue-300 block">
+                  REGISTERED CONTRACTOR
                 </span>
-                <span className="text-xs font-black text-white">Business Bidder (Annual Active)</span>
+                <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase leading-tight">
+                  {userProfile.company}
+                </h1>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-blue-100 font-medium">
+                  <span>Officer in Charge: <strong className="text-white font-bold">{userProfile.name}</strong></span>
+                  <span className="text-slate-400">&bull;</span>
+                  <span>{userProfile.cidaGrade}</span>
+                  <span className="text-slate-400">&bull;</span>
+                  <span>Primary Trade: <strong className="text-white font-bold">{userProfile.preferredCategory}</strong></span>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="px-4 py-2.5 bg-white/10 hover:bg-white text-white hover:text-[#0F172A] border border-white/20 font-black text-xs rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer uppercase tracking-wider"
-              >
-                Sign Out
-              </button>
+
+              {/* Quick Jump Action Pills */}
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveView("related")}
+                  className="px-5 py-3 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>Search Bids</span>
+                  <span>&rarr;</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveView("favorites")}
+                  className="px-5 py-3 bg-white/10 hover:bg-white text-white hover:text-[#0F172A] border border-white/20 font-black text-xs rounded-xl transition-all active:scale-95 cursor-pointer uppercase tracking-wider"
+                >
+                  Watchlist ({watchlist.length})
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 2. STRAIGHT 4-BOX METRICS RAIL (Box-wise Linear Grid with Identical Baselines) */}
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          
+          <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
+                MATCHING NOTICES
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-[#0055B8]">
+                {MOCK_TENDERS.length} Live
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+              In your registered trade sectors
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Main Workspace Layout */}
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
+                CLOSING THIS WEEK
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-[#0F172A]">
+                4 Urgent
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+              Submission deadline within 7 days
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
+                ACTIVE WATCHLIST
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-[#0055B8]">
+                {watchlist.length} Saved
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+              Pinned for deadline alerts
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
+                PIPELINE VALUE
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-[#0F172A] font-mono">
+                LKR 285.4M
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+              Aggregate opportunity band
+            </div>
+          </div>
+
+        </section>
+
+        {/* 3. MAIN WORKSPACE 2-COLUMN STRUCTURE (Clean Linear Box Layout) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* LEFT SIDEBAR: PROFILE & NAVIGATION CONTROLS */}
-          <aside className="lg:col-span-3 space-y-6">
+          {/* LEFT SIDEBAR: BOX-BY-BOX CONTROL STACK */}
+          <aside className="lg:col-span-4 xl:col-span-3 space-y-5 sticky top-28">
             
-            {/* User Profile Card */}
-            <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-md text-center">
-              <div className="w-16 h-16 rounded-2xl bg-[#0055B8] text-white flex items-center justify-center font-display text-2xl font-black mx-auto mb-3 shadow-md">
+            {/* Box 1: Authorized Officer Badge Box */}
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-md flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[#0055B8] text-white flex items-center justify-center font-display text-xl font-black shrink-0 shadow-sm">
                 KP
               </div>
-              <h2 className="text-base font-black text-[#0F172A] leading-tight">
-                {userProfile.name}
-              </h2>
-              <p className="text-xs text-[#0055B8] font-bold mt-0.5">
-                Authorized Supplier
-              </p>
-              <div className="mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-normal space-y-1">
-                <div>{userProfile.company}</div>
-                <div className="font-mono text-slate-700 font-bold">{userProfile.email}</div>
+              <div className="truncate">
+                <h2 className="text-sm font-black text-[#0F172A] truncate">
+                  {userProfile.name}
+                </h2>
+                <div className="text-xs text-[#0055B8] font-bold">
+                  Authorized Officer
+                </div>
+                <div className="text-[11px] text-slate-400 font-mono truncate mt-0.5">
+                  {userProfile.email}
+                </div>
               </div>
             </div>
 
-            {/* Sidebar Navigation Menu */}
-            <nav className="bg-white border border-slate-200/90 rounded-3xl p-3 shadow-md divide-y divide-slate-100">
+            {/* Box 2: Workspace Navigation Box */}
+            <nav className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-md divide-y divide-slate-100">
               {[
                 { id: "overview", label: "Dashboard Overview" },
                 { id: "related", label: "Related Live Tenders" },
@@ -166,15 +269,13 @@ function SupplierDashboardContent() {
                   key={item.id}
                   type="button"
                   onClick={() => setActiveView(item.id as DashboardView)}
-                  className={`w-full text-left px-4 py-3.5 rounded-2xl text-xs font-black transition-all flex items-center justify-between cursor-pointer ${
+                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-black transition-all flex items-center justify-between cursor-pointer ${
                     activeView === item.id
                       ? "bg-[#EFF6FF] text-[#0055B8] shadow-2xs"
                       : "text-slate-700 hover:bg-slate-50 hover:text-slate-950 font-bold"
                   }`}
                 >
-                  <span className="flex items-center gap-2">
-                    {item.label}
-                  </span>
+                  <span>{item.label}</span>
                   <div className="flex items-center gap-1.5">
                     {item.badge !== undefined && (
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#0055B8] text-white">
@@ -189,93 +290,63 @@ function SupplierDashboardContent() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-3.5 rounded-2xl text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between cursor-pointer"
+                className="w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between cursor-pointer"
               >
                 <span>Logout</span>
                 <span className="text-slate-400 font-bold">&rsaquo;</span>
               </button>
             </nav>
 
-            {/* Procurement Hotline Card */}
-            <div className="bg-[#F8FAFC] border border-slate-200/90 rounded-3xl p-5 text-xs shadow-sm">
+            {/* Box 3: Procurement Helpdesk Box */}
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-5 text-xs shadow-md">
               <span className="text-[10px] font-black uppercase tracking-widest text-[#0055B8] block mb-1">
                 PROCUREMENT HELPDESK
               </span>
               <div className="font-black text-slate-900 text-sm mb-1">CIDA &amp; Bidding Support</div>
               <p className="text-slate-600 font-normal leading-relaxed mb-3">
-                Have questions regarding bid bonds, eligibility criteria, or parate auctions?
+                Need guidance on bid bonds, eligibility criteria, or parate notices?
               </p>
-              <div className="font-mono text-xs font-bold text-slate-900">+94 11 200 8000</div>
+              <div className="font-mono text-xs font-bold text-slate-900 bg-[#F8FAFC] p-2.5 rounded-xl border border-slate-200 text-center">
+                Hotline: +94 11 200 8000
+              </div>
             </div>
 
           </aside>
 
-          {/* RIGHT MAIN CONTENT PANEL */}
-          <main className="lg:col-span-9 space-y-8">
+          {/* RIGHT MAIN CONTENT: BOX-BY-BOX LINEAR FEED */}
+          <main className="lg:col-span-8 xl:col-span-9 space-y-6">
             
             {/* VIEW 1: DASHBOARD OVERVIEW */}
             {activeView === "overview" && (
-              <div className="space-y-8 animate-fadeIn">
+              <div className="space-y-6 animate-fadeIn">
                 
-                {/* 4 High-Impact Metrics */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="bg-white border border-slate-200/90 p-5 sm:p-6 rounded-3xl shadow-md">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                      MATCHING NOTICES
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-black text-[#0055B8]">
-                      {MOCK_TENDERS.length} Live
+                {/* Box 1: Welcome Overview Card */}
+                <div className="bg-white border border-slate-200/90 p-7 rounded-2xl shadow-md">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 mb-4 border-b border-slate-100">
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#0055B8] block mb-0.5">
+                        CENTRAL REPOSITORY
+                      </span>
+                      <h2 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
+                        TenderHub National Procurement Feed
+                      </h2>
                     </div>
-                    <span className="text-[11px] text-slate-500 font-normal mt-1 block">In your target categories</span>
+                    <span className="text-xs font-mono font-bold text-slate-500 bg-[#F8FAFC] px-3 py-1.5 rounded-xl border border-slate-200 shrink-0">
+                      Sync: 05:00 AM Daily
+                    </span>
                   </div>
 
-                  <div className="bg-white border border-slate-200/90 p-5 sm:p-6 rounded-3xl shadow-md">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                      CLOSING THIS WEEK
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-black text-[#0F172A]">
-                      4 Notices
-                    </div>
-                    <span className="text-[11px] text-slate-500 font-normal mt-1 block">Action required soon</span>
-                  </div>
-
-                  <div className="bg-white border border-slate-200/90 p-5 sm:p-6 rounded-3xl shadow-md">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                      ACTIVE WATCHLIST
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-black text-[#0055B8]">
-                      {watchlist.length} Saved
-                    </div>
-                    <span className="text-[11px] text-slate-500 font-normal mt-1 block">Tracked procurement bids</span>
-                  </div>
-
-                  <div className="bg-white border border-slate-200/90 p-5 sm:p-6 rounded-3xl shadow-md">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                      PIPELINE VALUE
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-black text-[#0F172A] font-mono">
-                      LKR 285.4M
-                    </div>
-                    <span className="text-[11px] text-slate-500 font-normal mt-1 block">Aggregate tender opportunities</span>
-                  </div>
-                </div>
-
-                {/* Welcome Intelligence Briefing */}
-                <div className="bg-white border border-slate-200/90 p-7 sm:p-8 rounded-3xl shadow-md">
-                  <h2 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight mb-2">
-                    Welcome to TenderHub National Procurement Gateway
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-6 max-w-4xl">
-                    TenderHub aggregates, verifies, and delivers high-value government gazettes, municipal tenders, provincial notices, and corporate RFPs across all 9 provinces in Sri Lanka. All notices are validated daily at 05:00 AM with cryptographic SHA-256 evidence packs.
+                  <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-6">
+                    All notices in your feed are harvested directly from government gazettes, state ministries, municipal councils, and verified corporate boards across Sri Lanka.
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100">
+                  <div className="flex flex-wrap items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setActiveView("related")}
                       className="px-5 py-2.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider cursor-pointer"
                     >
-                      Browse Related Live Tenders &rarr;
+                      Browse Matching Tenders &rarr;
                     </button>
                     <button
                       type="button"
@@ -287,18 +358,18 @@ function SupplierDashboardContent() {
                   </div>
                 </div>
 
-                {/* Top Recommended Live Tenders Feed */}
+                {/* Box 2: Priority Tenders Linear Stack */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-black text-[#0F172A]">
+                    <h3 className="text-base sm:text-lg font-black text-[#0F172A]">
                       Priority Tenders for Your Contractor Profile
                     </h3>
                     <button
                       type="button"
                       onClick={() => setActiveView("related")}
-                      className="text-xs font-black text-[#0055B8] hover:underline"
+                      className="text-xs font-black text-[#0055B8] hover:underline cursor-pointer"
                     >
-                      View All Related Tenders &rarr;
+                      View All Related Bids &rarr;
                     </button>
                   </div>
 
@@ -308,7 +379,7 @@ function SupplierDashboardContent() {
                       return (
                         <div
                           key={tender.id}
-                          className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
+                          className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
                         >
                           <div>
                             <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100 text-xs">
@@ -344,7 +415,7 @@ function SupplierDashboardContent() {
                               <button
                                 type="button"
                                 onClick={() => toggleBookmark(tender.id, tender.ref)}
-                                className={`p-2 rounded-xl border transition-all text-xs font-bold ${
+                                className={`px-3 py-1.5 rounded-xl border transition-all text-xs font-bold cursor-pointer ${
                                   isSaved ? "bg-[#EFF6FF] text-[#0055B8] border-[#BFDBFE]" : "bg-[#F8FAFC] text-slate-400 border-slate-200 hover:text-[#0055B8]"
                                 }`}
                               >
@@ -352,7 +423,7 @@ function SupplierDashboardContent() {
                               </button>
                               <Link
                                 href={`/tender/${tender.id}`}
-                                className="px-3.5 py-2 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-xs transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
+                                className="px-3.5 py-1.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-xs transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                               >
                                 Dossier &rarr;
                               </Link>
@@ -370,7 +441,7 @@ function SupplierDashboardContent() {
             {/* VIEW 2: RELATED LIVE TENDERS */}
             {activeView === "related" && (
               <div className="space-y-6 animate-fadeIn">
-                <div className="bg-white border border-slate-200/90 p-6 sm:p-7 rounded-3xl shadow-md">
+                <div className="bg-white border border-slate-200/90 p-6 sm:p-7 rounded-2xl shadow-md">
                   <h2 className="text-xl font-black text-[#0F172A] mb-2">
                     Related Live Procurement Opportunities
                   </h2>
@@ -420,7 +491,7 @@ function SupplierDashboardContent() {
                     return (
                       <div
                         key={tender.id}
-                        className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
+                        className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100 text-xs">
@@ -459,7 +530,7 @@ function SupplierDashboardContent() {
                             <button
                               type="button"
                               onClick={() => toggleBookmark(tender.id, tender.ref)}
-                              className={`p-2.5 rounded-xl border text-xs font-black transition-all ${
+                              className={`p-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer ${
                                 isSaved ? "bg-[#EFF6FF] text-[#0055B8] border-[#BFDBFE]" : "bg-[#F8FAFC] text-slate-600 border-slate-200 hover:text-[#0055B8]"
                               }`}
                             >
@@ -483,7 +554,7 @@ function SupplierDashboardContent() {
             {/* VIEW 3: FAVOURITES / WATCHLIST */}
             {activeView === "favorites" && (
               <div className="space-y-6 animate-fadeIn">
-                <div className="bg-white border border-slate-200/90 p-6 sm:p-7 rounded-3xl shadow-md flex items-center justify-between">
+                <div className="bg-white border border-slate-200/90 p-6 sm:p-7 rounded-2xl shadow-md flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-black text-[#0F172A]">
                       Your Procurement Watchlist ({watchlist.length})
@@ -502,7 +573,7 @@ function SupplierDashboardContent() {
                 </div>
 
                 {favoriteTenders.length === 0 ? (
-                  <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center shadow-md">
+                  <div className="bg-white border border-slate-200/90 rounded-2xl p-12 text-center shadow-md">
                     <div className="text-slate-400 font-bold text-lg mb-2">Your Watchlist is Currently Empty</div>
                     <p className="text-xs sm:text-sm text-slate-500 font-normal max-w-md mx-auto mb-6">
                       Click the &quot;Save&quot; button on any tender to pin it to your workspace for deadline alerts and bidding tracking.
@@ -510,7 +581,7 @@ function SupplierDashboardContent() {
                     <button
                       type="button"
                       onClick={() => setActiveView("related")}
-                      className="px-6 py-3 bg-[#0055B8] text-white font-black text-xs rounded-xl uppercase tracking-wider shadow-md"
+                      className="px-6 py-3 bg-[#0055B8] text-white font-black text-xs rounded-xl uppercase tracking-wider shadow-md cursor-pointer"
                     >
                       Browse Available Tenders
                     </button>
@@ -520,7 +591,7 @@ function SupplierDashboardContent() {
                     {favoriteTenders.map((tender) => (
                       <div
                         key={tender.id}
-                        className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-md hover:shadow-lg transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
+                        className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
                       >
                         <div className="space-y-1.5 flex-1">
                           <div className="flex items-center gap-2">
@@ -564,7 +635,7 @@ function SupplierDashboardContent() {
 
             {/* VIEW 4: COMPANY & USER DETAILS / SETTINGS */}
             {activeView === "settings" && (
-              <div className="bg-white border border-slate-200/90 rounded-3xl p-7 sm:p-10 shadow-md animate-fadeIn">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-7 sm:p-10 shadow-md animate-fadeIn">
                 <h2 className="text-xl sm:text-2xl font-black text-[#0F172A] mb-2">
                   Company Profile &amp; Intelligence Alerts
                 </h2>
@@ -671,7 +742,7 @@ function SupplierDashboardContent() {
                       <button
                         type="button"
                         onClick={() => setUserProfile({ ...userProfile, whatsappAlerts: !userProfile.whatsappAlerts })}
-                        className={`px-4 py-1.5 rounded-xl font-bold text-xs transition-colors ${
+                        className={`px-4 py-1.5 rounded-xl font-bold text-xs transition-colors cursor-pointer ${
                           userProfile.whatsappAlerts ? "bg-[#0055B8] text-white" : "bg-slate-200 text-slate-700"
                         }`}
                       >
