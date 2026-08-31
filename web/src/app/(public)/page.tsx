@@ -392,12 +392,12 @@ export default function HomePage() {
   const visibleCategories = showAllCategories ? CATEGORIES : CATEGORIES.slice(0, 5);
 
   return (
-    <div className={`max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all ${
+    <div className={`max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-6 transition-all ${
       textZoom === "large" ? "text-[110%]" : textZoom === "xl" ? "text-[120%]" : "text-[100%]"
     }`}>
       
       {/* 1. TOP INSTITUTIONAL STATUS STRIP */}
-      <header className="flex flex-wrap items-center justify-between text-xs pb-4 mb-8 border-b border-[#E2E6ED] gap-4">
+      <header className="flex flex-wrap items-center justify-between text-xs pb-3.5 mb-6 border-b border-[#E2E6ED] gap-4">
         <div className="flex items-center gap-2.5 text-[#374151]">
           <span className="text-[#0055B8] font-extrabold uppercase tracking-wider">NATIONAL PROCUREMENT GAZETTE</span>
           <span className="text-gray-300">|</span>
@@ -455,7 +455,52 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
+      {/* 2. CINEMATIC HERO BANNER BAR (Lotus Tower & Colombo Skyline Atmosphere) */}
+      <section className="relative rounded-2xl overflow-hidden mb-10 shadow-lg border border-slate-800 bg-[#0A1128] text-white">
+        
+        {/* Background Image with Dark Blue & Vignette Gradients */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity scale-105 transition-transform duration-1000"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
+          }}
+        />
+        <div className="absolute inset-0 bg-linear-to-r from-[#070F26] via-[#0A193F]/90 to-[#070F26]/95" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,85,184,0.35),transparent_60%)]" />
+
+        {/* Hero Content */}
+        <div className="relative z-10 px-6 sm:px-10 py-10 sm:py-14 max-w-4xl">
+          
+          <div className="inline-flex items-center gap-2 bg-[#0055B8]/80 text-white text-[11px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-400/30 mb-4 shadow-xs">
+            <span>●</span> Sri Lanka National Procurement &amp; Tender Network
+          </div>
+
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.05] mb-4">
+            FIND GOVERNMENT &amp; COMMERCIAL TENDERS
+          </h1>
+
+          <p className="text-sm sm:text-base text-gray-200 font-medium leading-relaxed max-w-2xl mb-6">
+            Real-time procurement gazettes, ministry purchases, and commercial RFPs across all 9 provinces. Direct specifications, BOQ documents, and deadline alerts.
+          </p>
+
+          {/* Quick Action Badges */}
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-semibold text-gray-300">
+            <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-xs px-3 py-1.5 rounded-md border border-white/15">
+              <span className="text-emerald-400 font-bold">✓</span> 366 Live Notices Today
+            </div>
+            <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-xs px-3 py-1.5 rounded-md border border-white/15">
+              <span className="text-emerald-400 font-bold">✓</span> Verified Gazette Issues
+            </div>
+            <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-xs px-3 py-1.5 rounded-md border border-white/15">
+              <span className="text-emerald-400 font-bold">✓</span> 3,200+ Registered Contractors
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* 3. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
         {/* LEFT COLUMN: NAVIGATION */}
@@ -556,12 +601,14 @@ export default function HomePage() {
             )}
           </nav>
 
-          {/* Heading and Live/Expired Tabs */}
+          {/* Section Header & Tab Controls */}
           <section className="mb-8">
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-3">
-              <h1 className="font-display text-4xl sm:text-5xl font-black text-[#0F172A] tracking-tight uppercase leading-none">
-                TENDERS &amp; PURCHASES
-              </h1>
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl font-black text-[#0F172A] tracking-tight uppercase leading-none">
+                  PROCUREMENT WORKSPACE
+                </h2>
+              </div>
               
               {/* Live / Latest / Expired Tabs */}
               <div className="flex items-center gap-1.5 text-xs font-bold">
@@ -602,11 +649,11 @@ export default function HomePage() {
             </div>
             
             <p className="text-sm sm:text-base text-[#4B5563] max-w-3xl font-medium">
-              National procurement directory. Search gazette tenders, newspaper notices, and corporate RFPs across Sri Lanka.
+              Search active procurement notices, ministry purchases, and commercial RFPs across Sri Lanka.
             </p>
           </section>
 
-          {/* 3. WORKSPACE SEARCH PANEL */}
+          {/* 4. WORKSPACE SEARCH PANEL */}
           <section className="bg-white border-2 border-[#E2E6ED] rounded-xl p-6 lg:p-7 mb-10 shadow-xs">
             
             {/* Primary Search Bar */}
@@ -869,16 +916,16 @@ export default function HomePage() {
 
           </section>
 
-          {/* 4. RESULTS HEADER & CONTROLS */}
+          {/* 5. RESULTS HEADER & CONTROLS */}
           <section className="mb-8">
             
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E2E6ED]">
               
               {/* Distinct Headline & Result Metric */}
               <div>
-                <h2 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+                <h3 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight uppercase">
                   TENDER RESULTS
-                </h2>
+                </h3>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-[#4B5563] font-semibold mt-1">
                   <span className="text-[#0055B8] font-bold">{filteredTenders.length} opportunities matching your criteria</span>
                   <span>·</span>
@@ -978,7 +1025,7 @@ export default function HomePage() {
 
           </section>
 
-          {/* 5. RESULTS DISPLAY: CARDS VIEW OR DENSE TABLE VIEW */}
+          {/* 6. RESULTS DISPLAY: CARDS VIEW OR DENSE TABLE VIEW */}
           {viewMode === "cards" ? (
             /* CARDS VIEW */
             <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-7 mb-16">
@@ -1019,9 +1066,9 @@ export default function HomePage() {
                         </div>
 
                         {/* 2. What (Title) */}
-                        <h3 className="text-xl lg:text-2xl font-bold leading-snug mb-3 text-white">
+                        <h4 className="text-xl lg:text-2xl font-bold leading-snug mb-3 text-white">
                           {tender.title}
-                        </h3>
+                        </h4>
 
                         {/* 3. Source & Location */}
                         <div className="text-xs text-blue-100 opacity-95 mb-5 font-mono">
@@ -1083,9 +1130,9 @@ export default function HomePage() {
                       </div>
 
                       {/* 2. What (Title) */}
-                      <h3 className="text-xl lg:text-2xl font-bold leading-snug text-[#0F172A] mb-3 group-hover:text-[#0055B8] transition-colors">
+                      <h4 className="text-xl lg:text-2xl font-bold leading-snug text-[#0F172A] mb-3 group-hover:text-[#0055B8] transition-colors">
                         {tender.title}
-                      </h3>
+                      </h4>
 
                       {/* 3. Source & Location */}
                       <div className="text-xs text-[#4B5563] font-medium mb-5 font-mono">
@@ -1204,7 +1251,7 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* 6. CLEAN EUROPEAN NUMERIC PAGINATION */}
+          {/* 7. CLEAN EUROPEAN NUMERIC PAGINATION */}
           {filteredTenders.length > 0 && (
             <footer className="flex items-center justify-between pt-8 border-t-2 border-[#E2E6ED] text-sm font-bold text-gray-700">
               <div className="text-gray-500 font-medium">
@@ -1227,7 +1274,7 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* 7. QUICK VIEW SLIDE-OVER DRAWER */}
+      {/* 8. QUICK VIEW SLIDE-OVER DRAWER */}
       {quickViewTender && (
         <div 
           className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex justify-end animate-fadeIn"
