@@ -250,31 +250,31 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/85 via-[#0A1E4A]/65 to-[#07132F]/80" />
         </div>
 
-        <div className="relative z-10 px-6 sm:px-12 py-10 sm:py-14">
+        <div className="relative z-10 px-6 sm:px-12 lg:px-16 py-14 sm:py-20 lg:py-24">
           
-          {/* Top Hero Header */}
-          <div className="max-w-4xl mb-8">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          {/* Top Hero Header (Grand Scale) */}
+          <div className="max-w-5xl mb-10 sm:mb-12">
+            <div className="flex items-center gap-2.5 mb-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-300">
                 {t("heroSubtitle")}
               </span>
             </div>
 
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.04] mb-4">
               {t("heroTitle")}
             </h1>
 
-            <p className="text-xs sm:text-sm text-blue-100 font-normal leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base text-blue-100 font-normal leading-relaxed max-w-3xl">
               {t("heroDesc")}
             </p>
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
-          <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-2xl text-slate-900 border border-slate-100">
+          <div className="bg-white rounded-3xl p-7 sm:p-9 lg:p-10 shadow-2xl text-slate-900 border border-slate-100">
             
             {/* Primary Search Bar */}
-            <div className="mb-4 relative" ref={searchContainerRef}>
+            <div className="mb-5 relative" ref={searchContainerRef}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -283,7 +283,7 @@ export default function HomePage() {
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3.5 pl-4 pr-16 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-2xl py-4 sm:py-4.5 pl-5 sm:pl-6 pr-16 text-sm sm:text-base font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal shadow-2xs"
                 />
                 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -327,14 +327,14 @@ export default function HomePage() {
             </div>
 
             {/* 4 Core Dropdowns + Action CTA */}
-            <div ref={filterBarRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-4">
+            <div ref={filterBarRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4 mb-2">
               
               {/* Modern Category Dropdown */}
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "category" ? null : "category")}
-                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-xl p-2.5 sm:p-3 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
+                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-2xl p-3 sm:p-3.5 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
@@ -383,7 +383,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "province" ? null : "province")}
-                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-xl p-2.5 sm:p-3 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
+                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-2xl p-3 sm:p-3.5 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
@@ -422,7 +422,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "valueBand" ? null : "valueBand")}
-                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-xl p-2.5 sm:p-3 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
+                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-2xl p-3 sm:p-3.5 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
@@ -461,7 +461,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "closing" ? null : "closing")}
-                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-xl p-2.5 sm:p-3 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
+                  className="w-full bg-[#F8FAFC] hover:bg-white border border-slate-200/90 hover:border-[#0055B8] focus:border-[#0055B8] focus:bg-white rounded-2xl p-3 sm:p-3.5 text-left transition-all hover:shadow-sm flex items-center justify-between gap-2 cursor-pointer"
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
@@ -508,7 +508,7 @@ export default function HomePage() {
                     const el = document.getElementById("tender-results-section");
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm py-3.5 px-4 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs sm:text-sm py-3.5 sm:py-4 px-5 rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
                 >
                   <span>{t("searchBtn")}</span>
                   <span>&rarr;</span>
@@ -519,7 +519,7 @@ export default function HomePage() {
                     type="button"
                     onClick={handleReset}
                     title="Reset all filters"
-                    className="p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all hover:scale-105 active:scale-95 text-xs font-bold cursor-pointer"
+                    className="p-3.5 sm:p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl transition-all hover:scale-105 active:scale-95 text-xs font-bold cursor-pointer"
                   >
                     Reset
                   </button>
