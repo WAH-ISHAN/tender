@@ -98,126 +98,126 @@ export default function PricingPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 items-stretch">
         
         {/* 1. Free Guest / Tier */}
-        <div className="bg-[#F8F9FB] p-6 rounded-xl flex flex-col justify-between border-2 border-[#E2E6ED]">
+        <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col justify-between border-2 border-slate-200 shadow-sm">
           <div>
-            <div className="text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-1">New Bidder</div>
-            <h3 className="text-xl font-bold text-[#0F172A] mb-2">Free Starter</h3>
-            <p className="text-xs text-gray-500 mb-6">Explore the national catalogue and assess market opportunities.</p>
+            <div className="text-[11px] font-black text-slate-500 uppercase tracking-wider mb-1">New Bidder</div>
+            <h3 className="text-xl font-black text-[#0F172A] mb-2">Free Starter</h3>
+            <p className="text-xs text-slate-500 font-normal leading-relaxed mb-6">Explore the national catalogue and assess market opportunities.</p>
             
             <div className="font-display text-4xl font-black text-[#0F172A] mb-6">
               Rs. 0
             </div>
             
-            <ul className="text-xs text-gray-700 flex flex-col gap-2.5 pb-6 border-b border-[#E2E6ED]">
-              <li className="flex items-center gap-2 font-semibold">✓ 5 Free full notice views</li>
-              <li className="flex items-center gap-2 font-semibold">✓ Browse all 39,942+ archive notices</li>
-              <li className="flex items-center gap-2 font-semibold">✓ Province, Category &amp; Value band filters</li>
-              <li className="flex items-center gap-2 font-semibold">✓ View auction lots &amp; parate notices</li>
-              <li className="flex items-center gap-2 text-gray-400">✕ Direct contact officer numbers</li>
-              <li className="flex items-center gap-2 text-gray-400">✕ SHA-256 downloadable BOQ/PDFs</li>
-              <li className="flex items-center gap-2 text-gray-400">✕ Electronic bid submission receipt</li>
+            <ul className="text-xs text-slate-700 flex flex-col gap-2.5 pb-6 border-b border-slate-200 font-normal">
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; 5 Free full notice views</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Browse all 39,942+ archive notices</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Province, Category &amp; Value band filters</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; View auction lots &amp; parate notices</li>
+              <li className="flex items-center gap-2 text-slate-400">&times; Direct contact officer numbers</li>
+              <li className="flex items-center gap-2 text-slate-400">&times; SHA-256 downloadable BOQ/PDFs</li>
+              <li className="flex items-center gap-2 text-slate-400">&times; Electronic bid submission receipt</li>
             </ul>
           </div>
 
           <Link
             href="/register"
-            className="mt-6 w-full block text-center py-3 bg-white border border-[#D9DFE7] hover:border-[#0055B8] hover:text-[#0055B8] text-[#0F172A] font-bold text-xs rounded-md transition-colors uppercase tracking-wider shadow-2xs"
+            className="mt-6 w-full block text-center py-3 bg-white border border-slate-300 hover:border-[#0055B8] hover:text-[#0055B8] text-[#0F172A] font-black text-xs rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-2xs"
           >
             Create Free Account
           </Link>
         </div>
 
         {/* 2. Business Bidder (Solid Blue Highlight Card) (§ 08 & § 16) */}
-        <div className="bg-[#0055B8] text-white p-6 rounded-xl flex flex-col justify-between shadow-xl relative lg:-translate-y-2 border-2 border-blue-400">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest py-1 px-3 rounded-full shadow-xs">
+        <div className="bg-[#0055B8] text-white p-6 pt-9 rounded-2xl flex flex-col justify-between shadow-2xl relative lg:-translate-y-2 border-2 border-blue-400">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-white text-[#0055B8] border border-blue-200 text-[10px] font-black uppercase tracking-widest py-1 px-4 rounded-full shadow-md whitespace-nowrap">
             RECOMMENDED FOR CONTRACTORS
           </div>
 
           <div>
-            <div className="text-xs font-extrabold text-blue-200 uppercase tracking-wider mb-1">Commercial Bidder</div>
-            <h3 className="text-xl font-bold text-white mb-2">Business Bidder</h3>
-            <p className="text-xs text-blue-100 mb-6">Complete procurement intelligence, full document downloads, and e-submission.</p>
+            <div className="text-[11px] font-black text-blue-200 uppercase tracking-widest mb-1 mt-2.5">Commercial Bidder</div>
+            <h3 className="text-2xl font-black text-white mb-2">Business Bidder</h3>
+            <p className="text-xs text-blue-100 font-normal leading-relaxed mb-6">Complete procurement intelligence, full document downloads, and e-submission.</p>
             
             <div className="font-display text-4xl font-black text-white mb-0.5">
               {billingCycle === "annual" ? "Rs. 24,000" : "Rs. 7,500"}
             </div>
-            <span className="text-xs text-blue-200 block mb-6 font-mono">
+            <span className="text-xs text-blue-200 block mb-6 font-mono font-bold">
               billed {billingCycle === "annual" ? "annually (12 months)" : "quarterly (3 months)"}
             </span>
             
-            <ul className="text-xs text-blue-100 flex flex-col gap-2.5 pb-6 border-b border-blue-400/30">
-              <li className="flex items-center gap-2 text-white font-bold">✓ Unlimited daily gazette &amp; tender access</li>
-              <li className="flex items-center gap-2 text-white font-bold">✓ Signed 5-minute SHA-256 document links</li>
-              <li className="flex items-center gap-2 text-white font-bold">✓ Direct procurement officer contact &amp; phone</li>
-              <li className="flex items-center gap-2 text-white font-bold">✓ Legally binding E-Submission Receipt</li>
-              <li className="flex items-center gap-2 text-white font-bold">✓ Bid Pipeline &amp; Compliance Vault reminders</li>
-              <li className="flex items-center gap-2 text-white font-bold">✓ Real-time keyword &amp; category alert feed</li>
+            <ul className="text-xs text-blue-100 flex flex-col gap-2.5 pb-6 border-b border-blue-400/30 font-normal">
+              <li className="flex items-center gap-2 text-white font-bold">&check; Unlimited daily gazette &amp; tender access</li>
+              <li className="flex items-center gap-2 text-white font-bold">&check; Signed 5-minute SHA-256 document links</li>
+              <li className="flex items-center gap-2 text-white font-bold">&check; Direct procurement officer contact &amp; phone</li>
+              <li className="flex items-center gap-2 text-white font-bold">&check; Legally binding E-Submission Receipt</li>
+              <li className="flex items-center gap-2 text-white font-bold">&check; Bid Pipeline &amp; Compliance Vault reminders</li>
+              <li className="flex items-center gap-2 text-white font-bold">&check; Real-time keyword &amp; category alert feed</li>
             </ul>
           </div>
 
           <button
             onClick={() => setShowBankClaim(true)}
-            className="mt-6 w-full block text-center py-3 bg-white text-[#0055B8] hover:bg-blue-50 font-black text-xs rounded-md transition-colors uppercase tracking-wider shadow-md"
+            className="mt-6 w-full block text-center py-3.5 bg-white text-[#0055B8] hover:bg-blue-50 font-black text-xs rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-md cursor-pointer"
           >
             Claim via Bank Transfer &rarr;
           </button>
         </div>
 
         {/* 3. Publisher / Procuring Entity Tier (§ 01 The Moat) */}
-        <div className="bg-[#F8F9FB] p-6 rounded-xl flex flex-col justify-between border-2 border-emerald-300">
+        <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col justify-between border-2 border-slate-200 shadow-sm">
           <div>
-            <div className="text-xs font-extrabold text-emerald-800 uppercase tracking-wider mb-1">Procuring Authorities</div>
-            <h3 className="text-xl font-bold text-[#0F172A] mb-2">Publisher Workspace</h3>
-            <p className="text-xs text-gray-500 mb-6">For ministries, state boards, banks, and private corporates.</p>
+            <div className="text-[11px] font-black text-[#0055B8] uppercase tracking-wider mb-1">Procuring Authorities</div>
+            <h3 className="text-xl font-black text-[#0F172A] mb-2">Publisher Workspace</h3>
+            <p className="text-xs text-slate-500 font-normal leading-relaxed mb-6">For ministries, state boards, banks, and private corporates.</p>
             
-            <div className="font-display text-4xl font-black text-emerald-700 mb-0.5">
+            <div className="font-display text-4xl font-black text-[#0055B8] mb-0.5">
               FREE
             </div>
-            <span className="text-xs text-emerald-800 font-semibold block mb-6">
+            <span className="text-xs text-slate-600 font-semibold block mb-6">
               Free indefinitely to build national supply (§ 01)
             </span>
             
-            <ul className="text-xs text-gray-700 flex flex-col gap-2.5 pb-6 border-b border-[#E2E6ED]">
-              <li className="flex items-center gap-2 font-bold text-gray-900">✓ 7-Stage Procurement Lifecycle management</li>
-              <li className="flex items-center gap-2 font-bold text-gray-900">✓ Separation of duties threshold approvals</li>
-              <li className="flex items-center gap-2 font-bold text-gray-900">✓ Dual-Control sealed opening ceremony</li>
-              <li className="flex items-center gap-2 font-bold text-gray-900">✓ Conflict-of-interest committee evaluation</li>
-              <li className="flex items-center gap-2 font-bold text-gray-900">✓ Numbered addenda &amp; anonymous Q&amp;A</li>
-              <li className="flex items-center gap-2 font-bold text-gray-900">✓ Downloadable timestamped Evidence Pack</li>
+            <ul className="text-xs text-slate-700 flex flex-col gap-2.5 pb-6 border-b border-slate-200 font-normal">
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; 7-Stage Procurement Lifecycle management</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Separation of duties threshold approvals</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Dual-Control sealed opening ceremony</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Conflict-of-interest committee evaluation</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Numbered addenda &amp; anonymous Q&amp;A</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Downloadable timestamped Evidence Pack</li>
             </ul>
           </div>
 
           <Link
             href="/register"
-            className="mt-6 w-full block text-center py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-md transition-colors uppercase tracking-wider shadow-xs"
+            className="mt-6 w-full block text-center py-3 bg-[#0F172A] hover:bg-black text-white font-black text-xs rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-xs"
           >
             Create Company Workspace
           </Link>
         </div>
 
         {/* 4. Enterprise & Partner API Tier (§ 23) */}
-        <div className="bg-[#F8F9FB] p-6 rounded-xl flex flex-col justify-between border-2 border-[#E2E6ED]">
+        <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col justify-between border-2 border-slate-200 shadow-sm">
           <div>
-            <div className="text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-1">Large Integrators</div>
-            <h3 className="text-xl font-bold text-[#0F172A] mb-2">Partner API</h3>
-            <p className="text-xs text-gray-500 mb-6">Machine-readable feed with hashed API keys and webhooks.</p>
+            <div className="text-[11px] font-black text-slate-500 uppercase tracking-wider mb-1">Large Integrators</div>
+            <h3 className="text-xl font-black text-[#0F172A] mb-2">Partner API</h3>
+            <p className="text-xs text-slate-500 font-normal leading-relaxed mb-6">Machine-readable feed with hashed API keys and webhooks.</p>
             
             <div className="font-display text-4xl font-black text-[#0F172A] mb-6">
               Custom
             </div>
             
-            <ul className="text-xs text-gray-700 flex flex-col gap-2.5 pb-6 border-b border-[#E2E6ED]">
-              <li className="flex items-center gap-2 font-semibold">✓ REST Partner API with daily quota</li>
-              <li className="flex items-center gap-2 font-semibold">✓ Cursor-paged real-time notice polling</li>
-              <li className="flex items-center gap-2 font-semibold">✓ Webhook notifications with HMAC secrets</li>
-              <li className="flex items-center gap-2 font-semibold">✓ Dedicated account manager &amp; SLA</li>
-              <li className="flex items-center gap-2 font-semibold">✓ Unlimited seats &amp; audit log export</li>
+            <ul className="text-xs text-slate-700 flex flex-col gap-2.5 pb-6 border-b border-slate-200 font-normal">
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; REST Partner API with daily quota</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Cursor-paged real-time notice polling</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Webhook notifications with HMAC secrets</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Dedicated account manager &amp; SLA</li>
+              <li className="flex items-center gap-2 font-bold text-slate-900">&check; Unlimited seats &amp; audit log export</li>
             </ul>
           </div>
 
           <Link
             href="/contact-us"
-            className="mt-6 w-full block text-center py-3 bg-white border border-[#D9DFE7] hover:border-[#0055B8] hover:text-[#0055B8] text-[#0F172A] font-bold text-xs rounded-md transition-colors uppercase tracking-wider shadow-2xs"
+            className="mt-6 w-full block text-center py-3 bg-white border border-slate-300 hover:border-[#0055B8] hover:text-[#0055B8] text-[#0F172A] font-black text-xs rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider shadow-2xs"
           >
             Contact Enterprise Sales
           </Link>
