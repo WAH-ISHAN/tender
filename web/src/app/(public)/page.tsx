@@ -273,10 +273,10 @@ export default function HomePage() {
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
       {/* 1. HERO BANNER WITH DYNAMIC METRICS OVERLAY & INTEGRATED SEARCH ENGINE */}
-      <section className="relative rounded-3xl sm:rounded-[36px] mb-16 sm:mb-20 shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-20 overflow-hidden">
+      <section className="relative rounded-3xl sm:rounded-[36px] mb-16 sm:mb-20 shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-30">
         
-        {/* Full Section Background Image Container */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Full Section Background Image Container (Strictly Rounded & Clipped) */}
+        <div className="absolute inset-0 pointer-events-none rounded-3xl sm:rounded-[36px] overflow-hidden">
           <div 
             className="absolute inset-0 bg-cover bg-center opacity-75 scale-105 transition-transform duration-1000"
             style={{
@@ -315,7 +315,7 @@ export default function HomePage() {
           </div>
 
           {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
-          <div className="bg-white rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl text-slate-900 border border-slate-100">
+          <div className="bg-white rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl text-slate-900 border border-slate-100 relative z-30">
             
             {/* Primary Search Bar */}
             <div className="mb-6 relative" ref={searchContainerRef}>
