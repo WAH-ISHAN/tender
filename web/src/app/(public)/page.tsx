@@ -666,43 +666,10 @@ export default function HomePage() {
               <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
                 {t("tendersByCategory")}
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">12 Sectors</span>
+              <span className="text-[11px] text-slate-400 font-mono">12 Categories</span>
             </div>
 
-            <nav className="flex flex-col gap-1.5 text-xs text-slate-700">
-              {SECTORS.map((sec) => {
-                const isSelected = sectorFilter === sec.id;
-                return (
-                  <button
-                    key={sec.id}
-                    type="button"
-                    onClick={() => setSectorFilter(sec.id)}
-                    className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
-                      isSelected
-                        ? "bg-[#0055B8] text-white font-black shadow-sm"
-                        : "hover:bg-slate-50 font-bold text-slate-700"
-                    }`}
-                  >
-                    <span className="truncate pr-1">{sec.name}</span>
-                    <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
-                      {sec.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* Taxonomy Section 2: Tenders By Categories */}
-          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-              <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
-                TENDERS BY CATEGORY
-              </span>
-              <span className="text-[11px] text-slate-400 font-mono">12 Sectors</span>
-            </div>
-
-            <nav className="flex flex-col gap-1.5 text-xs text-slate-700 max-h-96 overflow-y-auto pr-1">
+            <nav className="flex flex-col gap-1.5 text-xs text-slate-700 max-h-96 overflow-y-auto custom-scrollbar pr-1">
               <button
                 type="button"
                 onClick={() => setSelectedCategory("all")}

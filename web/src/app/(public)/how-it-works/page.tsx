@@ -11,7 +11,30 @@ export default function HowItWorksPage() {
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
-        {/* Left Subnav (Interactive Functional Navigation) */}
+        {/* Mobile & Tablet Horizontal Subnav Tabs (Rule #8 Interactive Navigation) */}
+        <div className="lg:hidden col-span-1 flex overflow-x-auto custom-scrollbar gap-2 p-1.5 bg-[#F1F3F7] rounded-2xl border border-slate-200 mb-6">
+          {[
+            { id: "overview", label: "Process Overview" },
+            { id: "sourcing", label: "Daily Sourcing" },
+            { id: "indexing", label: "Indexing & Tags" },
+            { id: "documents", label: "Bidding Documents" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id as ProcessTab)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-all cursor-pointer ${
+                activeTab === tab.id
+                  ? "bg-white text-[#0055B8] shadow-xs"
+                  : "text-slate-600 hover:text-black font-bold"
+              }`}
+            >
+              {activeTab === tab.id ? `[${tab.label}]` : tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Left Subnav (Desktop Interactive Navigation) */}
         <aside className="lg:col-span-2 hidden lg:flex flex-col gap-4 pt-4 text-[13px]">
           <button
             type="button"
@@ -58,7 +81,7 @@ export default function HowItWorksPage() {
         <main className="lg:col-span-10">
           
           {/* Dynamic Header according to active tab */}
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-black text-[#111827] uppercase leading-none mb-6">
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-[#111827] uppercase leading-none mb-6">
             {activeTab === "overview" && "WHAT WE DO & HOW IT WORKS"}
             {activeTab === "sourcing" && "DAILY PROCUREMENT SOURCING"}
             {activeTab === "indexing" && "INDEXING & CLASSIFICATION"}
