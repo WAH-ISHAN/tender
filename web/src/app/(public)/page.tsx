@@ -350,7 +350,7 @@ export default function HomePage() {
                 </button>
 
                 {activeDropdown === "category" && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto animate-fadeIn divide-y divide-slate-50">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar animate-fadeIn divide-y divide-slate-50">
                     <button
                       type="button"
                       onClick={() => { setSelectedCategory("all"); setActiveDropdown(null); }}
@@ -399,7 +399,7 @@ export default function HomePage() {
                 </button>
 
                 {activeDropdown === "province" && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto animate-fadeIn divide-y divide-slate-50">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar animate-fadeIn divide-y divide-slate-50">
                     {PROVINCES.map((prov) => (
                       <button
                         key={prov.id}
@@ -438,7 +438,7 @@ export default function HomePage() {
                 </button>
 
                 {activeDropdown === "valueBand" && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto animate-fadeIn divide-y divide-slate-50">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar animate-fadeIn divide-y divide-slate-50">
                     {VALUE_BANDS.map((band) => (
                       <button
                         key={band.id}
