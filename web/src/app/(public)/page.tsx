@@ -537,24 +537,126 @@ export default function HomePage() {
   return (
     <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
       
-      {/* 1. CINEMATIC HERO BANNER */}
-      <section className="relative rounded-2xl overflow-hidden mb-10 shadow-lg border border-slate-800 bg-[#0A1128] text-white">
+      {/* 1. eTenders STYLE HERO BANNER WITH INTEGRATED SEARCH & DIAMOND IMAGE FRAME */}
+      <section className="relative rounded-2xl overflow-hidden mb-10 shadow-xl bg-linear-to-r from-[#0055B8] via-[#0066E0] to-[#004CA3] text-white min-h-[380px] flex items-center">
+        
+        {/* Background Lotus Tower / City Silhouette */}
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity scale-105"
+          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
           }}
         />
-        <div className="absolute inset-0 bg-linear-to-r from-[#070F26] via-[#0A193F]/90 to-[#070F26]/95" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#004DA8]/95 via-[#005BBF]/85 to-[#004DA8]/90 pointer-events-none" />
 
-        <div className="relative z-10 px-6 sm:px-12 py-10 sm:py-16 max-w-4xl">
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.05] mb-4">
-            FIND GOVERNMENT &amp; COMMERCIAL TENDERS
-          </h1>
+        {/* Top Right Accreditation Badge */}
+        <div className="absolute top-0 right-0 hidden md:flex items-center gap-3 bg-white text-gray-800 px-5 py-2.5 rounded-bl-2xl shadow-md border-b border-l border-gray-100 z-10">
+          <div className="text-right">
+            <div className="text-[11px] font-black text-[#0055B8] uppercase tracking-wider leading-none">
+              National Directory
+            </div>
+            <div className="text-[10px] text-gray-500 font-semibold">
+              Verified Gazette Mirror
+            </div>
+          </div>
+          <div className="w-7 h-7 rounded bg-blue-50 border border-blue-200 flex items-center justify-center text-[#0055B8] font-black text-xs">
+            LK
+          </div>
+        </div>
 
-          <p className="text-sm sm:text-base text-gray-200 font-medium leading-relaxed max-w-2xl">
-            Real-time procurement gazettes, ministry purchases, and commercial RFPs across all 9 provinces. Direct specifications, BOQ documents, and deadline alerts.
-          </p>
+        {/* Main Grid Content */}
+        <div className="relative z-10 w-full px-6 sm:px-10 lg:px-12 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          {/* Left Column: Heading, Subtitle & Integrated Search */}
+          <div className="lg:col-span-7 xl:col-span-8">
+            <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-blue-200 mb-2">
+              THE LARGEST COLLECTION OF
+            </div>
+
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.08] mb-3">
+              TENDERS IN SRI LANKA
+            </h1>
+
+            <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed max-w-xl mb-6">
+              We take pride in our verified procurement services which we have had the pleasure of providing to our valued contractors &amp; suppliers across Sri Lanka.
+            </p>
+
+            {/* Integrated White Search Container */}
+            <div className="bg-white p-2 sm:p-2.5 rounded-xl shadow-2xl flex flex-col sm:flex-row items-center gap-2 max-w-2xl border border-white/20 mb-3">
+              
+              {/* Input: Find Tender Here */}
+              <div className="flex-1 w-full relative">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                  🔍
+                </div>
+                <input
+                  type="text"
+                  placeholder="Find tender here..."
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  className="w-full bg-transparent pl-10 pr-3 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none"
+                />
+              </div>
+
+              <div className="hidden sm:block w-[1px] h-8 bg-gray-200" />
+
+              {/* Input: Select Category */}
+              <div className="w-full sm:w-56">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full bg-transparent py-2.5 px-3 text-xs sm:text-sm font-semibold text-gray-800 cursor-pointer outline-none truncate"
+                >
+                  <option value="all">Select Category</option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+            </div>
+
+            {/* Vibrant Green FIND TENDER Action Button */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  const element = document.getElementById("tender-results-section");
+                  element?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="bg-[#00B843] hover:bg-[#009E38] text-white font-black text-xs sm:text-sm px-8 py-3 rounded-lg uppercase tracking-wider shadow-lg transition-all transform hover:-translate-y-0.5"
+              >
+                FIND TENDER
+              </button>
+            </div>
+
+          </div>
+
+          {/* Right Column: Diamond Green Frame with Contractor Image */}
+          <div className="lg:col-span-5 xl:col-span-4 hidden lg:flex justify-center items-center">
+            <div className="relative w-64 h-64 flex items-center justify-center">
+              
+              {/* Outer Green Accent Diamond */}
+              <div className="absolute inset-0 border-4 border-[#00B843] rounded-3xl rotate-45 shadow-2xl transition-transform duration-700 hover:rotate-[48deg]" />
+              
+              {/* Small Top-Left Green Accent Box */}
+              <div className="absolute -top-4 -left-4 w-12 h-12 border-4 border-[#00B843] rounded-xl rotate-45 bg-[#0055B8]" />
+
+              {/* Inner Clipped Image */}
+              <div className="relative w-56 h-56 rounded-2xl rotate-45 overflow-hidden shadow-inner border-2 border-white/40">
+                <div 
+                  className="absolute -inset-10 bg-cover bg-center -rotate-45"
+                  style={{
+                    backgroundImage: `url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop')`,
+                  }}
+                />
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -869,7 +971,7 @@ export default function HomePage() {
           </section>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
-          <section className="mb-5">
+          <section id="tender-results-section" className="mb-5">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-[#E2E6ED]">
               
               <div className="flex items-baseline gap-3">
