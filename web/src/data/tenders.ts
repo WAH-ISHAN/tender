@@ -1,0 +1,346 @@
+export interface BiddingDocument {
+  name: string;
+  size: string;
+  type: string;
+  hash: string;
+}
+
+export interface TenderItem {
+  id: string;
+  ref: string;
+  title: string;
+  entity: string;
+  province: string;
+  district: string;
+  location: string;
+  source: string;
+  startDate: string;
+  endDate: string;
+  daysLeft: number;
+  contractType: string;
+  instrumentType: string;
+  sector: string;
+  categoryId: string;
+  categoryName: string;
+  valueBand: string;
+  amount: string;
+  amountNumeric: number;
+  bidBond: string;
+  bidBondValidity: string;
+  docFee: string;
+  cidaGrade: string;
+  preBidMeeting: string;
+  openingTime: string;
+  contactPerson: string;
+  contactPhone: string;
+  contactEmail: string;
+  submissionAddress: string;
+  deliveryPeriod: string;
+  paymentTerms: string;
+  isPromoted: boolean;
+  isUrgent: boolean;
+  hasDocuments: boolean;
+  docCount: number;
+  description: string;
+  heroImage: string;
+  technicalSpecs: string[];
+  documentsList: BiddingDocument[];
+}
+
+export const MOCK_TENDERS: TenderItem[] = [
+  {
+    id: "SPC-JAN-2026",
+    ref: "SPC/JAN/2026",
+    title: "Provision of Comprehensive Janitorial, Sanitation & Waste Management Services",
+    entity: "Southern Provincial Council",
+    province: "southern",
+    district: "Galle",
+    location: "Chief Secretariat Complex, Galle",
+    source: "Silumina & Thinakaran",
+    startDate: "10.08.2026",
+    endDate: "15.10.2026",
+    daysLeft: 3,
+    contractType: "Facility Management Agreement",
+    instrumentType: "Tender",
+    sector: "provincial",
+    categoryId: "services",
+    categoryName: "Janitorial & Facilities",
+    valueBand: "5M-25M",
+    amount: "LKR 6,200,000",
+    amountNumeric: 6200000,
+    bidBond: "LKR 60,000 (Refundable Bank Guarantee)",
+    bidBondValidity: "120 Days from closing",
+    docFee: "LKR 2,500 (Non-refundable)",
+    cidaGrade: "CIDA EM-04 or National Janitorial Authority Class A",
+    preBidMeeting: "28 September 2026 at 10:00 AM (Auditorium, Chief Secretariat, Galle)",
+    openingTime: "15 October 2026 at 14:00 PM (Tender Board Room, Galle)",
+    contactPerson: "Assistant Chief Secretary (Administration)",
+    contactPhone: "+94 91 224 4567 / +94 91 223 8901",
+    contactEmail: "admin@spc.gov.lk",
+    submissionAddress: "Procurement Committee, 2nd Floor, Chief Secretariat Building, Galle",
+    deliveryPeriod: "12 Months Service Contract (Renewable)",
+    paymentTerms: "Monthly service invoice upon certification of satisfactory sanitation inspection",
+    isPromoted: false,
+    isUrgent: true,
+    hasDocuments: true,
+    docCount: 2,
+    heroImage: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2000&auto=format&fit=crop",
+    description: "Daily hygiene sanitation, floor maintenance, deep disinfection, window cleaning, and waste disposal for the 5-story administrative secretariat complex.",
+    technicalSpecs: [
+      "Staffing: Minimum 35 trained janitorial personnel with dedicated onsite supervisor",
+      "Chemicals: Eco-friendly biodegradable sanitation reagents certified under SLS standards",
+      "Equipment: High-pressure floor scrubbers, wet/dry industrial vacuum extractors",
+    ],
+    documentsList: [
+      { name: "SPC_Janitorial_Tender_Form_2026.pdf", size: "1.2 MB", type: "PDF", hash: "4a2b1c3d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b" },
+      { name: "Cleaning_Schedule_BOQ.xlsx", size: "640 KB", type: "XLSX", hash: "9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b4a2b1c3d" },
+    ],
+  },
+  {
+    id: "MOE-2026-SP-01",
+    ref: "MOE/2026/SP-01",
+    title: "Supply, Delivery and Installation of Solar Power Infrastructure for Rural Schools",
+    entity: "Ministry of Education",
+    province: "western",
+    district: "Colombo",
+    location: "Isurupaya, Battaramulla (Western Province)",
+    source: "Daily FT",
+    startDate: "08.08.2026",
+    endDate: "12.10.2026",
+    daysLeft: 10,
+    contractType: "National Competitive Bidding (NCB)",
+    instrumentType: "Tender",
+    sector: "government",
+    categoryId: "energy",
+    categoryName: "Renewable Energy & Solar",
+    valueBand: "5M-25M",
+    amount: "LKR 17,000,000",
+    amountNumeric: 17000000,
+    bidBond: "LKR 200,000 (Central Bank Approved Commercial Bank Guarantee)",
+    bidBondValidity: "120 Days from closing",
+    docFee: "LKR 5,000 (Non-refundable)",
+    cidaGrade: "CIDA Grade C4 or above / EM-02 in Renewable Energy Systems",
+    preBidMeeting: "20 September 2026 at 10:30 AM (Auditorium, Isurupaya & Online Zoom)",
+    openingTime: "12 October 2026 at 14:30 PM (Procurement Board Room, 3rd Floor)",
+    contactPerson: "Eng. K. D. M. Perera (Deputy Director - Infrastructure)",
+    contactPhone: "+94 11 278 5141 / +94 11 278 5142",
+    contactEmail: "procurement@moe.gov.lk",
+    submissionAddress: "Procurement Division, 3rd Floor, Ministry of Education, Isurupaya, Battaramulla",
+    deliveryPeriod: "90 Calendar Days from Letter of Acceptance",
+    paymentTerms: "20% Mobilization Advance, 70% Progress Milestones, 10% Retention (12 Months)",
+    isPromoted: true,
+    isUrgent: false,
+    hasDocuments: true,
+    docCount: 4,
+    heroImage: "https://images.unsplash.com/photo-1509391365360-2e959784a276?q=80&w=2000&auto=format&fit=crop",
+    description: "Design, engineering, supply, testing, and commissioning of rooftop on-grid solar photovoltaic systems with hybrid battery storage across 50 secondary schools in Western Province.",
+    technicalSpecs: [
+      "Solar Modules: Tier 1 Mono-crystalline PERC 550W+ with IEC 61215/61730 certifications",
+      "Inverter: 3-Phase Grid-tied hybrid inverters with minimum 98.5% efficiency and integrated MPPT",
+      "Battery Storage: LiFePO4 modular battery systems with 6,000+ cycle warranty",
+      "Mounting Frame: Anodized aluminum / hot-dip galvanized steel rated for 140 km/h wind load",
+      "IoT Telemetry: Cloud-connected real-time generation monitoring dashboard",
+    ],
+    documentsList: [
+      { name: "Section_I_Instructions_to_Bidders_ITB.pdf", size: "1.4 MB", type: "PDF", hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+      { name: "Section_II_Technical_Specifications.pdf", size: "2.8 MB", type: "PDF", hash: "8f4a1c0245a91ee59a2243d9370129bc61e0e84b7218683a483e5898ef3bc102" },
+      { name: "Section_III_Priced_BOQ_Form_Template.xlsx", size: "840 KB", type: "XLSX", hash: "a7c29e11f02123485098efb132a89345e672901239856abcf1243e3b0c44298f" },
+      { name: "Section_IV_Bid_Security_Guarantee_Format.pdf", size: "420 KB", type: "PDF", hash: "09f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d906" },
+    ],
+  },
+  {
+    id: "SLPA-2026-PT-04",
+    ref: "SLPA/2026/PT-04",
+    title: "Repair and Structural Rehabilitation of Southern Maritime Port Infrastructure",
+    entity: "Sri Lanka Ports Authority (SLPA)",
+    province: "southern",
+    district: "Galle",
+    location: "Galle Harbour, Southern Province",
+    source: "Sunday Observer & Thinakaran",
+    startDate: "05.08.2026",
+    endDate: "12.10.2026",
+    daysLeft: 12,
+    contractType: "Federal Maritime Contract (ICB/NCB)",
+    instrumentType: "RFP",
+    sector: "government",
+    categoryId: "construction",
+    categoryName: "Civil Construction & Works",
+    valueBand: "25M-100M",
+    amount: "LKR 48,500,000",
+    amountNumeric: 48500000,
+    bidBond: "LKR 500,000 (Bank Guarantee from Licensed Commercial Bank)",
+    bidBondValidity: "150 Days from closing date",
+    docFee: "LKR 12,500 (Non-refundable)",
+    cidaGrade: "CIDA Grade C2 or above in Maritime / Heavy Civil Construction",
+    preBidMeeting: "25 September 2026 at 10:00 AM (SLPA Conference Hall, Galle)",
+    openingTime: "12 October 2026 at 14:00 PM (SLPA Head Office, Colombo 01)",
+    contactPerson: "Chief Port Civil Engineer — Marine Division",
+    contactPhone: "+94 11 248 2000 / +94 91 223 4561",
+    contactEmail: "civil.tenders@slpa.lk",
+    submissionAddress: "Procurement Division, 6th Floor, Sri Lanka Ports Authority, No. 19 Church Street, Colombo 01",
+    deliveryPeriod: "180 Calendar Days",
+    paymentTerms: "Milestone-based progress claims verified by supervising marine consultant",
+    isPromoted: true,
+    isUrgent: false,
+    hasDocuments: true,
+    docCount: 5,
+    heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2000&auto=format&fit=crop",
+    description: "The Sri Lanka Ports Authority invites sealed tenders from experienced marine civil contractors for underwater pile rehabilitation, cathodic protection renewal, fender bracket replacement, and heavy-duty concrete apron resurfacing at Galle Port.",
+    technicalSpecs: [
+      "Underwater Piling: High-density micro-silica underwater concrete encasement with sacrificial zinc anodes",
+      "Cathodic Protection: Impressed current cathodic protection (ICCP) renewal with remote telemetry",
+      "Quay Apron: 350mm reinforced concrete slab with Grade 40 marine aggregate and epoxy coated rebar",
+      "Fender Systems: Heavy marine cone rubber fenders with UHMW-PE low-friction facing pads",
+    ],
+    documentsList: [
+      { name: "SLPA_Tender_Dossier_Volume_I.pdf", size: "4.2 MB", type: "PDF", hash: "912384a1d65dfc2d4b1fa3d677284addd200126d90697f83b1657ff1fc53b92d" },
+      { name: "Marine_Civil_BOQ_Priced_Schedule.xlsx", size: "1.6 MB", type: "XLSX", hash: "3a89345e672901239856abcf1243e3b0c44298fc1c149afbf4c8996fb92427ae" },
+      { name: "Structural_Engineering_Drawings_Plates.pdf", size: "12.8 MB", type: "PDF", hash: "61e0e84b7218683a483e5898ef3bc1028f4a1c0245a91ee59a2243d9370129bc" },
+    ],
+  },
+  {
+    id: "BOC-IT-26-08",
+    ref: "BOC/IT/26/08",
+    title: "Procurement of Enterprise Server Hardware, Virtualization Clusters & Workstations",
+    entity: "Bank of Ceylon",
+    province: "western",
+    district: "Colombo",
+    location: "BOC Tower, Bank of Ceylon Mawatha, Colombo 01",
+    source: "Daily News",
+    startDate: "12.08.2026",
+    endDate: "12.10.2026",
+    daysLeft: 15,
+    contractType: "Banking IT Procurement",
+    instrumentType: "Tender",
+    sector: "government",
+    categoryId: "it",
+    categoryName: "Computer, Servers & IT",
+    valueBand: "5M-25M",
+    amount: "LKR 10,000,000",
+    amountNumeric: 10000000,
+    bidBond: "LKR 150,000",
+    bidBondValidity: "90 Days from closing",
+    docFee: "LKR 3,500",
+    cidaGrade: "Authorized Tier-1 OEM Gold Partner (Dell / HPE / Cisco / Lenovo)",
+    preBidMeeting: "18 September 2026 at 11:00 AM (Virtual MS Teams Meeting)",
+    openingTime: "12 October 2026 at 15:00 PM (BOC Head Office)",
+    contactPerson: "Senior Manager (IT Procurement & Vendor Relations)",
+    contactPhone: "+94 11 244 6790",
+    contactEmail: "itprocurement@boc.lk",
+    submissionAddress: "IT Department, 24th Floor, Bank of Ceylon Tower, Colombo 01",
+    deliveryPeriod: "45 Days from purchase order",
+    paymentTerms: "100% upon delivery, installation, integration testing, and sign-off",
+    isPromoted: false,
+    isUrgent: false,
+    hasDocuments: true,
+    docCount: 3,
+    heroImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2000&auto=format&fit=crop",
+    description: "Supply, deployment, and 3-year 24x7 mission-critical onsite maintenance of high-availability enterprise compute rack servers and 500 branch banking workstations.",
+    technicalSpecs: [
+      "Enterprise Servers: Dual Intel Xeon Gold 6430 / AMD EPYC 9354, 512GB DDR5 ECC RAM, NVMe RAID",
+      "Workstations: Intel Core i7 14th Gen, 32GB RAM, 1TB NVMe, Dual 24-inch IPS Monitors, TPM 2.0",
+      "Warranty: 3-Year 24x7 4-Hour Onsite Response SLA directly backed by Manufacturer OEM",
+    ],
+    documentsList: [
+      { name: "BOC_Server_Specifications_RFP.pdf", size: "1.8 MB", type: "PDF", hash: "112441ff45607a97223450918efb132a89345e672901239856abcf1243e3b0c4" },
+      { name: "Hardware_Compliance_Sheet.xlsx", size: "450 KB", type: "XLSX", hash: "5dfc2d4b1fa3d677284addd200126d90697f83b1657ff1fc53b92dc18148a1d6" },
+    ],
+  },
+  {
+    id: "RDA-KY-26-044",
+    ref: "RDA/KY/26/044",
+    title: "Rehabilitation, Drainage Culverts and Asphalt Concrete Resurfacing of Provincial Access Roads — Kandy",
+    entity: "Road Development Authority (RDA)",
+    province: "central",
+    district: "Kandy",
+    location: "Kandy District, Central Province",
+    source: "Dinamina & Daily FT",
+    startDate: "10.08.2026",
+    endDate: "28.09.2026",
+    daysLeft: 16,
+    contractType: "Highway Construction Contract",
+    instrumentType: "Tender",
+    sector: "government",
+    categoryId: "construction",
+    categoryName: "Civil Construction & Works",
+    valueBand: "25M-100M",
+    amount: "LKR 85,000,000",
+    amountNumeric: 85000000,
+    bidBond: "LKR 900,000 (Unconditional Bank Guarantee)",
+    bidBondValidity: "180 Days",
+    docFee: "LKR 20,000",
+    cidaGrade: "CIDA Grade C1 or C2 in Highway & Bridge Engineering",
+    preBidMeeting: "15 September 2026 at 10:00 AM (Chief Engineer Office, RDA Kandy)",
+    openingTime: "28 September 2026 at 14:00 PM (Executive Engineer Hall, RDA)",
+    contactPerson: "Provincial Director (Central Province RDA)",
+    contactPhone: "+94 81 222 3451 / +94 11 286 2795",
+    contactEmail: "rda.kandy@rda.gov.lk",
+    submissionAddress: "Procurement Committee, RDA Provincial Office, William Gopallawa Mawatha, Kandy",
+    deliveryPeriod: "240 Calendar Days",
+    paymentTerms: "IPC Interim Payment Certificates based on measured BOQ quantities",
+    isPromoted: true,
+    isUrgent: false,
+    hasDocuments: true,
+    docCount: 5,
+    heroImage: "https://images.unsplash.com/photo-1545459720-aac8509eb02c?q=80&w=2000&auto=format&fit=crop",
+    description: "Rehabilitation and asphalt concrete overlay across 18.4 km of provincial feeder roads, construction of 12 box culverts, masonry retaining walls, and thermo-plastic road line markings in Kandy District.",
+    technicalSpecs: [
+      "Sub-base: 150mm Aggregate Base Course (ABC) compacted to 100% BS Heavy Compaction",
+      "Surfacing: 50mm Hot-rolled Asphalt Concrete wearing course with 60/70 penetration grade binder",
+      "Culverts: Pre-cast reinforced concrete twin box culverts with stone masonry wing walls",
+    ],
+    documentsList: [
+      { name: "RDA_ITB_Highway_Conditions_of_Contract.pdf", size: "3.4 MB", type: "PDF", hash: "67a91ee59a2243d9370129bc61e0e84b7218683a483e5898ef3bc1028f4a1c02" },
+      { name: "RDA_Priced_BOQ_Earthwork_Asphalt.xlsx", size: "1.9 MB", type: "XLSX", hash: "02123485098efb132a89345e672901239856abcf1243e3b0c44298fa7c29e11f" },
+      { name: "Typical_Cross_Sections_Road_Alignment.pdf", size: "8.6 MB", type: "PDF", hash: "57ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d90609f83b16" },
+    ],
+  },
+  {
+    id: "MOH-PH-26-11",
+    ref: "MOH/PH/26/11",
+    title: "Supply of Essential Pharmaceuticals, Laboratory Reagents & Surgical Consumables",
+    entity: "Ministry of Health (MSD)",
+    province: "western",
+    district: "Colombo",
+    location: "Medical Supplies Division, Deans Road, Colombo 10",
+    source: "Government Gazette & Dinamina",
+    startDate: "15.08.2026",
+    endDate: "20.10.2026",
+    daysLeft: 20,
+    contractType: "State Pharmaceutical Framework Agreement",
+    instrumentType: "Tender",
+    sector: "government",
+    categoryId: "medical",
+    categoryName: "Medical & Pharmaceuticals",
+    valueBand: "25M-100M",
+    amount: "LKR 32,000,000",
+    amountNumeric: 32000000,
+    bidBond: "LKR 350,000",
+    bidBondValidity: "120 Days",
+    docFee: "LKR 8,000",
+    cidaGrade: "NMRA (National Medicines Regulatory Authority) Registered Importer / Manufacturer",
+    preBidMeeting: "22 September 2026 at 11:00 AM (Auditorium, MSD, Colombo 10)",
+    openingTime: "20 October 2026 at 10:00 AM (MSD Tender Board Room)",
+    contactPerson: "Director (Medical Supplies Division)",
+    contactPhone: "+94 11 269 4114",
+    contactEmail: "director@msd.gov.lk",
+    submissionAddress: "Medical Supplies Division, No. 357, Baddegama Wimalawansa Thero Mawatha, Colombo 10",
+    deliveryPeriod: "Staggered quarterly delivery batches over 12 months",
+    paymentTerms: "Letter of Credit (LC) / Direct Bank Transfer 30 days post quality inspection clearance",
+    isPromoted: false,
+    isUrgent: false,
+    hasDocuments: true,
+    docCount: 4,
+    heroImage: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=2000&auto=format&fit=crop",
+    description: "Annual framework tender for the procurement and cold-chain supply of essential pharmaceutical formulations, WHO pre-qualified vaccines, and disposable surgical consumables for state hospitals.",
+    technicalSpecs: [
+      "Certifications: WHO-GMP, Certificate of Analysis (COA) per batch, NMRA Marketing Authorization",
+      "Packaging: Tamper-evident hospital blister packs labeled with Government of Sri Lanka State Seal",
+      "Cold Chain: Real-time temperature dataloggers included in refrigerated shipments (2°C to 8°C)",
+    ],
+    documentsList: [
+      { name: "MSD_Pharmaceutical_Tender_Form.pdf", size: "2.1 MB", type: "PDF", hash: "98fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855e3b0c442" },
+      { name: "Drug_Formulary_Pricing_Schedule.xlsx", size: "920 KB", type: "XLSX", hash: "1fa3d677284addd200126d90697f83b1657ff1fc53b92dc18148a1d65dfc2d4b" },
+    ],
+  },
+];

@@ -2,79 +2,139 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#F3F5F8] border-t border-[#E2E6ED] mt-24">
+    <footer className="w-full bg-[#F8FAFC] border-t border-slate-200 mt-24 text-slate-700">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-14 pb-12 border-b border-[#E2E6ED]">
+        {/* Top 5-Column Institutional Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-slate-200">
           
-          {/* Brand & Mission */}
-          <div className="md:col-span-5 flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <svg width="24" height="20" viewBox="0 0 28 24" fill="none" className="text-[#0055B8]">
-                <path d="M14 0L27.8564 24H0.143594L14 0Z" fill="currentColor" fillOpacity="0.15"/>
-                <path d="M14 4L24 22H4L14 4Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round"/>
-                <path d="M8 17H20" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span className="font-bold text-lg tracking-tight text-[#0055B8] uppercase">
-                LANSU PROCUREMENT
+          {/* Column 1: Brand & National Mission (4 Cols) */}
+          <div className="lg:col-span-4 flex flex-col gap-4">
+            <Link href="/" className="inline-block">
+              <span className="font-display font-black text-2xl tracking-tight text-[#0F172A] block leading-none">
+                TENDER<span className="text-[#0055B8]">HUB</span>
+              </span>
+              <span className="text-[10px] font-bold text-slate-500 tracking-wider uppercase block mt-1">
+                Sri Lanka National Procurement &amp; Tender Network
               </span>
             </Link>
-            <p className="text-sm text-[#6B7280] max-w-sm leading-relaxed">
-              Sri Lanka's centralized commercial and state procurement gateway. Aggregating national gazettes, corporate RFPs, and supplier registrations daily.
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm">
+              Sri Lanka&apos;s centralized commercial and state procurement gateway. Aggregating national government gazettes, state ministries, municipal councils, corporate RFPs, and verified supplier registrations daily.
             </p>
-          </div>
 
-          {/* Navigation Links */}
-          <div className="md:col-span-2 flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-[#111827] uppercase tracking-wider">
-              Navigation
-            </h4>
-            <div className="flex flex-col gap-2 text-sm text-[#6B7280]">
-              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Find Tenders</Link>
-              <Link href="/how-it-works" className="hover:text-[#0055B8] transition-colors">How It Works</Link>
-              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Pricing Plans</Link>
-              <Link href="/about-us" className="hover:text-[#0055B8] transition-colors">About Us</Link>
+            <div className="pt-2 flex flex-col gap-2 text-xs">
+              <div className="flex items-center gap-2 text-slate-600">
+                <span className="w-2 h-2 rounded-full bg-[#0055B8]" />
+                <span className="font-semibold text-[#0F172A]">National Competitive Bidding (NCB/ICB) Gateway</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-600">
+                <span className="w-2 h-2 rounded-full bg-[#0055B8]" />
+                <span className="font-semibold text-[#0F172A]">CIDA &amp; National Procurement Authority Aligned</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-600">
+                <span className="w-2 h-2 rounded-full bg-[#0055B8]" />
+                <span className="font-semibold text-[#0F172A]">Verified Daily Procurement Gazette Mirror</span>
+              </div>
             </div>
           </div>
 
-          {/* Key Sectors */}
-          <div className="md:col-span-2 flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-[#111827] uppercase tracking-wider">
-              Top Sectors
+          {/* Column 2: Procurement Directory (2 Cols) */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
+              Procurement Directory
             </h4>
-            <div className="flex flex-col gap-2 text-sm text-[#6B7280]">
-              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Construction</Link>
-              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Computer &amp; IT</Link>
-              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Medical Supply</Link>
-              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Renewable Energy</Link>
-            </div>
+            <nav className="flex flex-col gap-2 text-xs font-semibold text-slate-600">
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Live Tenders Catalogue</Link>
+              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Government Ministries</Link>
+              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Provincial Councils (9)</Link>
+              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">State Corporations</Link>
+              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Public &amp; Parate Auctions</Link>
+              <Link href="/tenders-sri-lanka" className="hover:text-[#0055B8] transition-colors">Awards &amp; Standstill Archive</Link>
+            </nav>
           </div>
 
-          {/* Contact Details */}
-          <div className="md:col-span-3 flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-[#111827] uppercase tracking-wider">
-              Contact Desk
+          {/* Column 3: Bidders & Contractors (2 Cols) */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
+              Bidders &amp; Suppliers
             </h4>
-            <div className="text-sm text-[#6B7280] flex flex-col gap-1.5">
-              <span className="font-semibold text-[#111827]">World Trade Centre, Colombo 01</span>
-              <span>Hotline: +94 11 200 8000</span>
-              <span className="text-[#0055B8] font-medium">tenders@lansu.lk</span>
-              <span className="text-xs text-gray-400 mt-0.5">Mon - Fri: 08:30 - 17:30 IST</span>
+            <nav className="flex flex-col gap-2 text-xs font-semibold text-slate-600">
+              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Plans &amp; Subscriptions</Link>
+              <Link href="/subscriber-pricing" className="hover:text-[#0055B8] transition-colors">Offline Bank Transfer</Link>
+              <Link href="/how-it-works" className="hover:text-[#0055B8] transition-colors">How It Works &amp; Pipeline</Link>
+              <Link href="/register" className="hover:text-[#0055B8] transition-colors">Supplier Registration</Link>
+              <Link href="/register" className="hover:text-[#0055B8] transition-colors">Post Tender Notice (Free)</Link>
+              <Link href="/about-us" className="hover:text-[#0055B8] transition-colors">About TenderHub</Link>
+            </nav>
+          </div>
+
+          {/* Column 4: Top Sectors (2 Cols) */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
+              Priority Sectors
+            </h4>
+            <nav className="flex flex-col gap-2 text-xs font-semibold text-slate-600">
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Civil Construction &amp; Works</Link>
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Computer, Servers &amp; IT</Link>
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Renewable Energy &amp; Solar</Link>
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Medical &amp; Pharmaceuticals</Link>
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Janitorial &amp; Sanitation</Link>
+              <Link href="/" className="hover:text-[#0055B8] transition-colors">Maritime, Ports &amp; Logistics</Link>
+            </nav>
+          </div>
+
+          {/* Column 5: Central Desk & Contact (2 Cols) */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
+              Procurement Desk
+            </h4>
+            <div className="text-xs text-slate-600 flex flex-col gap-2 leading-relaxed">
+              <div>
+                <span className="font-bold text-[#0F172A] block">Central Operations Office</span>
+                <span>Level 14, World Trade Centre, Colombo 01, Sri Lanka</span>
+              </div>
+              <div className="pt-1">
+                <span className="font-bold text-[#0F172A] block">Direct Hotlines</span>
+                <span className="font-mono text-slate-800 font-bold block">+94 11 200 8000</span>
+                <span className="font-mono text-slate-800 font-bold block">+94 11 200 8001</span>
+              </div>
+              <div className="pt-1">
+                <span className="font-bold text-[#0F172A] block">Official Email</span>
+                <Link href="mailto:tenders@tenderhub.lk" className="text-[#0055B8] font-bold hover:underline">
+                  tenders@tenderhub.lk
+                </Link>
+              </div>
+              <div className="pt-1 text-[11px] text-slate-400">
+                Operating: Mon – Fri (08:30 – 17:30 IST)
+              </div>
             </div>
           </div>
 
         </div>
 
-        {/* Bottom Copyright & Legal Links */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#9CA3AF] gap-4">
-          <p>© 2026 Lansu Procurement Portal. All rights reserved.</p>
-          <div className="flex items-center gap-5 text-[#6B7280]">
-            <Link href="#" className="hover:text-[#0055B8] transition-colors">Privacy Policy</Link>
-            <span>·</span>
-            <Link href="#" className="hover:text-[#0055B8] transition-colors">Terms of Service</Link>
-            <span>·</span>
-            <Link href="#" className="hover:text-[#0055B8] transition-colors">Public Gazettes</Link>
+        {/* Bottom Legal, Standards & Compliance Strip */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <p className="font-semibold text-slate-700">
+              &copy; 2026 TenderHub Sri Lanka. All rights reserved.
+            </p>
+            <span className="hidden sm:inline text-slate-300">|</span>
+            <span className="text-slate-500">
+              National Procurement Intelligence Gateway
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600">
+            <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Privacy Policy</Link>
+            <span>&bull;</span>
+            <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Terms of Service</Link>
+            <span>&bull;</span>
+            <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Gazette Disclaimer</Link>
+            <span>&bull;</span>
+            <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Procurement Guidelines</Link>
+            <span>&bull;</span>
+            <Link href="/contact-us" className="hover:text-[#0055B8] transition-colors">Help &amp; Support</Link>
           </div>
         </div>
 
