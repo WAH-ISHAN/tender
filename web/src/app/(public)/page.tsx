@@ -80,6 +80,7 @@ export default function HomePage() {
 
   // View Mode: Cards vs Dense List
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
+  const [isMobileFiltersExpanded, setIsMobileFiltersExpanded] = useState(false);
 
   // Bookmarking Watchlist
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set(["SLPA-2026-PT-04"]));
@@ -740,8 +741,8 @@ export default function HomePage() {
       {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
         
-        {/* LEFT COLUMN: SIDEBAR BREAKDOWNS & TAXONOMY - Responsive: stacked on mobile, sticky only on lg+ */}
-        <aside className="lg:col-span-3 xl:col-span-3 flex flex-col space-y-4 xs:space-y-5 sm:space-y-6 lg:sticky lg:top-24 xl:top-28 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:custom-scrollbar lg:pr-1">
+        {/* LEFT COLUMN: SIDEBAR BREAKDOWNS & TAXONOMY - Desktop only (Hidden on mobile to save vertical space) */}
+        <aside className="hidden lg:flex lg:col-span-3 xl:col-span-3 flex-col space-y-4 xs:space-y-5 sm:space-y-6 lg:sticky lg:top-24 xl:top-28 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:custom-scrollbar lg:pr-1">
           
           {/* Spotlight 1: Prominent "Registration of Suppliers" Action Button */}
           <button
@@ -916,7 +917,166 @@ export default function HomePage() {
         </aside>
 
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
-        <main className="lg:col-span-9 xl:col-span-9">
+        <main className="lg:col-span-9 xl:col-span-9 w-full min-w-0">
+
+          {/* MOBILE COMPACT SPOTLIGHT & CATEGORY BUTTONS PANEL (Rule #8: Mobile Optimized Chips) */}
+          <div className="lg:hidden block space-y-3.5 mb-6">
+            
+            {/* Quick 2-Column Action Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => handleStatusTabChange("suppliers")}
+                className={`p-3 rounded-xl border transition-all text-left shadow-xs flex items-center justify-between cursor-pointer active:scale-98 ${
+                  selectedCategory === "suppliers"
+                    ? "bg-[#0055B8] text-white border-[#0055B8]"
+                    : "bg-white text-slate-900 border-slate-200"
+                }`}
+              >
+                <div className="min-w-0 pr-2">
+                  <span className="text-[9px] font-black uppercase tracking-wider block opacity-75">{t("officialGazetteSpecialBadge")}</span>
+                  <span className="text-xs font-black block truncate">{t("spotlightSuppliers")}</span>
+                </div>
+                <span className={`px-2 py-0.5 rounded-lg text-xs font-black font-mono shrink-0 ${
+                  selectedCategory === "suppliers" ? "bg-white/20 text-white" : "bg-[#EFF6FF] text-[#0055B8]"
+                }`}>
+                  3,217
+                </span>
+              </button>
+
+              <Link
+                href="/register"
+                className="p-3 rounded-xl bg-[#0F172A] text-white border border-slate-700 shadow-xs flex items-center justify-between transition-all active:scale-98"
+              >
+                <div className="min-w-0 pr-2">
+                  <span className="text-[9px] font-black uppercase tracking-wider text-blue-300 block">{t("forProcuringBodiesBadge")}</span>
+                  <span className="text-xs font-black block truncate">{t("publishFreeTitle")}</span>
+                </div>
+                <span className="px-2.5 py-1 rounded-lg bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-wider shrink-0">
+                  + FREE
+                </span>
+              </Link>
+            </div>
+
+            {/* Mobile Category Pill Buttons Ribbon */}
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs">
+              <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
+                    {t("tendersByCategory")}
+                  </span>
+                  <span className="text-[10px] bg-[#EFF6FF] text-[#0055B8] font-bold px-1.5 py-0.5 rounded-md font-mono">
+                    12
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsMobileFiltersExpanded(!isMobileFiltersExpanded)}
+                  className="text-[11px] font-black text-[#0055B8] hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  <span>{isMobileFiltersExpanded ? "Less Filters ▲" : "All Sectors & Provinces ▼"}</span>
+                </button>
+              </div>
+
+              {/* Swipeable Category Pill Buttons with Counts */}
+              <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 overscroll-x-contain">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory("all")}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                    selectedCategory === "all"
+                      ? "bg-[#0055B8] text-white shadow-sm"
+                      : "bg-[#F1F5F9] text-slate-700 hover:bg-slate-200 font-bold"
+                  }`}
+                >
+                  <span>{t("allCategoriesLabel")}</span>
+                  <span className={`text-[10px] font-mono ${selectedCategory === "all" ? "text-white/80" : "text-slate-500"}`}>39.9k</span>
+                </button>
+
+                {CATEGORIES.map((cat) => {
+                  const isSelected = selectedCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                        isSelected
+                          ? "bg-[#0055B8] text-white shadow-sm"
+                          : "bg-[#F1F5F9] text-slate-700 hover:bg-slate-200 font-bold"
+                      }`}
+                    >
+                      <span>{getCategoryName(cat.id, cat.name)}</span>
+                      <span className={`text-[10px] font-mono ${isSelected ? "text-white/80" : "text-slate-500"}`}>{cat.count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Collapsible Deep Filter Drawer (Sectors & Provinces) */}
+              {isMobileFiltersExpanded && (
+                <div className="mt-3 pt-3 border-t border-slate-100 space-y-3 animate-fadeIn">
+                  {/* Sectors */}
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1.5">
+                      {t("tendersBySector")}
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {SECTORS.map((sec) => (
+                        <button
+                          key={sec.id}
+                          type="button"
+                          onClick={() => setSectorFilter(sec.id)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            sectorFilter === sec.id
+                              ? "bg-[#0055B8] text-white font-black"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          }`}
+                        >
+                          {getSectorName(sec.id, sec.name)} ({sec.count})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Provinces */}
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1.5">
+                      {t("tendersByLocations")}
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProvince("all")}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          selectedProvince === "all"
+                            ? "bg-[#0055B8] text-white font-black"
+                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        }`}
+                      >
+                        {t("allProvincesOpt")}
+                      </button>
+                      {PROVINCES.filter(p => p.id !== "all").map((prov) => (
+                        <button
+                          key={prov.id}
+                          type="button"
+                          onClick={() => setSelectedProvince(prov.id)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            selectedProvince === prov.id
+                              ? "bg-[#0055B8] text-white font-black"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          }`}
+                        >
+                          {getProvinceName(prov.id, prov.name)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
 
           {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Fully Responsive with Zero Text Overlapping */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm flex items-center gap-1.5 xs:gap-2 overflow-x-auto custom-scrollbar overscroll-x-contain">
