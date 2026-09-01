@@ -723,8 +723,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Classic Live Count - Vintage Gazette Vibe */}
-      <div className="flex justify-center mb-8 xs:mb-10 sm:mb-12">
+      {/* Classic Live Count - Vintage Gazette Vibe (Desktop only) */}
+      <div className="hidden lg:flex justify-center mb-8 xs:mb-10 sm:mb-12">
         <div className="inline-flex flex-wrap items-center justify-center gap-2 xs:gap-3 bg-[#FFFBEB] border-[3px] border-double border-[#B45309] px-4 xs:px-6 sm:px-8 py-3 xs:py-3.5 rounded-xl shadow-sm max-w-full">
           <span className="relative flex h-2.5 w-2.5 xs:h-3 xs:w-3 shrink-0">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -920,21 +920,32 @@ export default function HomePage() {
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-9 w-full min-w-0">
 
-          {/* MOBILE CATEGORY & FILTER SIDE-MENU TRIGGER BAR (Rule #8 Mobile Side Menu) */}
-          <div className="lg:hidden bg-white border border-slate-200/90 rounded-2xl p-3 mb-5 shadow-sm flex items-center justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-                {t("tendersByCategory")}
-              </span>
-              <span className="text-xs xs:text-sm font-black text-[#0F172A] truncate block">
-                {selectedCategory === "all" ? t("allCategoriesLabel") : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
-              </span>
+          {/* MOBILE UNIFIED LIVE STATUS & CATEGORY TRIGGER BAR (Rule #8 Mobile Optimized) */}
+          <div className="lg:hidden bg-white border border-slate-200/90 rounded-2xl p-3 xs:p-4 mb-5 shadow-sm flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="inline-flex items-center gap-1.5 bg-[#FFFBEB] border border-[#FDE68A] px-2.5 py-1.5 rounded-xl shrink-0">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600" />
+                </span>
+                <span className="text-[10px] font-black tracking-wider text-[#92400E] uppercase">{t("liveTendersLabel")}</span>
+                <span className="text-xs font-black font-display text-[#0F172A]">366</span>
+              </div>
+              
+              <div className="min-w-0 flex-1">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block truncate">
+                  {t("tendersByCategory")}
+                </span>
+                <span className="text-xs xs:text-sm font-black text-[#0F172A] truncate block">
+                  {selectedCategory === "all" ? t("allCategoriesLabel") : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
+                </span>
+              </div>
             </div>
             
             <button
               type="button"
               onClick={() => setIsMobileSideMenuOpen(true)}
-              className="px-3.5 xs:px-4 py-2.5 bg-[#0055B8] hover:bg-[#004394] active:scale-95 text-white font-black text-xs rounded-xl shadow-xs transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+              className="px-4 py-2.5 bg-[#0055B8] hover:bg-[#004394] active:scale-95 text-white font-black text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer min-h-[40px]"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -1596,20 +1607,6 @@ export default function HomePage() {
           </div>
 
         </main>
-      </div>
-
-      {/* Floating Mobile Filter Pill Button (Quick Access anywhere on page) */}
-      <div className="fixed bottom-5 right-4 z-40 lg:hidden">
-        <button
-          type="button"
-          onClick={() => setIsMobileSideMenuOpen(true)}
-          className="px-4 py-3 bg-[#0055B8] hover:bg-[#004394] active:scale-95 text-white font-black text-xs rounded-full shadow-2xl border border-white/20 flex items-center gap-2 cursor-pointer backdrop-blur-md"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-          <span>{t("tendersByCategory")} (12)</span>
-        </button>
       </div>
 
     </div>

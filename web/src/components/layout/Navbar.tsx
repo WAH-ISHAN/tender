@@ -30,8 +30,8 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Clean Desktop Navigation (md and up) - Fluid gap scaling */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-7 2xl:gap-8 text-[11px] lg:text-xs xl:text-sm font-bold text-[#374151] shrink-0">
+        {/* Clean Desktop Navigation (xl and up) - Fluid gap scaling */}
+        <nav className="hidden xl:flex items-center gap-4 2xl:gap-8 text-xs xl:text-sm font-bold text-[#374151] shrink-0">
           <Link
             href="/"
             className={`py-6 lg:py-7 transition-colors uppercase tracking-wider ${
@@ -125,8 +125,8 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Desktop Auth State Doors (Hidden on small mobile) - Responsive from 640px+ */}
-          <div className="hidden sm:flex items-center gap-2 lg:gap-2.5 shrink-0">
+          {/* Desktop Auth State Doors (xl and up) */}
+          <div className="hidden xl:flex items-center gap-2 lg:gap-2.5 shrink-0">
             {pathname.startsWith("/dashboard") || pathname.startsWith("/favorites") || pathname.startsWith("/related-tenders") || pathname.startsWith("/settings") ? (
               <Link
                 href="/dashboard"
@@ -154,13 +154,13 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Hamburger Toggle (md:hidden) - 44px touch target */}
+          {/* Mobile & Tablet Menu Hamburger Toggle (xl:hidden) - 44px touch target */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
             aria-expanded={isMobileMenuOpen}
-            className="md:hidden p-2.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 transition-all cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+            className="xl:hidden p-2.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 transition-all cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
           >
             {isMobileMenuOpen ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
@@ -179,7 +179,7 @@ export default function Navbar() {
 
       {/* FULL OFF-CANVAS SLIDE-OVER SIDE MENU DRAWER FOR MOBILE & TABLET */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden animate-fadeIn">
+        <div className="fixed inset-0 z-50 xl:hidden animate-fadeIn">
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity" 
