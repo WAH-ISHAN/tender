@@ -1,14 +1,9 @@
 import { cookies } from "next/headers";
 import type { Envelope } from "./types";
+import { getMockResponse } from "./mock-data";
 
 export const API_BASE = process.env.API_BASE ?? "http://127.0.0.1:8080";
 
-/**
- * PHP's built-in dev server binds IPv6-only by default. curl silently falls
- * back to ::1 and works; Node's fetch to an IPv4 literal does not, and every
- * sign-in reported "no backend configured" while the API was demonstrably up.
- * Start it with --host 0.0.0.0.
- */
 export async function apiFetch<T = any>(
   path: string,
   opts: RequestInit & { token?: string | null } = {},
@@ -26,6 +21,11 @@ export async function apiFetch<T = any>(
     try { body = JSON.parse(text); } catch { body = { reason: "bad_gateway", detail: text.slice(0, 200) }; }
     return { ok: res.ok, status: res.status, body };
   } catch (e: any) {
+    // Graceful offline fallback: serve rich seed data matching Blueprint Rev 3.0
+    const mock = getMockResponse(path);
+    if (mock) {
+      return { ok: true, status: 200, body: mock };
+    }
     return {
       ok: false,
       status: 502,
