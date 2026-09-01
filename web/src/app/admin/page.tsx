@@ -1,1 +1,5 @@
-export default function Page() { return ( <div>Placeholder for app/admin/page.tsx</div> ); }
+import { redirect } from "next/navigation";
+
+export default function AdminPage() {
+  redirect("/console");
+}

@@ -1,0 +1,243 @@
+<?php
+
+namespace App\Controllers\Api\V1\Authority;
+
+use App\Libraries\DocumentStore;
+
+/** Documents, purchasers, clarifications, addenda. */
+class SaleController extends WorkspaceBase
+{
+    public function documents(int $id)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+
+        return $this->ok(db_connect()->table('notice_documents')
+            ->where('notice_id', $proc['notice_id'])->get()->getResultArray());
+    }
+
+    public function upload(int $id)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+
+        // Adding a document after closing changes what bidders were asked to
+        // price AFTER they priced it. That is what an addendum is for.
+        if (strtotime((string) $proc['closing_at']) < time()) {
+            return problem(409, 'closed', 'This tender has closed. Issue an addendum instead.');
+        }
+
+        $file = $this->request->getFile('file');
+        if (! $file || ! $file->isValid()) {
+            return problem(422, 'no_file', 'No file received.');
+        }
+
+        $ext = strtolower($file->getClientExtension());
+        if (! in_array($ext, DocumentStore::ALLOWED, true)) {
+            return problem(422, 'bad_type', 'That file type is not accepted.', ['allowed' => DocumentStore::ALLOWED]);
+        }
+        if ($file->getSize() > DocumentStore::MAX_BYTES) {
+            return problem(413, 'too_large', 'Files are capped at 40 MB.');
+        }
+
+        $store  = new DocumentStore();
+        $stored = $store->put((string) file_get_contents($file->getTempName()), $ext);
+        $db     = db_connect();
+
+        $db->table('notice_documents')->insert([
+            'notice_id' => (int) $proc['notice_id'],
+            'name' => $file->getClientName(),
+            'kind' => $this->request->getPost('kind') ?: 'bidding',
+            'mime' => $file->getClientMimeType(),
+            'size_bytes' => $stored['size'], 'sha256' => $stored['sha256'], 'path' => $stored['path'],
+            'mirrored_at' => date('Y-m-d H:i:s'),
+            'uploaded_by' => (int) $this->request->userId,
+            'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->table('notices')->where('id', $proc['notice_id'])->set('documents_count',
+            (string) $db->table('notice_documents')->where('notice_id', $proc['notice_id'])->countAllResults(), false)->update();
+
+        return $this->ok(['sha256' => $stored['sha256'], 'deduped' => $stored['deduped'], 'size' => $stored['size']], [], 201);
+    }
+
+    public function documentUrl(int $id, int $docId)
+    {
+        $proc = $this->procurement($id);
+        $doc  = model('App\Models\NoticeDocumentModel')->find($docId);
+        if (! $proc || ! $doc || (int) $doc['notice_id'] !== (int) $proc['notice_id']) {
+            return problem(404, 'not_found', 'No such document.');
+        }
+
+        $exp = time() + 300;
+        $u   = (int) $this->request->userId;
+
+        return $this->ok([
+            'url' => sprintf('/api/v1/files/documents/%d?u=%d&e=%d&s=%s', $docId, $u, $exp,
+                DocumentStore::sign($docId, $u, $exp)),
+            'expires_at' => date('c', $exp),
+        ]);
+    }
+
+    public function deleteDocument(int $id, int $docId)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+        db_connect()->table('notice_documents')->where('id', $docId)
+            ->where('notice_id', $proc['notice_id'])->delete();
+
+        return $this->ok(['deleted' => true]);
+    }
+
+    /** The legal record of who is entitled to bid, with the purchased-to-
+     *  submitted conversion procurement committees actually watch. */
+    public function purchasers(int $id)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+
+        $db   = db_connect();
+        $rows = $db->table('doc_purchases')
+            ->select('doc_purchases.*, organisations.name, organisations.district_id, organisations.cida_grade')
+            ->join('organisations', 'organisations.id = doc_purchases.buyer_org_id')
+            ->where('doc_purchases.procurement_id', $id)->get()->getResultArray();
+
+        $submitted = $db->table('submissions')->where('procurement_id', $id)->countAllResults();
+
+        return $this->ok($rows, [
+            'purchasers' => count($rows),
+            'submissions' => $submitted,
+            'conversion' => count($rows) ? round($submitted / count($rows) * 100, 1) : null,
+        ]);
+    }
+
+    public function buyDocuments(int $id)
+    {
+        $db = db_connect();
+        $proc = $db->table('procurements')->where('id', $id)->get()->getFirstRow('array');
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+        $orgId = (int) $this->request->orgId;
+        if ($db->table('doc_purchases')->where('procurement_id', $id)->where('buyer_org_id', $orgId)->countAllResults()) {
+            return $this->ok(['already' => true]);
+        }
+        $db->table('doc_purchases')->insert([
+            'procurement_id' => $id, 'buyer_org_id' => $orgId,
+            'amount' => (float) ($this->body()['amount'] ?? 0),
+            'receipt_no' => 'DP-' . strtoupper(bin2hex(random_bytes(3))),
+            'purchased_at' => date('Y-m-d H:i:s'), 'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return $this->ok(['purchased' => true], [], 201);
+    }
+
+    public function clarifications(int $id)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+
+        $rows = db_connect()->table('clarifications')
+            ->select('id, question, answer, answered_at, created_at')
+            ->where('procurement_id', $id)->orderBy('created_at')->get()->getResultArray();
+
+        return $this->ok($rows, [
+            // The asker is NEVER named. An answer that identifies who asked lets
+            // the rest of the field infer a competitor's approach.
+            'note' => 'Questions are published anonymously and answers go to every purchaser at once.',
+        ]);
+    }
+
+    public function answer(int $id, int $clarId)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+        $answer = trim((string) ($this->body()['answer'] ?? ''));
+        if ($answer === '') {
+            return problem(422, 'validation_failed', 'An answer is required.');
+        }
+
+        db_connect()->table('clarifications')->where('id', $clarId)->where('procurement_id', $id)->update([
+            'answer' => $answer, 'answered_by' => (int) $this->request->userId,
+            'answered_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return $this->ok(['answered' => true], ['published_to' => 'all purchasers, anonymously']);
+    }
+
+    public function addenda(int $id)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+
+        return $this->ok(db_connect()->table('addenda')->where('procurement_id', $id)
+            ->orderBy('number')->get()->getResultArray());
+    }
+
+    /**
+     * An addendum is the ONLY way a published closing date moves. Editing the
+     * date directly would leave no record it ever changed, which is exactly the
+     * dispute an addendum exists to settle.
+     */
+    public function issueAddendum(int $id)
+    {
+        $proc = $this->procurement($id);
+        if (! $proc) {
+            return problem(404, 'not_found', 'No such tender.');
+        }
+
+        $in     = $this->body();
+        $reason = trim((string) ($in['reason'] ?? ''));
+        if ($reason === '') {
+            return problem(422, 'validation_failed', 'An addendum must carry a reason.');
+        }
+
+        $newClosing = null;
+        if (! empty($in['new_closing_at'])) {
+            $d = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $in['new_closing_at']);
+            if (! $d) {
+                return problem(422, 'bad_date', 'New closing date must be Y-m-d H:i:s.');
+            }
+            // A date can be extended, never brought forward.
+            if ($d->getTimestamp() <= strtotime((string) $proc['closing_at'])) {
+                return problem(422, 'not_an_extension', 'A closing date can be extended but never brought forward.', [
+                    'current_closing_at' => $proc['closing_at'],
+                ]);
+            }
+            $newClosing = $d->format('Y-m-d H:i:s');
+        }
+
+        $db = db_connect();
+        $db->transBegin();
+
+        $number = (int) $db->table('addenda')->where('procurement_id', $id)->countAllResults() + 1;
+        $db->table('addenda')->insert([
+            'procurement_id' => $id, 'number' => $number, 'reason' => $reason,
+            'new_closing_at' => $newClosing, 'issued_by' => (int) $this->request->userId,
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        if ($newClosing) {
+            // The extension and its numbered reason are written in ONE transaction.
+            $db->table('notices')->where('id', $proc['notice_id'])->update(['closing_at' => $newClosing]);
+        }
+
+        $db->transCommit();
+
+        return $this->ok(['number' => $number, 'new_closing_at' => $newClosing], [], 201);
+    }
+}
