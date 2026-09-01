@@ -918,8 +918,8 @@ export default function HomePage() {
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-9">
 
-          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Updated to match TenderNotices.lk stats */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 mb-8 sm:mb-10 shadow-sm flex items-center gap-2 overflow-x-auto">
+          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Fully Responsive with Zero Text Overlapping */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm flex items-center gap-1.5 xs:gap-2 overflow-x-auto custom-scrollbar overscroll-x-contain">
             {[
               { id: "today", label: t("todaysTendersLabel"), count: "0" },
               { id: "live", label: t("liveTendersLabel"), count: "366" },
@@ -934,15 +934,15 @@ export default function HomePage() {
                   key={tab.id}
                   type="button"
                   onClick={() => handleStatusTabChange(tab.id as any)}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer ${
+                  className={`px-3.5 xs:px-4 py-2 xs:py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 shrink-0 cursor-pointer min-h-[38px] ${
                     isActive
                       ? "bg-[#0055B8] text-white shadow-md"
-                      : "text-slate-700 hover:bg-slate-100 font-bold"
+                      : "text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-bold"
                   }`}
                 >
-                  <span>{tab.label}</span>
-                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono ${
-                    isActive ? "bg-white/20 text-white" : "bg-[#F1F5F9] text-slate-600 font-bold"
+                  <span className="whitespace-nowrap shrink-0">{tab.label}</span>
+                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono shrink-0 whitespace-nowrap font-bold ${
+                    isActive ? "bg-white/20 text-white" : "bg-[#F1F5F9] text-slate-600"
                   }`}>
                     {tab.count}
                   </span>
