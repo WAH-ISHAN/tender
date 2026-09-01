@@ -1086,15 +1086,61 @@ export default function HomePage() {
                       {/* Organization - Login gated */}
                       <div className="text-xs font-bold text-[#0055B8] mb-3 flex items-center gap-2">
                         <span className="text-slate-400 font-semibold">{isLoggedIn ? tender.entity : t("cardLoginToView") + " " + t("cardCategory").replace(":","")}</span>
-                        {!isLoggedIn && <Link href="/login" onClick={(e)=>e.stopPropagation()} className="text-[10px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#0055B8] px-2 py-0.5 rounded-lg font-black hover:bg-blue-100">{t("cardLoginToView")}</Link>}
+                        {!isLoggedIn && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              router.push("/login");
+                            }}
+                            className="text-[10px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#0055B8] px-2 py-0.5 rounded-lg font-black hover:bg-blue-100 cursor-pointer"
+                          >
+                            {t("cardLoginToView")}
+                          </button>
+                        )}
                       </div>
 
                       {/* Detailed Meta - TenderNotices.lk style - Responsive for 320px -> 1920px */}
                       <div className="space-y-1.5 xs:space-y-1 text-[11px] xs:text-xs mb-4 bg-[#F8FAFC] p-2.5 xs:p-3 rounded-xl border border-slate-100 min-w-0">
                         <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardCategory")}</span><span className="bg-white text-[#0055B8] border border-[#E2E8F0] px-2 py-0.5 rounded-lg font-bold text-[10px] xs:text-[11px] inline-flex w-fit">{tender.categoryName}</span></div>
-                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardSource")}</span>{isLoggedIn ? <span className="text-slate-700 font-semibold truncate text-[11px] xs:text-xs">{tender.source}</span> : <Link href="/login" onClick={(e)=>e.stopPropagation()} className="text-[#0055B8] font-bold hover:underline text-[11px] w-fit">{t("cardLoginToView")}</Link>}</div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2">
+                          <span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardSource")}</span>
+                          {isLoggedIn ? (
+                            <span className="text-slate-700 font-semibold truncate text-[11px] xs:text-xs">{tender.source}</span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                router.push("/login");
+                              }}
+                              className="text-[#0055B8] font-bold hover:underline text-[11px] w-fit text-left cursor-pointer"
+                            >
+                              {t("cardLoginToView")}
+                            </button>
+                          )}
+                        </div>
                         <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardLocation")}</span><span className="text-slate-700 font-semibold truncate text-[11px] xs:text-xs">{tender.location}</span></div>
-                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardPublishedDate")}</span>{isLoggedIn ? <span className="text-slate-700 text-[11px] xs:text-xs">{tender.startDate}</span> : <Link href="/login" onClick={(e)=>e.stopPropagation()} className="text-[#0055B8] font-bold hover:underline text-[11px] w-fit">{t("cardLoginToView")}</Link>}</div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2">
+                          <span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardPublishedDate")}</span>
+                          {isLoggedIn ? (
+                            <span className="text-slate-700 text-[11px] xs:text-xs">{tender.startDate}</span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                router.push("/login");
+                              }}
+                              className="text-[#0055B8] font-bold hover:underline text-[11px] w-fit text-left cursor-pointer"
+                            >
+                              {t("cardLoginToView")}
+                            </button>
+                          )}
+                        </div>
                         <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardClosingDate")}</span><span className="text-slate-700 font-bold text-[11px] xs:text-xs">{tender.endDate}</span></div>
                         <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardReferenceNo")}</span><span className="font-mono text-[#0055B8] font-bold text-[11px] xs:text-xs break-all">{tender.ref}</span></div>
                         <div className="flex flex-wrap items-center gap-1.5 xs:gap-2 pt-1"><span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-black text-[9px] xs:text-[10px]">{t("cardLiveTender")}</span><span className="text-[#0055B8] font-bold text-[10px] xs:text-[11px]">{t("cardTenderClosingIn")} {tender.daysLeft} {t("cardDays")}</span></div>
