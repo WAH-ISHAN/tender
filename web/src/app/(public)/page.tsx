@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MOCK_TENDERS, TenderItem } from "@/data/tenders";
@@ -82,6 +83,23 @@ export default function HomePage() {
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
   const [isMobileFiltersExpanded, setIsMobileFiltersExpanded] = useState(false);
   const [isMobileSideMenuOpen, setIsMobileSideMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when mobile side menu is open
+  useEffect(() => {
+    if (isMobileSideMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileSideMenuOpen]);
 
   // Bookmarking Watchlist
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set(["SLPA-2026-PT-04"]));
@@ -921,19 +939,20 @@ export default function HomePage() {
         <main className="lg:col-span-9 xl:col-span-9 w-full min-w-0">
 
           {/* MOBILE SLIDE-OUT OFF-CANVAS SIDE MENU DRAWER */}
-          {isMobileSideMenuOpen && (
-            <div className="fixed inset-0 z-50 lg:hidden animate-fadeIn">
+          {mounted && isMobileSideMenuOpen && createPortal(
+            <div className="fixed inset-0 z-[99999] lg:hidden flex justify-start">
               {/* Backdrop Overlay */}
               <div
-                className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"
+                className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs transition-opacity animate-fadeIn"
                 onClick={() => setIsMobileSideMenuOpen(false)}
+                aria-hidden="true"
               />
               
-              {/* Off-canvas Drawer Panel */}
-              <div className="fixed inset-y-0 left-0 max-w-[85vw] sm:max-w-sm w-full bg-white shadow-2xl flex flex-col z-50 animate-slideRight">
+              {/* Off-canvas Drawer Panel (Slide from Left, full height) */}
+              <div className="relative w-full max-w-[85vw] sm:max-w-sm h-screen max-h-screen bg-white shadow-2xl flex flex-col z-[100000] animate-slideRight">
                 
                 {/* Drawer Header */}
-                <div className="p-4 xs:p-5 border-b border-slate-100 flex items-center justify-between bg-[#0A1633] text-white">
+                <div className="p-4 xs:p-5 border-b border-slate-100 flex items-center justify-between bg-[#0A1633] text-white shrink-0">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                     <span className="font-display text-base xs:text-lg font-black uppercase tracking-wider truncate">
@@ -989,7 +1008,7 @@ export default function HomePage() {
                         <span className="text-[9px] font-black uppercase tracking-wider text-blue-300 block">{t("forProcuringBodiesBadge")}</span>
                         <span className="text-xs font-black block truncate">{t("publishFreeTitle")}</span>
                       </div>
-                      <span className="px-2 py-1 rounded-lg bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-wider shrink-0">
+                      <span className="px-2.5 py-1 rounded-lg bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-wider shrink-0">
                         + FREE
                       </span>
                     </Link>
@@ -1073,7 +1092,7 @@ export default function HomePage() {
                             }`}
                           >
                             <span className="truncate pr-2">{getCategoryName(cat.id, cat.name)}</span>
-                            <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>{cat.count}</span>
+                            <span className={`font-mono text-[11px] ${isSelected ? "text-white/80" : "text-slate-400"}`}>{cat.count}</span>
                           </button>
                         );
                       })}
@@ -1146,7 +1165,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Drawer Footer Actions */}
-                <div className="p-4 border-t border-slate-100 bg-slate-50 flex gap-2">
+                <div className="p-4 border-t border-slate-100 bg-slate-50 flex gap-2 shrink-0">
                   <button
                     type="button"
                     onClick={() => {
@@ -1167,7 +1186,8 @@ export default function HomePage() {
                 </div>
 
               </div>
-            </div>
+            </div>,
+            document.body
           )}
 
           {/* 3. QUICK STATUS TABS & CATEGORY TRIGGER RIBBON (Top Filter Bar) - Clean Touch Ribbon with Zero Scrollbars */}

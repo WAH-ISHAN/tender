@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
@@ -8,11 +9,28 @@ export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <header className="w-full bg-white border-b border-[#E2E6ED] sticky top-0 z-50 supports-[backdrop-filter]:bg-white/95 supports-[backdrop-filter]:backdrop-blur-md">
@@ -177,18 +195,18 @@ export default function Navbar() {
 
       </div>
 
-      {/* FULL OFF-CANVAS SLIDE-OVER SIDE MENU DRAWER FOR MOBILE & TABLET */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 xl:hidden animate-fadeIn">
+      {/* FULL OFF-CANVAS SLIDE-OVER SIDE MENU DRAWER (Portal to document.body for true full-screen overlay) */}
+      {mounted && isMobileMenuOpen && createPortal(
+        <div className="fixed inset-0 z-[99999] xl:hidden flex justify-end">
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity" 
+            className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs transition-opacity animate-fadeIn" 
             onClick={() => setIsMobileMenuOpen(false)}
             aria-hidden="true"
           />
 
-          {/* Off-canvas Side Drawer Panel (Slide from Right) */}
-          <div className="fixed inset-y-0 right-0 max-w-[85vw] sm:max-w-sm w-full bg-white shadow-2xl flex flex-col z-50 animate-slideLeft">
+          {/* Off-canvas Side Drawer Panel (Slide from Right, 100vh full height) */}
+          <div className="relative w-full max-w-[85vw] sm:max-w-sm h-screen max-h-screen bg-white shadow-2xl flex flex-col z-[100000] animate-slideLeft">
             
             {/* Side Menu Header */}
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-[#0A1633] text-white shrink-0">
@@ -217,7 +235,7 @@ export default function Navbar() {
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4 xs:p-5 space-y-6">
               
               {/* Trilingual Segmented Selector */}
-              <div className="bg-slate-50 p-2 rounded-2xl border border-slate-200">
+              <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1.5 px-1">
                   Language / භාෂාව / மொழி
                 </span>
@@ -229,7 +247,7 @@ export default function Navbar() {
                       language === "en" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    English (EN)
+                    EN
                   </button>
                   <button 
                     type="button"
@@ -238,7 +256,7 @@ export default function Navbar() {
                       language === "si" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    සිංහල (සිං)
+                    සිං
                   </button>
                   <button 
                     type="button"
@@ -247,7 +265,7 @@ export default function Navbar() {
                       language === "ta" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    தமிழ் (த)
+                    த
                   </button>
                 </div>
               </div>
@@ -382,7 +400,8 @@ export default function Navbar() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
