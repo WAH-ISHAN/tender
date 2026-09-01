@@ -81,6 +81,7 @@ export default function HomePage() {
   // View Mode: Cards vs Dense List
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
   const [isMobileFiltersExpanded, setIsMobileFiltersExpanded] = useState(false);
+  const [isMobileSideMenuOpen, setIsMobileSideMenuOpen] = useState(false);
 
   // Bookmarking Watchlist
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set(["SLPA-2026-PT-04"]));
@@ -919,139 +920,230 @@ export default function HomePage() {
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-9 w-full min-w-0">
 
-          {/* MOBILE COMPACT SPOTLIGHT & CATEGORY BUTTONS PANEL (Rule #8: Mobile Optimized Chips) */}
-          <div className="lg:hidden block space-y-3.5 mb-6">
-            
-            {/* Quick 2-Column Action Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <button
-                type="button"
-                onClick={() => handleStatusTabChange("suppliers")}
-                className={`p-3 rounded-xl border transition-all text-left shadow-xs flex items-center justify-between cursor-pointer active:scale-98 ${
-                  selectedCategory === "suppliers"
-                    ? "bg-[#0055B8] text-white border-[#0055B8]"
-                    : "bg-white text-slate-900 border-slate-200"
-                }`}
-              >
-                <div className="min-w-0 pr-2">
-                  <span className="text-[9px] font-black uppercase tracking-wider block opacity-75">{t("officialGazetteSpecialBadge")}</span>
-                  <span className="text-xs font-black block truncate">{t("spotlightSuppliers")}</span>
-                </div>
-                <span className={`px-2 py-0.5 rounded-lg text-xs font-black font-mono shrink-0 ${
-                  selectedCategory === "suppliers" ? "bg-white/20 text-white" : "bg-[#EFF6FF] text-[#0055B8]"
-                }`}>
-                  3,217
-                </span>
-              </button>
-
-              <Link
-                href="/register"
-                className="p-3 rounded-xl bg-[#0F172A] text-white border border-slate-700 shadow-xs flex items-center justify-between transition-all active:scale-98"
-              >
-                <div className="min-w-0 pr-2">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-blue-300 block">{t("forProcuringBodiesBadge")}</span>
-                  <span className="text-xs font-black block truncate">{t("publishFreeTitle")}</span>
-                </div>
-                <span className="px-2.5 py-1 rounded-lg bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-wider shrink-0">
-                  + FREE
-                </span>
-              </Link>
+          {/* MOBILE CATEGORY & FILTER SIDE-MENU TRIGGER BAR (Rule #8 Mobile Side Menu) */}
+          <div className="lg:hidden bg-white border border-slate-200/90 rounded-2xl p-3 mb-5 shadow-sm flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                {t("tendersByCategory")}
+              </span>
+              <span className="text-xs xs:text-sm font-black text-[#0F172A] truncate block">
+                {selectedCategory === "all" ? t("allCategoriesLabel") : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
+              </span>
             </div>
+            
+            <button
+              type="button"
+              onClick={() => setIsMobileSideMenuOpen(true)}
+              className="px-3.5 xs:px-4 py-2.5 bg-[#0055B8] hover:bg-[#004394] active:scale-95 text-white font-black text-xs rounded-xl shadow-xs transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+              <span>{t("tendersByCategory")} (12)</span>
+            </button>
+          </div>
 
-            {/* Mobile Category Pill Buttons Ribbon */}
-            <div className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs">
-              <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
-                    {t("tendersByCategory")}
-                  </span>
-                  <span className="text-[10px] bg-[#EFF6FF] text-[#0055B8] font-bold px-1.5 py-0.5 rounded-md font-mono">
-                    12
-                  </span>
+          {/* MOBILE SLIDE-OUT OFF-CANVAS SIDE MENU DRAWER */}
+          {isMobileSideMenuOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden animate-fadeIn">
+              {/* Backdrop Overlay */}
+              <div
+                className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"
+                onClick={() => setIsMobileSideMenuOpen(false)}
+              />
+              
+              {/* Off-canvas Drawer Panel */}
+              <div className="fixed inset-y-0 left-0 max-w-[85vw] sm:max-w-sm w-full bg-white shadow-2xl flex flex-col z-50 animate-slideRight">
+                
+                {/* Drawer Header */}
+                <div className="p-4 xs:p-5 border-b border-slate-100 flex items-center justify-between bg-[#0A1633] text-white">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                    <span className="font-display text-base xs:text-lg font-black uppercase tracking-wider truncate">
+                      {t("tendersByCategory")} &amp; Filters
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileSideMenuOpen(false)}
+                    aria-label="Close Side Menu"
+                    className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer shrink-0"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsMobileFiltersExpanded(!isMobileFiltersExpanded)}
-                  className="text-[11px] font-black text-[#0055B8] hover:underline flex items-center gap-1 cursor-pointer"
-                >
-                  <span>{isMobileFiltersExpanded ? "Less Filters ▲" : "All Sectors & Provinces ▼"}</span>
-                </button>
-              </div>
 
-              {/* Swipeable Category Pill Buttons with Counts */}
-              <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 overscroll-x-contain">
-                <button
-                  type="button"
-                  onClick={() => setSelectedCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                    selectedCategory === "all"
-                      ? "bg-[#0055B8] text-white shadow-sm"
-                      : "bg-[#F1F5F9] text-slate-700 hover:bg-slate-200 font-bold"
-                  }`}
-                >
-                  <span>{t("allCategoriesLabel")}</span>
-                  <span className={`text-[10px] font-mono ${selectedCategory === "all" ? "text-white/80" : "text-slate-500"}`}>39.9k</span>
-                </button>
-
-                {CATEGORIES.map((cat) => {
-                  const isSelected = selectedCategory === cat.id;
-                  return (
+                {/* Drawer Body (Scrollable) */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 xs:p-5 space-y-5">
+                  
+                  {/* Spotlight Badges inside Side Menu */}
+                  <div className="space-y-2">
                     <button
-                      key={cat.id}
                       type="button"
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                        isSelected
-                          ? "bg-[#0055B8] text-white shadow-sm"
-                          : "bg-[#F1F5F9] text-slate-700 hover:bg-slate-200 font-bold"
+                      onClick={() => {
+                        handleStatusTabChange("suppliers");
+                        setIsMobileSideMenuOpen(false);
+                      }}
+                      className={`w-full p-3 rounded-xl border transition-all text-left shadow-xs flex items-center justify-between cursor-pointer ${
+                        selectedCategory === "suppliers"
+                          ? "bg-[#0055B8] text-white border-[#0055B8]"
+                          : "bg-slate-50 text-slate-900 border-slate-200"
                       }`}
                     >
-                      <span>{getCategoryName(cat.id, cat.name)}</span>
-                      <span className={`text-[10px] font-mono ${isSelected ? "text-white/80" : "text-slate-500"}`}>{cat.count}</span>
+                      <div className="min-w-0 pr-2">
+                        <span className="text-[9px] font-black uppercase tracking-wider block opacity-75">{t("officialGazetteSpecialBadge")}</span>
+                        <span className="text-xs font-black block truncate">{t("spotlightSuppliers")}</span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-lg text-xs font-black font-mono shrink-0 ${
+                        selectedCategory === "suppliers" ? "bg-white/20 text-white" : "bg-[#EFF6FF] text-[#0055B8]"
+                      }`}>
+                        3,217
+                      </span>
                     </button>
-                  );
-                })}
-              </div>
 
-              {/* Collapsible Deep Filter Drawer (Sectors & Provinces) */}
-              {isMobileFiltersExpanded && (
-                <div className="mt-3 pt-3 border-t border-slate-100 space-y-3 animate-fadeIn">
-                  {/* Sectors */}
+                    <Link
+                      href="/register"
+                      onClick={() => setIsMobileSideMenuOpen(false)}
+                      className="p-3 rounded-xl bg-[#0F172A] text-white border border-slate-700 shadow-xs flex items-center justify-between transition-all block"
+                    >
+                      <div className="min-w-0 pr-2">
+                        <span className="text-[9px] font-black uppercase tracking-wider text-blue-300 block">{t("forProcuringBodiesBadge")}</span>
+                        <span className="text-xs font-black block truncate">{t("publishFreeTitle")}</span>
+                      </div>
+                      <span className="px-2 py-1 rounded-lg bg-[#0055B8] text-white text-[10px] font-black uppercase tracking-wider shrink-0">
+                        + FREE
+                      </span>
+                    </Link>
+                  </div>
+
+                  {/* Status Tabs in Side Menu */}
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1.5">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2">
+                      Tender Status
+                    </span>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: "live", label: t("liveTendersLabel"), count: "366" },
+                        { id: "today", label: t("todaysTendersLabel"), count: "0" },
+                        { id: "closing", label: t("statusClosing"), count: "41" },
+                        { id: "closed", label: t("closedTendersLabel"), count: "39,576" },
+                      ].map((tab) => {
+                        const isActive = statusTab === tab.id;
+                        return (
+                          <button
+                            key={tab.id}
+                            type="button"
+                            onClick={() => {
+                              handleStatusTabChange(tab.id as any);
+                              setIsMobileSideMenuOpen(false);
+                            }}
+                            className={`p-2.5 rounded-xl text-xs font-black text-left flex items-center justify-between transition-all cursor-pointer ${
+                              isActive
+                                ? "bg-[#0055B8] text-white shadow-sm"
+                                : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+                            }`}
+                          >
+                            <span className="truncate">{tab.label}</span>
+                            <span className={`text-[10px] font-mono shrink-0 ${isActive ? "text-white/80" : "text-slate-500"}`}>{tab.count}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Categories Breakdown List inside Side Menu */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                        {t("tendersByCategory")}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono">12 Categories</span>
+                    </div>
+                    
+                    <div className="space-y-1 max-h-60 overflow-y-auto custom-scrollbar pr-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory("all");
+                          setIsMobileSideMenuOpen(false);
+                        }}
+                        className={`w-full py-2 px-3 rounded-xl text-left flex items-center justify-between text-xs font-bold transition-all cursor-pointer ${
+                          selectedCategory === "all"
+                            ? "bg-[#0055B8] text-white font-black shadow-xs"
+                            : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>{t("allCategoriesLabel")}</span>
+                        <span className={`font-mono text-[11px] ${selectedCategory === "all" ? "text-white/80" : "text-slate-400"}`}>39,942</span>
+                      </button>
+
+                      {CATEGORIES.map((cat) => {
+                        const isSelected = selectedCategory === cat.id;
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedCategory(cat.id);
+                              setIsMobileSideMenuOpen(false);
+                            }}
+                            className={`w-full py-2 px-3 rounded-xl text-left flex items-center justify-between text-xs font-bold transition-all cursor-pointer ${
+                              isSelected
+                                ? "bg-[#0055B8] text-white font-black shadow-xs"
+                                : "hover:bg-slate-100 text-slate-700"
+                            }`}
+                          >
+                            <span className="truncate pr-2">{getCategoryName(cat.id, cat.name)}</span>
+                            <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>{cat.count}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Sectors in Side Menu */}
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2">
                       {t("tendersBySector")}
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="space-y-1">
                       {SECTORS.map((sec) => (
                         <button
                           key={sec.id}
                           type="button"
-                          onClick={() => setSectorFilter(sec.id)}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          onClick={() => {
+                            setSectorFilter(sec.id);
+                            setIsMobileSideMenuOpen(false);
+                          }}
+                          className={`w-full py-2 px-3 rounded-xl text-left flex items-center justify-between text-xs font-bold transition-all cursor-pointer ${
                             sectorFilter === sec.id
                               ? "bg-[#0055B8] text-white font-black"
-                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                              : "hover:bg-slate-100 text-slate-700"
                           }`}
                         >
-                          {getSectorName(sec.id, sec.name)} ({sec.count})
+                          <span className="truncate pr-2">{getSectorName(sec.id, sec.name)}</span>
+                          <span className={`font-mono text-[11px] ${sectorFilter === sec.id ? "text-white/80" : "text-slate-400"}`}>{sec.count}</span>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Provinces */}
+                  {/* Provinces in Side Menu */}
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1.5">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2">
                       {t("tendersByLocations")}
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1">
                       <button
                         type="button"
-                        onClick={() => setSelectedProvince("all")}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                          selectedProvince === "all"
-                            ? "bg-[#0055B8] text-white font-black"
-                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        onClick={() => {
+                          setSelectedProvince("all");
+                          setIsMobileSideMenuOpen(false);
+                        }}
+                        className={`py-2 px-2.5 rounded-xl text-left text-xs font-bold transition-all cursor-pointer truncate ${
+                          selectedProvince === "all" ? "bg-[#0055B8] text-white font-black" : "bg-slate-50 text-slate-700"
                         }`}
                       >
                         {t("allProvincesOpt")}
@@ -1060,11 +1152,12 @@ export default function HomePage() {
                         <button
                           key={prov.id}
                           type="button"
-                          onClick={() => setSelectedProvince(prov.id)}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            selectedProvince === prov.id
-                              ? "bg-[#0055B8] text-white font-black"
-                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          onClick={() => {
+                            setSelectedProvince(prov.id);
+                            setIsMobileSideMenuOpen(false);
+                          }}
+                          className={`py-2 px-2.5 rounded-xl text-left text-xs font-bold transition-all cursor-pointer truncate ${
+                            selectedProvince === prov.id ? "bg-[#0055B8] text-white font-black" : "bg-slate-50 text-slate-700"
                           }`}
                         >
                           {getProvinceName(prov.id, prov.name)}
@@ -1072,14 +1165,36 @@ export default function HomePage() {
                       ))}
                     </div>
                   </div>
+
                 </div>
-              )}
+
+                {/* Drawer Footer Actions */}
+                <div className="p-4 border-t border-slate-100 bg-slate-50 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleReset();
+                      setIsMobileSideMenuOpen(false);
+                    }}
+                    className="flex-1 py-3 px-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-black text-xs uppercase tracking-wider cursor-pointer text-center shadow-2xs"
+                  >
+                    {t("resetBtn")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileSideMenuOpen(false)}
+                    className="flex-2 py-3 px-4 rounded-xl bg-[#0055B8] text-white font-black text-xs uppercase tracking-wider cursor-pointer text-center shadow-md"
+                  >
+                    Apply ({filteredTenders.length}) &rarr;
+                  </button>
+                </div>
+
+              </div>
             </div>
+          )}
 
-          </div>
-
-          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Fully Responsive with Zero Text Overlapping */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm flex items-center gap-1.5 xs:gap-2 overflow-x-auto custom-scrollbar overscroll-x-contain">
+          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Clean Touch Ribbon with Zero Scrollbars */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm flex items-center gap-1.5 xs:gap-2 overflow-x-auto no-scrollbar overscroll-x-contain">
             {[
               { id: "today", label: t("todaysTendersLabel"), count: "0" },
               { id: "live", label: t("liveTendersLabel"), count: "366" },
@@ -1481,6 +1596,20 @@ export default function HomePage() {
           </div>
 
         </main>
+      </div>
+
+      {/* Floating Mobile Filter Pill Button (Quick Access anywhere on page) */}
+      <div className="fixed bottom-5 right-4 z-40 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setIsMobileSideMenuOpen(true)}
+          className="px-4 py-3 bg-[#0055B8] hover:bg-[#004394] active:scale-95 text-white font-black text-xs rounded-full shadow-2xl border border-white/20 flex items-center gap-2 cursor-pointer backdrop-blur-md"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <span>{t("tendersByCategory")} (12)</span>
+        </button>
       </div>
 
     </div>

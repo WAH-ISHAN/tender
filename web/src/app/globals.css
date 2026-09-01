@@ -77,6 +77,18 @@
   background: #0055b8;
 }
 
+/* Hide scrollbar utility for clean touch-scrolling ribbons */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
 /* Fluid root font size for all display sizes: 320px -> 1920px+ */
 html {
   font-size: clamp(14px, 0.9vw + 0.5rem, 16px);
