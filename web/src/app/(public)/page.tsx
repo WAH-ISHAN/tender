@@ -1025,6 +1025,8 @@ export default function HomePage() {
                         { id: "today", label: t("todaysTendersLabel"), count: "0" },
                         { id: "closing", label: t("statusClosing"), count: "41" },
                         { id: "closed", label: t("closedTendersLabel"), count: "39,576" },
+                        { id: "all", label: t("allTendersLabel"), count: "39,942" },
+                        { id: "suppliers", label: t("statusSuppliers"), count: "3,217" },
                       ].map((tab) => {
                         const isActive = statusTab === tab.id;
                         return (
@@ -1190,61 +1192,23 @@ export default function HomePage() {
             document.body
           )}
 
-          {/* 3. QUICK STATUS TABS & CATEGORY TRIGGER RIBBON (Top Filter Bar) - Clean Touch Ribbon with Zero Scrollbars */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm flex items-center gap-1.5 xs:gap-2 overflow-x-auto no-scrollbar overscroll-x-contain">
-            
-            {/* Tenders By Category Side Menu Button Pill */}
+          {/* 3. TENDERS BY CATEGORY (12) SIDE MENU TRIGGER BUTTON */}
+          <div className="mb-6 xs:mb-8 flex items-center">
             <button
               type="button"
               onClick={() => setIsMobileSideMenuOpen(true)}
-              className={`px-3.5 xs:px-4 py-2 xs:py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 shrink-0 cursor-pointer min-h-[38px] ${
-                selectedCategory !== "all"
-                  ? "bg-[#0055B8] text-white shadow-md"
-                  : "bg-[#0F172A] text-white hover:bg-slate-800"
-              }`}
+              className="px-4 xs:px-5 py-2.5 xs:py-3 bg-[#0F172A] hover:bg-slate-800 active:scale-[0.98] text-white font-black text-xs sm:text-sm rounded-xl xs:rounded-2xl shadow-sm transition-all flex items-center gap-2.5 xs:gap-3 cursor-pointer"
             >
-              <svg className="w-3.5 h-3.5 text-blue-300 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+              <svg className="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
-              <span className="whitespace-nowrap shrink-0">
+              <span className="uppercase tracking-wider font-extrabold text-xs xs:text-sm text-white">
                 {selectedCategory === "all" ? t("tendersByCategory") : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
               </span>
-              <span className="px-1.5 py-0.5 rounded-lg text-[10px] font-mono shrink-0 whitespace-nowrap font-bold bg-white/20 text-white">
+              <span className="px-2 py-0.5 rounded-lg text-[11px] xs:text-xs font-mono font-bold bg-[#1E293B] text-slate-200 border border-slate-700/60">
                 12
               </span>
             </button>
-
-            <div className="w-[1px] h-6 bg-slate-200 shrink-0 mx-0.5" />
-
-            {[
-              { id: "live", label: t("liveTendersLabel"), count: "366" },
-              { id: "today", label: t("todaysTendersLabel"), count: "0" },
-              { id: "closed", label: t("closedTendersLabel"), count: "39,576" },
-              { id: "all", label: t("allTendersLabel"), count: "39,942" },
-              { id: "suppliers", label: t("statusSuppliers"), count: "3,217" },
-              { id: "closing", label: t("statusClosing"), count: "41" },
-            ].map((tab) => {
-              const isActive = statusTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => handleStatusTabChange(tab.id as any)}
-                  className={`px-3.5 xs:px-4 py-2 xs:py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 shrink-0 cursor-pointer min-h-[38px] ${
-                    isActive
-                      ? "bg-[#0055B8] text-white shadow-md"
-                      : "text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-bold"
-                  }`}
-                >
-                  <span className="whitespace-nowrap shrink-0">{tab.label}</span>
-                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono shrink-0 whitespace-nowrap font-bold ${
-                    isActive ? "bg-white/20 text-white" : "bg-[#F1F5F9] text-slate-600"
-                  }`}>
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
           </div>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
