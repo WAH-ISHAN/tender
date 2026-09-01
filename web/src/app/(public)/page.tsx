@@ -920,40 +920,6 @@ export default function HomePage() {
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-9 w-full min-w-0">
 
-          {/* MOBILE UNIFIED LIVE STATUS & CATEGORY TRIGGER BAR (Rule #8 Mobile Optimized) */}
-          <div className="lg:hidden bg-white border border-slate-200/90 rounded-2xl p-3 xs:p-4 mb-5 shadow-sm flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="inline-flex items-center gap-1.5 bg-[#FFFBEB] border border-[#FDE68A] px-2.5 py-1.5 rounded-xl shrink-0">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600" />
-                </span>
-                <span className="text-[10px] font-black tracking-wider text-[#92400E] uppercase">{t("liveTendersLabel")}</span>
-                <span className="text-xs font-black font-display text-[#0F172A]">366</span>
-              </div>
-              
-              <div className="min-w-0 flex-1">
-                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block truncate">
-                  {t("tendersByCategory")}
-                </span>
-                <span className="text-xs xs:text-sm font-black text-[#0F172A] truncate block">
-                  {selectedCategory === "all" ? t("allCategoriesLabel") : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
-                </span>
-              </div>
-            </div>
-            
-            <button
-              type="button"
-              onClick={() => setIsMobileSideMenuOpen(true)}
-              className="px-4 py-2.5 bg-[#0055B8] hover:bg-[#004394] active:scale-95 text-white font-black text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer min-h-[40px]"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
-              <span>{t("tendersByCategory")} (12)</span>
-            </button>
-          </div>
-
           {/* MOBILE SLIDE-OUT OFF-CANVAS SIDE MENU DRAWER */}
           {isMobileSideMenuOpen && (
             <div className="fixed inset-0 z-50 lg:hidden animate-fadeIn">
@@ -1204,11 +1170,35 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Clean Touch Ribbon with Zero Scrollbars */}
+          {/* 3. QUICK STATUS TABS & CATEGORY TRIGGER RIBBON (Top Filter Bar) - Clean Touch Ribbon with Zero Scrollbars */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm flex items-center gap-1.5 xs:gap-2 overflow-x-auto no-scrollbar overscroll-x-contain">
+            
+            {/* Tenders By Category Side Menu Button Pill */}
+            <button
+              type="button"
+              onClick={() => setIsMobileSideMenuOpen(true)}
+              className={`px-3.5 xs:px-4 py-2 xs:py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 shrink-0 cursor-pointer min-h-[38px] ${
+                selectedCategory !== "all"
+                  ? "bg-[#0055B8] text-white shadow-md"
+                  : "bg-[#0F172A] text-white hover:bg-slate-800"
+              }`}
+            >
+              <svg className="w-3.5 h-3.5 text-blue-300 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+              <span className="whitespace-nowrap shrink-0">
+                {selectedCategory === "all" ? t("tendersByCategory") : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
+              </span>
+              <span className="px-1.5 py-0.5 rounded-lg text-[10px] font-mono shrink-0 whitespace-nowrap font-bold bg-white/20 text-white">
+                12
+              </span>
+            </button>
+
+            <div className="w-[1px] h-6 bg-slate-200 shrink-0 mx-0.5" />
+
             {[
-              { id: "today", label: t("todaysTendersLabel"), count: "0" },
               { id: "live", label: t("liveTendersLabel"), count: "366" },
+              { id: "today", label: t("todaysTendersLabel"), count: "0" },
               { id: "closed", label: t("closedTendersLabel"), count: "39,576" },
               { id: "all", label: t("allTendersLabel"), count: "39,942" },
               { id: "suppliers", label: t("statusSuppliers"), count: "3,217" },
