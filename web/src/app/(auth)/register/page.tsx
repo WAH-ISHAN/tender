@@ -3,8 +3,9 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/Toaster";
+import { useLanguage } from "@/context/LanguageContext";
 
-const CATEGORIES = [
+const CATEGORIES_EN = [
   "Civil Construction & Infrastructure",
   "Computer, IT & Server Hardware",
   "Medical Equipment & Pharmaceuticals",
@@ -16,6 +17,9 @@ const CATEGORIES = [
 export default function RegisterPage() {
   const router = useRouter();
   const toast = useToast();
+  const { t } = useLanguage();
+
+  const CATEGORIES = CATEGORIES_EN;
 
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -79,53 +83,53 @@ export default function RegisterPage() {
       <div className="bg-white border border-slate-200/90 p-8 lg:p-10 rounded-2xl shadow-md">
         
         <h1 className="font-display text-3xl sm:text-4xl font-black text-[#0F172A] uppercase mb-2 text-center tracking-tight">
-          SUPPLIER REGISTRATION
+          {t("registerTitle")}
         </h1>
         <p className="text-xs text-slate-500 font-normal text-center mb-8">
-          Register your company to receive daily procurement notifications &amp; tender RFPs
+          {t("registerSubtitle")}
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">First Name</label>
+              <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">{t("registerFirstName")}</label>
               <input
                 type="text"
                 required
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Kamal"
+                placeholder={t("registerFirstNamePh")}
                 className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Last Name</label>
+              <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">{t("registerLastName")}</label>
               <input
                 type="text"
                 required
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                placeholder="Perera"
+                placeholder={t("registerLastNamePh")}
                 className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Registered Business Name</label>
+            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">{t("registerBusinessName")}</label>
             <input
               type="text"
               required
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
-              placeholder="Perera Engineering (Pvt) Ltd"
+              placeholder={t("registerBusinessPh")}
               className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
             />
           </div>
 
           {/* Modern Floating Category Dropdown */}
           <div className="flex flex-col gap-1.5 relative" ref={dropdownRef}>
-            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Primary Category of Interest</label>
+            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">{t("registerCategoryLabel")}</label>
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -164,19 +168,19 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Corporate Email Address</label>
+            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">{t("registerCorporateEmail")}</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="kamal@perera.lk"
+              placeholder={t("registerCorporateEmailPh")}
               className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">Create Password</label>
+            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">{t("registerCreatePassword")}</label>
             <input
               type="password"
               required
@@ -192,14 +196,14 @@ export default function RegisterPage() {
             disabled={isSubmitting}
             className="w-full bg-[#0055B8] hover:bg-[#004394] disabled:opacity-50 text-white font-extrabold text-xs sm:text-sm py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md mt-2 uppercase tracking-wider cursor-pointer"
           >
-            {isSubmitting ? "Creating Workspace..." : "Complete Free Registration"}
+            {isSubmitting ? t("registerCreating") : t("registerComplete")}
           </button>
         </form>
 
         <div className="text-center text-xs text-slate-500 font-normal mt-8 pt-6 border-t border-slate-200">
-          Already have an authorized supplier account?{" "}
+          {t("registerAlreadyHave")}{" "}
           <Link href="/login" className="text-[#0055B8] font-bold hover:underline">
-            Sign In Here
+            {t("registerSignInHere")}
           </Link>
         </div>
 

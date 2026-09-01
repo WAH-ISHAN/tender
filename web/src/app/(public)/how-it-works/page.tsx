@@ -1,23 +1,25 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 type ProcessTab = "overview" | "sourcing" | "indexing" | "documents";
 
 export default function HowItWorksPage() {
   const [activeTab, setActiveTab] = useState<ProcessTab>("overview");
+  const { t } = useLanguage();
 
   return (
-    <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+    <div className="max-w-[1680px] 2xl:max-w-[1760px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 2xl:px-10 py-6 xs:py-8 sm:py-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xs:gap-8 lg:gap-12 items-start">
         
         {/* Mobile & Tablet Horizontal Subnav Tabs (Rule #8 Interactive Navigation) */}
         <div className="lg:hidden col-span-1 flex overflow-x-auto custom-scrollbar gap-2 p-1.5 bg-[#F1F3F7] rounded-2xl border border-slate-200 mb-6">
           {[
-            { id: "overview", label: "Process Overview" },
-            { id: "sourcing", label: "Daily Sourcing" },
-            { id: "indexing", label: "Indexing & Tags" },
-            { id: "documents", label: "Bidding Documents" },
+            { id: "overview", label: t("howTabOverview") },
+            { id: "sourcing", label: t("howTabSourcing") },
+            { id: "indexing", label: t("howTabIndexing") },
+            { id: "documents", label: t("howTabDocuments") },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -43,7 +45,7 @@ export default function HowItWorksPage() {
               activeTab === "overview" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "overview" ? "[Process Overview]" : "Process Overview"}
+            {activeTab === "overview" ? `[${t("howTabOverview")}]` : t("howTabOverview")}
           </button>
 
           <button
@@ -53,7 +55,7 @@ export default function HowItWorksPage() {
               activeTab === "sourcing" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "sourcing" ? "[Daily Sourcing]" : "Daily Sourcing"}
+            {activeTab === "sourcing" ? `[${t("howTabSourcing")}]` : t("howTabSourcing")}
           </button>
 
           <button
@@ -63,7 +65,7 @@ export default function HowItWorksPage() {
               activeTab === "indexing" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "indexing" ? "[Indexing & Tags]" : "Indexing & Tags"}
+            {activeTab === "indexing" ? `[${t("howTabIndexing")}]` : t("howTabIndexing")}
           </button>
 
           <button
@@ -73,30 +75,26 @@ export default function HowItWorksPage() {
               activeTab === "documents" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "documents" ? "[Bidding Documents]" : "Bidding Documents"}
+            {activeTab === "documents" ? `[${t("howTabDocuments")}]` : t("howTabDocuments")}
           </button>
         </aside>
 
         {/* Main Content */}
         <main className="lg:col-span-10">
           
-          {/* Dynamic Header according to active tab */}
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-[#111827] uppercase leading-none mb-6">
-            {activeTab === "overview" && "WHAT WE DO & HOW IT WORKS"}
-            {activeTab === "sourcing" && "DAILY PROCUREMENT SOURCING"}
-            {activeTab === "indexing" && "INDEXING & CLASSIFICATION"}
-            {activeTab === "documents" && "OFFICIAL BIDDING VAULT"}
+          {/* Dynamic Header according to active tab - Responsive */}
+          <h1 className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111827] uppercase leading-none mb-4 xs:mb-6 break-words">
+            {activeTab === "overview" && t("howTitleOverview")}
+            {activeTab === "sourcing" && t("howTitleSourcing")}
+            {activeTab === "indexing" && t("howTitleIndexing")}
+            {activeTab === "documents" && t("howTitleDocuments")}
           </h1>
 
-          <p className="text-lg text-[#6B7280] max-w-3xl mb-12 font-normal leading-relaxed">
-            {activeTab === "overview" &&
-              "A transparent 3-stage intelligence pipeline that gathers procurement notices from across Sri Lanka and transforms them into structured, actionable opportunities."}
-            {activeTab === "sourcing" &&
-              "Continuous morning ingestion from the Department of Government Printing, 14 national newspapers, provincial councils, and corporate boards."}
-            {activeTab === "indexing" &&
-              "Standardized tagging conforming to CIDA contractor requirements, accurate LKR budget bands, submission cutoff times, and bid security terms."}
-            {activeTab === "documents" &&
-              "Direct download repository for authentic procurement documents, verified BOQs, technical drawings, and official gazette addenda."}
+          <p className="text-base xs:text-lg text-[#6B7280] max-w-3xl mb-8 xs:mb-10 sm:mb-12 font-normal leading-relaxed">
+            {activeTab === "overview" && t("howDescOverview")}
+            {activeTab === "sourcing" && t("howDescSourcing")}
+            {activeTab === "indexing" && t("howDescIndexing")}
+            {activeTab === "documents" && t("howDescDocuments")}
           </p>
 
           {/* TAB 1: PROCESS OVERVIEW (Exact 3 Cards Layout from Screenshot) */}
@@ -110,14 +108,14 @@ export default function HowItWorksPage() {
                     01
                   </div>
                   <h3 className="text-xl font-black text-[#0F172A] mb-3">
-                    Multi-Source Aggregation
+                    {t("howStep1Title")}
                   </h3>
                   <p className="text-sm text-slate-600 font-normal leading-relaxed">
-                    Every morning at 05:00 AM, our pipeline ingests government gazettes, 14 national newspapers, provincial council notices, and private corporate RFP publications.
+                    {t("howStep1Desc")}
                   </p>
                 </div>
                 <div className="text-xs font-bold text-[#0055B8] uppercase tracking-wider pt-6 border-t border-slate-200">
-                  Stage 1 &mdash; Data Collection
+                  {t("howStage1Label")}
                 </div>
               </div>
 
@@ -128,14 +126,14 @@ export default function HowItWorksPage() {
                     02
                   </div>
                   <h3 className="text-xl font-black text-white mb-3">
-                    Editorial Classification
+                    {t("howStep2Title")}
                   </h3>
                   <p className="text-sm text-blue-100 font-normal leading-relaxed">
-                    Every notice is indexed with standard classification codes, budget limits in LKR, submission deadlines, bid bond criteria, and exact department addresses.
+                    {t("howStep2Desc")}
                   </p>
                 </div>
                 <div className="text-xs font-bold text-blue-200 uppercase tracking-wider pt-6 border-t border-blue-400/30 flex items-center justify-between">
-                  <span>Stage 2 &mdash; Verification</span>
+                  <span>{t("howStage2Label")}</span>
                   <span className="text-xl">&rarr;</span>
                 </div>
               </div>
@@ -147,14 +145,14 @@ export default function HowItWorksPage() {
                     03
                   </div>
                   <h3 className="text-xl font-black text-[#0F172A] mb-3">
-                    Instant Bidding Alerts
+                    {t("howStep3Title")}
                   </h3>
                   <p className="text-sm text-slate-600 font-normal leading-relaxed">
-                    Suppliers receive real-time email alerts matching their category and province, with downloadable tender PDFs and complete submission instructions.
+                    {t("howStep3Desc")}
                   </p>
                 </div>
                 <div className="text-xs font-bold text-[#0055B8] uppercase tracking-wider pt-6 border-t border-slate-200">
-                  Stage 3 &mdash; Delivery
+                  {t("howStage3Label")}
                 </div>
               </div>
 
@@ -165,31 +163,31 @@ export default function HowItWorksPage() {
           {activeTab === "sourcing" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 animate-fadeIn">
               <div className="bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm">
-                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">Source Layer 01</div>
-                <h3 className="text-lg font-black text-[#0F172A] mb-3">Official Government Gazette Mirror</h3>
+                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">{t("howSourceLayer1")}</div>
+                <h3 className="text-lg font-black text-[#0F172A] mb-3">{t("howSourceGazetteTitle")}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
-                  Direct extraction from the Democratic Socialist Republic of Sri Lanka weekly and extraordinary gazettes, covering all national ministry procurements.
+                  {t("howSourceGazetteDesc")}
                 </p>
               </div>
               <div className="bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm">
-                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">Source Layer 02</div>
-                <h3 className="text-lg font-black text-[#0F172A] mb-3">14 National Daily Newspapers</h3>
+                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">{t("howSourceLayer2")}</div>
+                <h3 className="text-lg font-black text-[#0F172A] mb-3">{t("howSourceNewspapersTitle")}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
-                  Complete trilingual coverage across Daily News, Dinamina, Thinakaran, Sunday Observer, Silumina, Sunday Times, Daily FT, and regional publications.
+                  {t("howSourceNewspapersDesc")}
                 </p>
               </div>
               <div className="bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm">
-                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">Source Layer 03</div>
-                <h3 className="text-lg font-black text-[#0F172A] mb-3">9 Provincial Council Secretariats</h3>
+                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">{t("howSourceLayer3")}</div>
+                <h3 className="text-lg font-black text-[#0F172A] mb-3">{t("howSourceProvincialTitle")}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
-                  Western, Central, Southern, Northern, Eastern, North Western, North Central, Uva, and Sabaragamuwa provincial tender notices.
+                  {t("howSourceProvincialDesc")}
                 </p>
               </div>
               <div className="bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm">
-                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">Source Layer 04</div>
-                <h3 className="text-lg font-black text-[#0F172A] mb-3">State Banks &amp; Parate Auctions</h3>
+                <div className="font-black text-[#0055B8] text-xs uppercase tracking-wider mb-2">{t("howSourceLayer4")}</div>
+                <h3 className="text-lg font-black text-[#0F172A] mb-3">{t("howSourceBanksTitle")}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
-                  Real estate, machinery, vehicle, and commercial parate execution notices from BOC, People&apos;s Bank, and leading financial institutions.
+                  {t("howSourceBanksDesc")}
                 </p>
               </div>
             </div>
@@ -198,26 +196,26 @@ export default function HowItWorksPage() {
           {/* TAB 3: INDEXING & TAGS */}
           {activeTab === "indexing" && (
             <div className="bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm mb-16 animate-fadeIn">
-              <h2 className="text-2xl font-black text-[#0F172A] mb-4">Standardized Taxonomy &amp; Meta Extraction</h2>
+              <h2 className="text-2xl font-black text-[#0F172A] mb-4">{t("howTaxonomyTitle")}</h2>
               <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-6">
-                Every procurement announcement is structured into standard fields so bidders never miss critical qualifications:
+                {t("howTaxonomyDesc")}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">CIDA REQUIREMENTS</span>
-                  <span className="text-xs font-bold text-slate-900">Grading &amp; Speciality C1 to C9</span>
+                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">{t("howCidaReq")}</span>
+                  <span className="text-xs font-bold text-slate-900">{t("howCidaGrade")}</span>
                 </div>
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">BID SECURITY BOND</span>
-                  <span className="text-xs font-bold text-slate-900">Exact LKR Guarantee &amp; Validity</span>
+                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">{t("howBidBondLabel")}</span>
+                  <span className="text-xs font-bold text-slate-900">{t("howBidBondDesc")}</span>
                 </div>
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">SUBMISSION DEADLINE</span>
-                  <span className="text-xs font-bold text-slate-900">Countdown, Date &amp; Cutoff Hour</span>
+                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">{t("howDeadlineLabel")}</span>
+                  <span className="text-xs font-bold text-slate-900">{t("howDeadlineDesc")}</span>
                 </div>
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">DOCUMENT FEE</span>
-                  <span className="text-xs font-bold text-slate-900">Non-Refundable Purchase Cost</span>
+                  <span className="text-[10px] font-black uppercase text-[#0055B8] block mb-1">{t("howDocFeeLabel")}</span>
+                  <span className="text-xs font-bold text-slate-900">{t("howDocFeeDesc")}</span>
                 </div>
               </div>
             </div>
@@ -226,22 +224,22 @@ export default function HowItWorksPage() {
           {/* TAB 4: BIDDING DOCUMENTS */}
           {activeTab === "documents" && (
             <div className="bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm mb-16 animate-fadeIn">
-              <h2 className="text-2xl font-black text-[#0F172A] mb-4">Official Document Repository</h2>
+              <h2 className="text-2xl font-black text-[#0F172A] mb-4">{t("howRepoTitle")}</h2>
               <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-6">
-                Directly access authorized PDF tenders, Bills of Quantities (BOQ), and addenda issued by procuring entities:
+                {t("howRepoDesc")}
               </p>
               <div className="space-y-3 text-xs sm:text-sm">
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 flex items-center justify-between">
-                  <span className="font-bold text-slate-900">1. Clean Unwatermarked Official Notice Files</span>
-                  <span className="text-[#0055B8] font-bold text-xs">PDF 300 DPI</span>
+                  <span className="font-bold text-slate-900">{t("howRepoItem1")}</span>
+                  <span className="text-[#0055B8] font-bold text-xs">{t("howRepoItem1Badge")}</span>
                 </div>
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 flex items-center justify-between">
-                  <span className="font-bold text-slate-900">2. Pre-Bid Meeting Schedule &amp; Clarifications</span>
-                  <span className="text-[#0055B8] font-bold text-xs">Verified Bulletin</span>
+                  <span className="font-bold text-slate-900">{t("howRepoItem2")}</span>
+                  <span className="text-[#0055B8] font-bold text-xs">{t("howRepoItem2Badge")}</span>
                 </div>
                 <div className="p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 flex items-center justify-between">
-                  <span className="font-bold text-slate-900">3. Tender Submission Location &amp; Sealed Box Guidelines</span>
-                  <span className="text-[#0055B8] font-bold text-xs">Official Protocol</span>
+                  <span className="font-bold text-slate-900">{t("howRepoItem3")}</span>
+                  <span className="text-[#0055B8] font-bold text-xs">{t("howRepoItem3Badge")}</span>
                 </div>
               </div>
             </div>
@@ -250,14 +248,14 @@ export default function HowItWorksPage() {
           {/* CTA Box (Preserved Exact Design with Rounded Elevation) */}
           <div className="bg-[#F8FAFC] border border-slate-200/90 p-8 md:p-10 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
             <div>
-              <h3 className="text-2xl font-black text-[#0F172A] mb-2">Ready to explore active tenders?</h3>
-              <p className="text-slate-600 text-sm font-normal">Browse 366 live procurement procedures updated today across Sri Lanka.</p>
+              <h3 className="text-2xl font-black text-[#0F172A] mb-2">{t("howCtaTitle")}</h3>
+              <p className="text-slate-600 text-sm font-normal">{t("howCtaDesc")}</p>
             </div>
             <Link
               href="/"
               className="bg-[#0055B8] hover:bg-[#004394] text-white font-extrabold text-xs sm:text-sm px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md whitespace-nowrap uppercase tracking-wider"
             >
-              Explore Tenders &amp; Purchases
+              {t("howCtaBtn")}
             </Link>
           </div>
 

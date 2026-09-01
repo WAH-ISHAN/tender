@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MOCK_TENDERS, TenderItem } from "@/data/tenders";
 import { useToast } from "@/components/ui/Toaster";
+import { useLanguage } from "@/context/LanguageContext";
 
 type DashboardView = "overview" | "related" | "favorites" | "settings";
 
@@ -11,6 +12,7 @@ function SupplierDashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
+  const { t } = useLanguage();
 
   const tabParam = searchParams.get("tab") as DashboardView | null;
   const [activeView, setActiveView] = useState<DashboardView>(tabParam || "overview");
@@ -109,7 +111,7 @@ function SupplierDashboardContent() {
               <div className="flex items-center gap-2.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm" />
                 <span className="text-[11px] font-black uppercase tracking-widest text-blue-200">
-                  CIDA VERIFIED SUPPLIER WORKSPACE
+                  {t("dashVerifiedWorkspace")}
                 </span>
                 <span className="text-slate-500">&bull;</span>
                 <span className="font-mono text-slate-300 font-bold text-[11px]">
@@ -119,14 +121,14 @@ function SupplierDashboardContent() {
 
               <div className="flex items-center gap-3">
                 <span className="px-3.5 py-1.5 bg-white/10 border border-white/20 rounded-xl text-xs font-black text-white">
-                  Business Bidder (Annual Active)
+                  {t("dashBusinessActive")}
                 </span>
                 <button
                   type="button"
                   onClick={handleLogout}
                   className="px-3.5 py-1.5 bg-white/10 hover:bg-white text-white hover:text-[#0F172A] border border-white/20 font-black text-xs rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer uppercase tracking-wider"
                 >
-                  Sign Out
+                  {t("dashSignOut")}
                 </button>
               </div>
             </div>
@@ -135,17 +137,17 @@ function SupplierDashboardContent() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div className="space-y-2 max-w-3xl">
                 <span className="text-[11px] font-black uppercase tracking-widest text-blue-300 block">
-                  REGISTERED CONTRACTOR
+                  {t("dashRegisteredContractor")}
                 </span>
                 <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase leading-tight">
                   {userProfile.company}
                 </h1>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-blue-100 font-medium">
-                  <span>Officer in Charge: <strong className="text-white font-bold">{userProfile.name}</strong></span>
+                  <span>{t("dashOfficerInCharge")} <strong className="text-white font-bold">{userProfile.name}</strong></span>
                   <span className="text-slate-400">&bull;</span>
                   <span>{userProfile.cidaGrade}</span>
                   <span className="text-slate-400">&bull;</span>
-                  <span>Primary Trade: <strong className="text-white font-bold">{userProfile.preferredCategory}</strong></span>
+                  <span>{t("dashPrimaryTrade")} <strong className="text-white font-bold">{userProfile.preferredCategory}</strong></span>
                 </div>
               </div>
 
@@ -156,7 +158,7 @@ function SupplierDashboardContent() {
                   onClick={() => setActiveView("related")}
                   className="px-5 py-3 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
                 >
-                  <span>Search Bids</span>
+                  <span>{t("dashSearchBids")}</span>
                   <span>&rarr;</span>
                 </button>
                 <button
@@ -164,7 +166,7 @@ function SupplierDashboardContent() {
                   onClick={() => setActiveView("favorites")}
                   className="px-5 py-3 bg-white/10 hover:bg-white text-white hover:text-[#0F172A] border border-white/20 font-black text-xs rounded-xl transition-all active:scale-95 cursor-pointer uppercase tracking-wider"
                 >
-                  Watchlist ({watchlist.length})
+                  {t("dashWatchlist")} ({watchlist.length})
                 </button>
               </div>
             </div>
@@ -178,56 +180,56 @@ function SupplierDashboardContent() {
           <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                MATCHING NOTICES
+                {t("dashMatchingNotices")}
               </span>
               <div className="text-2xl sm:text-3xl font-black text-[#0055B8]">
-                {MOCK_TENDERS.length} Live
+                {MOCK_TENDERS.length} {t("dashLive")}
               </div>
             </div>
             <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
-              In your registered trade sectors
+              {t("dashInTradeSectors")}
             </div>
           </div>
 
           <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                CLOSING THIS WEEK
+                {t("dashClosingWeek")}
               </span>
               <div className="text-2xl sm:text-3xl font-black text-[#0F172A]">
-                4 Urgent
+                4 {t("dashUrgent")}
               </div>
             </div>
             <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
-              Submission deadline within 7 days
+              {t("dashDeadline7Days")}
             </div>
           </div>
 
           <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                ACTIVE WATCHLIST
+                {t("dashActiveWatchlist")}
               </span>
               <div className="text-2xl sm:text-3xl font-black text-[#0055B8]">
-                {watchlist.length} Saved
+                {watchlist.length} {t("dashSaved")}
               </div>
             </div>
             <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
-              Pinned for deadline alerts
+              {t("dashPinnedAlerts")}
             </div>
           </div>
 
           <div className="bg-white border border-slate-200/90 p-6 rounded-2xl shadow-md flex flex-col justify-between hover:shadow-lg transition-all">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
-                PIPELINE VALUE
+                {t("dashPipelineValue")}
               </span>
               <div className="text-2xl sm:text-3xl font-black text-[#0F172A] font-mono">
                 LKR 285.4M
               </div>
             </div>
             <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
-              Aggregate opportunity band
+              {t("dashAggregateBand")}
             </div>
           </div>
 
@@ -249,7 +251,7 @@ function SupplierDashboardContent() {
                   {userProfile.name}
                 </h2>
                 <div className="text-xs text-[#0055B8] font-bold">
-                  Authorized Officer
+                  {t("dashAuthorizedOfficer")}
                 </div>
                 <div className="text-[11px] text-slate-400 font-mono truncate mt-0.5">
                   {userProfile.email}
@@ -260,10 +262,10 @@ function SupplierDashboardContent() {
             {/* Box 2: Workspace Navigation Box */}
             <nav className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-md divide-y divide-slate-100">
               {[
-                { id: "overview", label: "Dashboard Overview" },
-                { id: "related", label: "Related Live Tenders" },
-                { id: "favorites", label: "Favourite / Watchlist", badge: watchlist.length },
-                { id: "settings", label: "Company & User Details" },
+                { id: "overview", label: t("dashOverview") },
+                { id: "related", label: t("dashRelatedLive") },
+                { id: "favorites", label: t("dashFavourite"), badge: watchlist.length },
+                { id: "settings", label: t("dashCompanyDetails") },
               ].map((item) => (
                 <button
                   key={item.id}
@@ -292,7 +294,7 @@ function SupplierDashboardContent() {
                 onClick={handleLogout}
                 className="w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between cursor-pointer"
               >
-                <span>Logout</span>
+                <span>{t("dashLogout")}</span>
                 <span className="text-slate-400 font-bold">&rsaquo;</span>
               </button>
             </nav>
@@ -300,14 +302,14 @@ function SupplierDashboardContent() {
             {/* Box 3: Procurement Helpdesk Box */}
             <div className="bg-white border border-slate-200/90 rounded-2xl p-5 text-xs shadow-md">
               <span className="text-[10px] font-black uppercase tracking-widest text-[#0055B8] block mb-1">
-                PROCUREMENT HELPDESK
+                {t("dashHelpdesk")}
               </span>
-              <div className="font-black text-slate-900 text-sm mb-1">CIDA &amp; Bidding Support</div>
+              <div className="font-black text-slate-900 text-sm mb-1">{t("dashCidaSupport")}</div>
               <p className="text-slate-600 font-normal leading-relaxed mb-3">
-                Need guidance on bid bonds, eligibility criteria, or parate notices?
+                {t("dashNeedGuidance")}
               </p>
               <div className="font-mono text-xs font-bold text-slate-900 bg-[#F8FAFC] p-2.5 rounded-xl border border-slate-200 text-center">
-                Hotline: +94 11 200 8000
+                {t("dashHotline")}
               </div>
             </div>
 
@@ -325,19 +327,19 @@ function SupplierDashboardContent() {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 mb-4 border-b border-slate-100">
                     <div>
                       <span className="text-[10px] font-black uppercase tracking-wider text-[#0055B8] block mb-0.5">
-                        CENTRAL REPOSITORY
+                        {t("dashCentralRepo")}
                       </span>
                       <h2 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
-                        TenderHub National Procurement Feed
+                        {t("dashNationalFeed")}
                       </h2>
                     </div>
                     <span className="text-xs font-mono font-bold text-slate-500 bg-[#F8FAFC] px-3 py-1.5 rounded-xl border border-slate-200 shrink-0">
-                      Sync: 05:00 AM Daily
+                      {t("dashSyncDaily")}
                     </span>
                   </div>
 
                   <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-6">
-                    All notices in your feed are harvested directly from government gazettes, state ministries, municipal councils, and verified corporate boards across Sri Lanka.
+                    {t("dashAllNoticesHarvested")}
                   </p>
 
                   <div className="flex flex-wrap items-center gap-3">
@@ -346,14 +348,14 @@ function SupplierDashboardContent() {
                       onClick={() => setActiveView("related")}
                       className="px-5 py-2.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider cursor-pointer"
                     >
-                      Browse Matching Tenders &rarr;
+                      {t("dashBrowseMatching")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveView("favorites")}
                       className="px-5 py-2.5 bg-[#F1F5F9] hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 cursor-pointer uppercase tracking-wider"
                     >
-                      View Watchlist ({watchlist.length})
+                      {t("dashViewWatchlist")} ({watchlist.length})
                     </button>
                   </div>
                 </div>
@@ -362,14 +364,14 @@ function SupplierDashboardContent() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-base sm:text-lg font-black text-[#0F172A]">
-                      Priority Tenders for Your Contractor Profile
+                      {t("dashPriorityTenders")}
                     </h3>
                     <button
                       type="button"
                       onClick={() => setActiveView("related")}
                       className="text-xs font-black text-[#0055B8] hover:underline cursor-pointer"
                     >
-                      View All Related Bids &rarr;
+                      {t("dashViewAllRelated")}
                     </button>
                   </div>
 
@@ -387,7 +389,7 @@ function SupplierDashboardContent() {
                                 {tender.entity}
                               </span>
                               <span className="bg-[#EFF6FF] text-[#0055B8] font-bold text-[11px] px-2.5 py-0.5 rounded-lg border border-[#BFDBFE]">
-                                {tender.daysLeft}d left
+                                {tender.daysLeft}{t("daysLeftText")}
                               </span>
                             </div>
 
@@ -400,14 +402,14 @@ function SupplierDashboardContent() {
                                 {tender.categoryName}
                               </span>
                               <span className="text-slate-400 font-mono text-[11px]">
-                                {tender.ref}
+                                {t("refLabel")} {tender.ref}
                               </span>
                             </div>
                           </div>
 
                           <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                             <div>
-                              <span className="text-[10px] font-bold uppercase text-slate-400 block">Est. Budget</span>
+                              <span className="text-[10px] font-bold uppercase text-slate-400 block">{t("dashEstBudget")}</span>
                               <span className="text-sm font-black text-[#0F172A] font-mono">{tender.amount}</span>
                             </div>
 
@@ -419,13 +421,13 @@ function SupplierDashboardContent() {
                                   isSaved ? "bg-[#EFF6FF] text-[#0055B8] border-[#BFDBFE]" : "bg-[#F8FAFC] text-slate-400 border-slate-200 hover:text-[#0055B8]"
                                 }`}
                               >
-                                {isSaved ? "Saved" : "Save"}
+                                {isSaved ? t("dashSaved") : t("dashSave")}
                               </button>
                               <Link
                                 href={`/tender/${tender.id}`}
                                 className="px-3.5 py-1.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-xs transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                               >
-                                Dossier &rarr;
+                                {t("dashDossier")}
                               </Link>
                             </div>
                           </div>
@@ -443,10 +445,10 @@ function SupplierDashboardContent() {
               <div className="space-y-6 animate-fadeIn">
                 <div className="bg-white border border-slate-200/90 p-6 sm:p-7 rounded-2xl shadow-md">
                   <h2 className="text-xl font-black text-[#0F172A] mb-2">
-                    Related Live Procurement Opportunities
+                    {t("dashRelatedTitle")}
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-6">
-                    Procurement notices matching your CIDA contractor registration categories, provincial operational areas, and business scope.
+                    {t("dashRelatedDesc")}
                   </p>
 
                   {/* Search & Sector Filters */}
@@ -454,7 +456,7 @@ function SupplierDashboardContent() {
                     <div className="sm:col-span-7">
                       <input
                         type="text"
-                        placeholder="Search related tenders by title, ref code, or ministry..."
+                        placeholder={t("dashSearchRelatedPlaceholder")}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
@@ -462,10 +464,10 @@ function SupplierDashboardContent() {
                     </div>
                     <div className="sm:col-span-5 flex items-center gap-2 overflow-x-auto pb-1">
                       {[
-                        { id: "all", label: "All Sectors" },
-                        { id: "construction", label: "Civil Works" },
-                        { id: "solar", label: "Solar & Energy" },
-                        { id: "it", label: "IT & Servers" },
+                        { id: "all", label: t("dashAllSectors") },
+                        { id: "construction", label: t("dashCivilWorks") },
+                        { id: "solar", label: t("dashSolarEnergy") },
+                        { id: "it", label: t("dashITServers") },
                       ].map((sec) => (
                         <button
                           key={sec.id}
@@ -499,7 +501,7 @@ function SupplierDashboardContent() {
                               {tender.entity}
                             </span>
                             <span className="bg-[#EFF6FF] text-[#0055B8] font-bold text-[11px] px-2.5 py-0.5 rounded-lg border border-[#BFDBFE]">
-                              {tender.daysLeft}d left
+                              {tender.daysLeft}{t("daysLeftText")}
                             </span>
                           </div>
 
@@ -522,7 +524,7 @@ function SupplierDashboardContent() {
 
                         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                           <div>
-                            <span className="text-[10px] font-bold uppercase text-slate-400 block">Est. Budget</span>
+                            <span className="text-[10px] font-bold uppercase text-slate-400 block">{t("dashEstBudget")}</span>
                             <span className="text-base font-black text-[#0F172A] font-mono">{tender.amount}</span>
                           </div>
 
@@ -534,13 +536,13 @@ function SupplierDashboardContent() {
                                 isSaved ? "bg-[#EFF6FF] text-[#0055B8] border-[#BFDBFE]" : "bg-[#F8FAFC] text-slate-600 border-slate-200 hover:text-[#0055B8]"
                               }`}
                             >
-                              {isSaved ? "Saved" : "Save"}
+                              {isSaved ? t("dashSaved") : t("dashSave")}
                             </button>
                             <Link
                               href={`/tender/${tender.id}`}
                               className="px-4 py-2.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-xs transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                             >
-                              View Dossier &rarr;
+                              {t("dashViewDossier")}
                             </Link>
                           </div>
                         </div>
@@ -557,10 +559,10 @@ function SupplierDashboardContent() {
                 <div className="bg-white border border-slate-200/90 p-6 sm:p-7 rounded-2xl shadow-md flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-black text-[#0F172A]">
-                      Your Procurement Watchlist ({watchlist.length})
+                      {t("dashWatchlistTitle")} ({watchlist.length})
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-600 font-normal mt-0.5">
-                      Monitored tenders with real-time submission countdowns and bid security bond criteria.
+                      {t("dashMonitoredTenders")}
                     </p>
                   </div>
                   <button
@@ -568,22 +570,22 @@ function SupplierDashboardContent() {
                     onClick={() => setActiveView("related")}
                     className="px-4 py-2 bg-[#EFF6FF] text-[#0055B8] border border-[#BFDBFE] font-black text-xs rounded-xl hover:bg-blue-100 transition-colors cursor-pointer"
                   >
-                    + Add More Tenders
+                    {t("dashAddMore")}
                   </button>
                 </div>
 
                 {favoriteTenders.length === 0 ? (
                   <div className="bg-white border border-slate-200/90 rounded-2xl p-12 text-center shadow-md">
-                    <div className="text-slate-400 font-bold text-lg mb-2">Your Watchlist is Currently Empty</div>
+                    <div className="text-slate-400 font-bold text-lg mb-2">{t("dashEmptyWatchlist")}</div>
                     <p className="text-xs sm:text-sm text-slate-500 font-normal max-w-md mx-auto mb-6">
-                      Click the &quot;Save&quot; button on any tender to pin it to your workspace for deadline alerts and bidding tracking.
+                      {t("dashClickSave")}
                     </p>
                     <button
                       type="button"
                       onClick={() => setActiveView("related")}
                       className="px-6 py-3 bg-[#0055B8] text-white font-black text-xs rounded-xl uppercase tracking-wider shadow-md cursor-pointer"
                     >
-                      Browse Available Tenders
+                      {t("dashBrowseAvailable")}
                     </button>
                   </div>
                 ) : (
@@ -603,11 +605,11 @@ function SupplierDashboardContent() {
                             {tender.title}
                           </h3>
                           <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 font-normal">
-                            <span>Deadline: <strong className="font-bold text-[#0055B8]">{tender.endDate} ({tender.daysLeft}d left)</strong></span>
+                            <span>{t("dashDeadline")} <strong className="font-bold text-[#0055B8]">{tender.endDate} ({tender.daysLeft}{t("daysLeftText")})</strong></span>
                             <span>&bull;</span>
-                            <span>Bid Bond: <strong className="font-bold text-slate-900">{tender.bidBond}</strong></span>
+                            <span>{t("dashBidBond")} <strong className="font-bold text-slate-900">{tender.bidBond}</strong></span>
                             <span>&bull;</span>
-                            <span>Fee: <strong className="font-bold text-slate-900">{tender.docFee}</strong></span>
+                            <span>{t("dashFee")} <strong className="font-bold text-slate-900">{tender.docFee}</strong></span>
                           </div>
                         </div>
 
@@ -617,13 +619,13 @@ function SupplierDashboardContent() {
                             onClick={() => toggleBookmark(tender.id, tender.ref)}
                             className="px-4 py-2.5 text-xs font-bold text-slate-600 hover:text-red-700 bg-[#F8FAFC] border border-slate-200 rounded-xl transition-colors cursor-pointer"
                           >
-                            Remove
+                            {t("dashRemove")}
                           </button>
                           <Link
                             href={`/tender/${tender.id}`}
                             className="px-5 py-2.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                           >
-                            Full Dossier &rarr;
+                            {t("dashFullDossier")}
                           </Link>
                         </div>
                       </div>
@@ -637,10 +639,10 @@ function SupplierDashboardContent() {
             {activeView === "settings" && (
               <div className="bg-white border border-slate-200/90 rounded-2xl p-7 sm:p-10 shadow-md animate-fadeIn">
                 <h2 className="text-xl sm:text-2xl font-black text-[#0F172A] mb-2">
-                  Company Profile &amp; Intelligence Alerts
+                  {t("dashCompanyProfile")}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mb-8">
-                  Keep your authorized company registration, CIDA contractor grading, and automated alert delivery channels up to date.
+                  {t("dashKeepAuthorized")}
                 </p>
 
                 <form onSubmit={handleSaveSettings} className="space-y-6">
@@ -649,7 +651,7 @@ function SupplierDashboardContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        Registered Business Name
+                        {t("dashRegisteredBusinessName")}
                       </label>
                       <input
                         type="text"
@@ -661,7 +663,7 @@ function SupplierDashboardContent() {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        Business Reg Number (BRN) / PV
+                        {t("dashBRN")}
                       </label>
                       <input
                         type="text"
@@ -677,7 +679,7 @@ function SupplierDashboardContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        Authorized Procurement Officer
+                        {t("dashAuthorizedOfficerLabel")}
                       </label>
                       <input
                         type="text"
@@ -689,7 +691,7 @@ function SupplierDashboardContent() {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        CIDA Contractor Grading
+                        {t("dashCidaGradeLabel")}
                       </label>
                       <input
                         type="text"
@@ -705,7 +707,7 @@ function SupplierDashboardContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        Corporate Email Address
+                        {t("dashCorporateEmailLabel")}
                       </label>
                       <input
                         type="email"
@@ -717,7 +719,7 @@ function SupplierDashboardContent() {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        Direct Mobile / WhatsApp Alerts
+                        {t("dashMobileWhatsApp")}
                       </label>
                       <input
                         type="tel"
@@ -732,12 +734,12 @@ function SupplierDashboardContent() {
                   {/* Alert Delivery Settings */}
                   <div className="p-5 bg-[#F8FAFC] rounded-2xl border border-slate-200 space-y-3">
                     <div className="text-xs font-black uppercase tracking-wider text-[#0055B8]">
-                      Automated Gazette Alert Preferences
+                      {t("dashAlertPrefs")}
                     </div>
                     <div className="flex flex-wrap items-center justify-between gap-4 text-xs">
                       <div>
-                        <strong className="text-slate-900 font-bold block">WhatsApp Instant Alerts (05:00 AM)</strong>
-                        <span className="text-slate-500 font-normal">Receive immediate PDF notice links on publish.</span>
+                        <strong className="text-slate-900 font-bold block">{t("dashWhatsAppInstant")}</strong>
+                        <span className="text-slate-500 font-normal">{t("dashReceiveImmediate")}</span>
                       </div>
                       <button
                         type="button"
@@ -746,7 +748,7 @@ function SupplierDashboardContent() {
                           userProfile.whatsappAlerts ? "bg-[#0055B8] text-white" : "bg-slate-200 text-slate-700"
                         }`}
                       >
-                        {userProfile.whatsappAlerts ? "Active" : "Disabled"}
+                        {userProfile.whatsappAlerts ? t("dashActive") : t("dashDisabled")}
                       </button>
                     </div>
                   </div>
@@ -756,10 +758,10 @@ function SupplierDashboardContent() {
                       type="submit"
                       className="px-8 py-3.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider cursor-pointer"
                     >
-                      Save Profile Changes
+                      {t("dashSaveChanges")}
                     </button>
                     <span className="text-xs text-slate-400 font-normal">
-                      Last synchronized: Today at 08:30 IST
+                      {t("dashLastSync")}
                     </span>
                   </div>
                 </form>

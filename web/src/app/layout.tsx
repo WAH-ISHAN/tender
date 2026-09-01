@@ -22,6 +22,15 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "TenderHub Sri Lanka — National Procurement & Tender Network",
   description: "Sri Lanka's centralized commercial and state procurement gateway. Aggregating national gazettes, government ministries, and verified corporate RFPs daily.",
+  metadataBase: new URL("https://tenderhub.lk"),
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#0055B8",
 };
 
 export default function RootLayout({

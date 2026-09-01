@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { MOCK_TENDERS } from "@/data/tenders";
 import { useToast } from "@/components/ui/Toaster";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function TenderDetailPage() {
   const toast = useToast();
+  const { t } = useLanguage();
   const params = useParams();
   const rawId = typeof params?.id === "string" ? params.id : Array.isArray(params?.id) ? params.id[0] : "";
   
@@ -48,9 +50,9 @@ export default function TenderDetailPage() {
       
       {/* Top Breadcrumbs */}
       <nav className="text-xs font-medium text-slate-500 mb-6 flex items-center gap-1.5" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-[#0055B8] transition-colors">Home</Link>
+        <Link href="/" className="hover:text-[#0055B8] transition-colors">{t("tenderBreadcrumbHome")}</Link>
         <span>&rsaquo;</span>
-        <Link href="/" className="hover:text-[#0055B8] transition-colors">Procurement Gazettes</Link>
+        <Link href="/" className="hover:text-[#0055B8] transition-colors">{t("tenderBreadcrumbGazettes")}</Link>
         <span>&rsaquo;</span>
         <span className="text-[#0055B8] font-bold">{tender.ref}</span>
       </nav>
@@ -77,12 +79,12 @@ export default function TenderDetailPage() {
               </span>
               <span className="text-white/30">|</span>
               <span className="text-blue-200 font-bold">
-                Closing in {tender.daysLeft} Days ({tender.endDate})
+                {t("tenderClosingIn")} {tender.daysLeft} {t("tenderDays")} ({tender.endDate})
               </span>
             </div>
 
             <div className="text-slate-300 font-mono text-[11px]">
-              Gazette Publication: <strong className="text-white font-sans">{tender.source}</strong>
+              {t("tenderGazettePub")} <strong className="text-white font-sans">{tender.source}</strong>
             </div>
           </div>
 
@@ -98,7 +100,7 @@ export default function TenderDetailPage() {
             <span>{tender.location}</span>
             <span className="text-white/40">&bull;</span>
             <span className="font-mono text-white font-bold bg-white/10 px-2 py-0.5 rounded border border-white/20">
-              Ref: {tender.ref}
+              {t("refLabel")} {tender.ref}
             </span>
           </div>
         </div>
@@ -113,33 +115,33 @@ export default function TenderDetailPage() {
           {/* Key Figures Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs text-xs">
             <div className="font-bold uppercase tracking-wider text-slate-400 text-[11px] pb-3 mb-4 border-b border-slate-100">
-              Procurement Parameters
+              {t("tenderProcureParams")}
             </div>
 
             <div className="space-y-4 font-mono">
               <div>
-                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">ESTIMATED BUDGET</span>
+                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">{t("tenderEstBudget")}</span>
                 <span className="text-2xl font-black text-[#0055B8]">{tender.amount}</span>
               </div>
 
               <div className="pt-3 border-t border-slate-100">
-                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">REQUIRED BID SECURITY BOND</span>
+                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">{t("tenderBidBond")}</span>
                 <span className="text-xs font-bold text-[#0F172A] font-sans">{tender.bidBond}</span>
-                <span className="font-sans text-[11px] text-slate-400 block mt-0.5">Validity: {tender.bidBondValidity}</span>
+                <span className="font-sans text-[11px] text-slate-400 block mt-0.5">{t("tenderValidity")} {tender.bidBondValidity}</span>
               </div>
 
               <div className="pt-3 border-t border-slate-100">
-                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">SUBMISSION DEADLINE</span>
-                <span className="text-xs font-bold text-[#0055B8] font-sans">{tender.endDate} ({tender.daysLeft} days remaining)</span>
+                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">{t("tenderSubmissionDeadline")}</span>
+                <span className="text-xs font-bold text-[#0055B8] font-sans">{tender.endDate} ({tender.daysLeft} {t("tenderDaysRemaining")})</span>
               </div>
 
               <div className="pt-3 border-t border-slate-100">
-                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">SEALED BID OPENING</span>
+                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">{t("tenderSealedOpening")}</span>
                 <span className="text-xs font-bold text-slate-900 font-sans">{tender.openingTime}</span>
               </div>
 
               <div className="pt-3 border-t border-slate-100">
-                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">DOCUMENT PURCHASE FEE</span>
+                <span className="font-sans text-[10px] uppercase font-bold text-slate-500 block mb-0.5">{t("tenderDocFee")}</span>
                 <span className="text-xs font-bold text-slate-900 font-sans">{tender.docFee}</span>
               </div>
             </div>
@@ -151,14 +153,14 @@ export default function TenderDetailPage() {
                   isBookmarked ? "bg-[#EFF6FF] text-[#0055B8] border-[#BFDBFE]" : "bg-[#F8FAFC] text-slate-700 border-slate-200 hover:bg-slate-100"
                 }`}
               >
-                {isBookmarked ? "Saved to Watchlist" : "Save to Watchlist"}
+                {isBookmarked ? t("tenderSavedWatchlist") : t("tenderSaveWatchlist")}
               </button>
 
               <button 
                 onClick={handleCopyRef}
-                className="w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
+                className="w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 cursor-pointer"
               >
-                {copiedRef ? "Reference Code Copied" : "Copy Reference Code"}
+                {copiedRef ? t("tenderRefCopied") : t("tenderCopyRef")}
               </button>
             </div>
           </div>
@@ -166,13 +168,13 @@ export default function TenderDetailPage() {
             {/* Contact Inquiries Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-md text-xs">
             <div className="font-black uppercase tracking-wider text-[#0055B8] text-[11px] pb-3 mb-3 border-b border-slate-100">
-              Procuring Entity Contact
+              {t("tenderProcuringContact")}
             </div>
             <div className="font-black text-slate-900 text-sm mb-1">{tender.contactPerson}</div>
             <div className="text-slate-500 font-normal mb-3">{tender.entity}</div>
             <div className="space-y-1.5 text-slate-700 font-normal">
-              <div>Telephone: <strong className="text-slate-900 font-bold">{tender.contactPhone}</strong></div>
-              <div>Official Email: <strong className="text-[#0055B8] font-bold">{tender.contactEmail}</strong></div>
+              <div>{t("tenderTelephone")} <strong className="text-slate-900 font-bold">{tender.contactPhone}</strong></div>
+              <div>{t("tenderOfficialEmail")} <strong className="text-[#0055B8] font-bold">{tender.contactEmail}</strong></div>
             </div>
           </div>
 
@@ -185,35 +187,35 @@ export default function TenderDetailPage() {
           <div className="flex border-b border-slate-200 mb-6 overflow-x-auto text-xs font-black gap-2">
             <button
               onClick={() => setActiveTab("scope")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg ${
+              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
                 activeTab === "scope" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
               }`}
             >
-              Scope of Work &amp; Specifications
+              {t("tenderTabScope")}
             </button>
             <button
               onClick={() => setActiveTab("docs")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg ${
+              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
                 activeTab === "docs" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
               }`}
             >
-              Bidding Documents ({tender.documentsList.length})
+              {t("tenderTabDocs")} ({tender.documentsList.length})
             </button>
             <button
               onClick={() => setActiveTab("cida")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg ${
+              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
                 activeTab === "cida" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
               }`}
             >
-              CIDA &amp; Eligibility Criteria
+              {t("tenderTabCida")}
             </button>
             <button
               onClick={() => setActiveTab("inquiries")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg ${
+              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
                 activeTab === "inquiries" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
               }`}
             >
-              Submission &amp; Inquiries
+              {t("tenderTabInquiries")}
             </button>
           </div>
 
@@ -222,7 +224,7 @@ export default function TenderDetailPage() {
             <div className="space-y-6 text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
               <div>
                 <h3 className="text-xs font-black text-[#0F172A] uppercase tracking-wider mb-2">
-                  1. Scope of Work Description
+                  {t("tenderScopeWorkDesc")}
                 </h3>
                 <p className="bg-[#F8FAFC] p-5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 font-normal leading-relaxed">
                   {tender.description}
@@ -231,7 +233,7 @@ export default function TenderDetailPage() {
 
               <div>
                 <h3 className="text-xs font-black text-[#0F172A] uppercase tracking-wider mb-2">
-                  2. Key Technical Standards &amp; Deliverables
+                  {t("tenderKeyTechnical")}
                 </h3>
                 <div className="bg-white border border-slate-200 rounded-xl divide-y divide-slate-100 text-xs">
                   {tender.technicalSpecs.map((spec, idx) => (
@@ -245,11 +247,11 @@ export default function TenderDetailPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#F8FAFC] p-5 rounded-xl border border-slate-200">
                 <div>
-                  <span className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px] block mb-1">Contract Execution Period</span>
+                  <span className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px] block mb-1">{t("tenderContractPeriod")}</span>
                   <span className="text-slate-900 font-black text-sm">{tender.deliveryPeriod}</span>
                 </div>
                 <div>
-                  <span className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px] block mb-1">Commercial Payment Terms</span>
+                  <span className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px] block mb-1">{t("tenderPaymentTerms")}</span>
                   <span className="text-slate-900 font-black text-sm">{tender.paymentTerms}</span>
                 </div>
               </div>
@@ -261,16 +263,16 @@ export default function TenderDetailPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">
-                  Official Bidding Dossier Files (SHA-256 Verified)
+                  {t("tenderOfficialFiles")}
                 </h3>
                 <span className="text-xs text-slate-600 font-semibold">
-                  Official Government Mirror
+                  {t("tenderOfficialMirror")}
                 </span>
               </div>
 
               {downloadSuccess && (
                 <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-bold">
-                  Download initiated for {downloadSuccess}.
+                  {t("tenderDownloadInitiated")} {downloadSuccess}.
                 </div>
               )}
 
@@ -291,9 +293,9 @@ export default function TenderDetailPage() {
 
                     <button
                       onClick={() => simulateDownload(doc.name)}
-                      className="bg-white hover:bg-[#0055B8] hover:text-white border border-slate-300 text-[#0055B8] font-bold text-xs px-4 py-2 rounded-lg transition-colors whitespace-nowrap uppercase tracking-wider"
+                      className="bg-white hover:bg-[#0055B8] hover:text-white border border-slate-300 text-[#0055B8] font-bold text-xs px-4 py-2 rounded-lg transition-colors whitespace-nowrap uppercase tracking-wider cursor-pointer"
                     >
-                      Download File
+                      {t("tenderDownloadFile")}
                     </button>
                   </div>
                 ))}
@@ -307,25 +309,25 @@ export default function TenderDetailPage() {
               <div className="bg-[#F8FAFC] p-6 rounded-xl border border-slate-200 space-y-4">
                 <div>
                   <span className="font-bold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
-                    Contractor CIDA Registration Grade
+                    {t("tenderCidaGrade")}
                   </span>
                   <div className="text-base font-bold text-[#0055B8]">
                     {tender.cidaGrade}
                   </div>
                   <p className="text-slate-600 mt-1">
-                    Bidders must submit a certified copy of valid registration for the current financial year.
+                    {t("tenderCidaGradeDesc")}
                   </p>
                 </div>
 
                 <div className="pt-4 border-t border-slate-200">
                   <span className="font-bold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
-                    Bid Security Guarantee Requirement
+                    {t("tenderBidSecurityReq")}
                   </span>
                   <div className="text-sm font-bold text-slate-900">
                     {tender.bidBond}
                   </div>
                   <div className="text-slate-500 mt-1">
-                    Guarantee validity must extend {tender.bidBondValidity}.
+                    {t("tenderGuaranteeValidity")} {tender.bidBondValidity}.
                   </div>
                 </div>
               </div>
@@ -338,7 +340,7 @@ export default function TenderDetailPage() {
               <div className="bg-[#F8FAFC] p-6 rounded-xl border border-slate-200 space-y-4">
                 <div>
                   <span className="font-bold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
-                    Physical Tender Box Submission Address
+                    {t("tenderSubmissionAddress")}
                   </span>
                   <div className="text-sm font-bold text-slate-900">
                     {tender.submissionAddress}
@@ -347,7 +349,7 @@ export default function TenderDetailPage() {
 
                 <div className="pt-4 border-t border-slate-200">
                   <span className="font-bold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
-                    Pre-Bid Clarification Conference
+                    {t("tenderPreBidMeeting")}
                   </span>
                   <div className="text-xs font-bold text-[#0055B8]">
                     {tender.preBidMeeting}

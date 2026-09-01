@@ -2,13 +2,26 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useToast } from "@/components/ui/Toaster";
+import { useLanguage } from "@/context/LanguageContext";
 
 type SubnavTab = "contact" | "hq" | "submissions" | "billing";
 
 export default function ContactUsPage() {
   const toast = useToast();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<SubnavTab>("contact");
   const [department, setDepartment] = useState("General Inquiries & Information");
+
+  const getDeptLabel = (dept: string) => {
+    const map: Record<string, string> = {
+      "General Inquiries & Information": "contactDeptGeneral",
+      "Publish a Private Tender Notice": "contactDeptPublish",
+      "Subscription & Payment Support": "contactDeptSubscription",
+      "Executive & Institutional Affairs": "contactDeptExecutive",
+      "API & Bulk Procurement Data": "contactDeptAPI",
+    };
+    return map[dept] ? t(map[dept]) : dept;
+  };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   
@@ -65,7 +78,7 @@ export default function ContactUsPage() {
     }
 
     setSubmitted(true);
-    toast.success("Inquiry Dispatched", `Your transmission has been forwarded to the ${department} desk.`);
+    toast.success("Inquiry Dispatched", `Your transmission has been forwarded to the ${getDeptLabel(department)} desk.`);
   };
 
   return (
@@ -75,10 +88,10 @@ export default function ContactUsPage() {
         {/* Mobile & Tablet Horizontal Subnav Tabs (Rule #8 Interactive Navigation) */}
         <div className="lg:hidden col-span-1 flex overflow-x-auto custom-scrollbar gap-2 p-1.5 bg-[#F1F3F7] rounded-2xl border border-slate-200 mb-6">
           {[
-            { id: "contact", label: "Contact Desk" },
-            { id: "hq", label: "Headquarters" },
-            { id: "submissions", label: "Tender Submissions" },
-            { id: "billing", label: "Support & Billing" },
+            { id: "contact", label: t("contactTabContact") },
+            { id: "hq", label: t("contactTabHQ") },
+            { id: "submissions", label: t("contactTabSubmissions") },
+            { id: "billing", label: t("contactTabBilling") },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -104,7 +117,7 @@ export default function ContactUsPage() {
               activeTab === "contact" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "contact" ? "[Contact Desk]" : "Contact Desk"}
+            {activeTab === "contact" ? `[${t("contactTabContact")}]` : t("contactTabContact")}
           </button>
 
           <button
@@ -114,7 +127,7 @@ export default function ContactUsPage() {
               activeTab === "hq" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "hq" ? "[Headquarters]" : "Headquarters"}
+            {activeTab === "hq" ? `[${t("contactTabHQ")}]` : t("contactTabHQ")}
           </button>
 
           <button
@@ -124,7 +137,7 @@ export default function ContactUsPage() {
               activeTab === "submissions" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "submissions" ? "[Tender Submissions]" : "Tender Submissions"}
+            {activeTab === "submissions" ? `[${t("contactTabSubmissions")}]` : t("contactTabSubmissions")}
           </button>
 
           <button
@@ -134,7 +147,7 @@ export default function ContactUsPage() {
               activeTab === "billing" ? "text-[#0055B8] font-bold" : "text-[#6B7280] hover:text-[#0055B8]"
             }`}
           >
-            {activeTab === "billing" ? "[Support & Billing]" : "Support & Billing"}
+            {activeTab === "billing" ? `[${t("contactTabBilling")}]` : t("contactTabBilling")}
           </button>
         </aside>
 
@@ -143,21 +156,17 @@ export default function ContactUsPage() {
           
           {/* Dynamic Header according to active subnav */}
           <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-[#111827] uppercase leading-none mb-6">
-            {activeTab === "contact" && "CONTACT THE DESK"}
-            {activeTab === "hq" && "NATIONAL HEADQUARTERS"}
-            {activeTab === "submissions" && "TENDER SUBMISSIONS"}
-            {activeTab === "billing" && "SUPPORT & BILLING"}
+            {activeTab === "contact" && t("contactTitleContact")}
+            {activeTab === "hq" && t("contactTitleHQ")}
+            {activeTab === "submissions" && t("contactTitleSubmissions")}
+            {activeTab === "billing" && t("contactTitleBilling")}
           </h1>
 
           <p className="text-lg text-[#6B7280] max-w-3xl mb-12 font-normal leading-relaxed">
-            {activeTab === "contact" &&
-              "Reach our procurement intelligence officers, editorial verification team, or publisher relations desk."}
-            {activeTab === "hq" &&
-              "Executive operations, state entity protocol, and institutional oversight at World Trade Centre, Colombo."}
-            {activeTab === "submissions" &&
-              "Submit government gazettes, corporate procurement notices, expression of interest (EOI), and parate auctions."}
-            {activeTab === "billing" &&
-              "Assistance with offline bank claims, corporate annual subscriptions, invoice receipts, and billing verification."}
+            {activeTab === "contact" && t("contactDescContact")}
+            {activeTab === "hq" && t("contactDescHQ")}
+            {activeTab === "submissions" && t("contactDescSubmissions")}
+            {activeTab === "billing" && t("contactDescBilling")}
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -165,27 +174,26 @@ export default function ContactUsPage() {
             {/* Form Column (Modernized Index Panel) */}
             <div className="lg:col-span-7 bg-white border border-slate-200/90 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <h2 className="text-xl font-bold text-[#111827] mb-6">
-                {activeTab === "contact" && "Submit an Inquiry"}
-                {activeTab === "hq" && "Institutional Executive Inquiry"}
-                {activeTab === "submissions" && "Publish a Notice Inquiry"}
-                {activeTab === "billing" && "Billing & Account Verification"}
+                {activeTab === "contact" && t("contactFormTitleContact")}
+                {activeTab === "hq" && t("contactFormTitleHQ")}
+                {activeTab === "submissions" && t("contactFormTitleSubmissions")}
+                {activeTab === "billing" && t("contactFormTitleBilling")}
               </h2>
 
               {submitted ? (
                 <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-6 text-center animate-fadeIn">
                   <div className="text-[#0055B8] font-black text-lg mb-2">
-                    Inquiry Received Successfully
+                    {t("contactInquirySuccess")}
                   </div>
                   <p className="text-xs sm:text-sm text-slate-700 font-normal leading-relaxed mb-4">
-                    Your transmission has been logged. A designated procurement officer from the{" "}
-                    <strong className="text-[#0055B8] font-bold">{department}</strong> desk will contact you within 2 business hours.
+                    {t("contactInquirySuccessDesc")} <strong className="text-[#0055B8] font-bold">{getDeptLabel(department)}</strong> {t("contactInquiryDeskSuffix")}
                   </p>
                   <button
                     type="button"
                     onClick={() => setSubmitted(false)}
-                    className="bg-[#0055B8] text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:bg-[#004394] transition-colors"
+                    className="bg-[#0055B8] text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:bg-[#004394] transition-colors cursor-pointer"
                   >
-                    Submit Another Inquiry
+                    {t("contactSubmitAnother")}
                   </button>
                 </div>
               ) : (
@@ -193,24 +201,24 @@ export default function ContactUsPage() {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-[#6B7280]">Full Name</label>
+                      <label className="text-xs font-semibold text-[#6B7280]">{t("contactFullName")}</label>
                       <input
                         type="text"
                         required
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder="John Silva"
+                        placeholder={t("contactFullNamePlaceholder")}
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-[#6B7280]">Company Organization</label>
+                      <label className="text-xs font-semibold text-[#6B7280]">{t("contactCompany")}</label>
                       <input
                         type="text"
                         required
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
-                        placeholder="Silva Enterprises Ltd"
+                        placeholder={t("contactCompanyPlaceholder")}
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
                     </div>
@@ -218,24 +226,24 @@ export default function ContactUsPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-[#6B7280]">Email Address</label>
+                      <label className="text-xs font-semibold text-[#6B7280]">{t("contactEmail")}</label>
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="john@silva.lk"
+                        placeholder={t("contactEmailPlaceholder")}
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-[#6B7280]">Phone Number</label>
+                      <label className="text-xs font-semibold text-[#6B7280]">{t("contactPhone")}</label>
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+94 77 XXX XXXX"
+                        placeholder={t("contactPhonePlaceholder")}
                         className="search-input-box w-full rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm outline-none transition-all"
                       />
                     </div>
@@ -243,13 +251,13 @@ export default function ContactUsPage() {
 
                   {/* Modern Custom Dropdown for Subject / Department */}
                   <div className="flex flex-col gap-1.5 relative" ref={dropdownRef}>
-                    <label className="text-xs font-semibold text-[#6B7280]">Subject / Department</label>
+                    <label className="text-xs font-semibold text-[#6B7280]">{t("contactSubjectDept")}</label>
                     <button
                       type="button"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       className="search-input-box w-full rounded-xl bg-[#F8FAFC] hover:bg-white border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm font-semibold text-slate-900 outline-none transition-all flex items-center justify-between gap-2 cursor-pointer text-left"
                     >
-                      <span className="truncate">{department}</span>
+                      <span className="truncate">{getDeptLabel(department)}</span>
                       <svg
                         className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isDropdownOpen ? "rotate-180 text-[#0055B8]" : ""}`}
                         viewBox="0 0 20 20"
@@ -279,7 +287,7 @@ export default function ContactUsPage() {
                               department === opt ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                             }`}
                           >
-                            <span>{opt}</span>
+                            <span>{getDeptLabel(opt)}</span>
                             {department === opt && <span className="w-1.5 h-1.5 rounded-full bg-[#0055B8]" />}
                           </button>
                         ))}
@@ -288,13 +296,13 @@ export default function ContactUsPage() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-[#6B7280]">Your Message</label>
+                    <label className="text-xs font-semibold text-[#6B7280]">{t("contactYourMessage")}</label>
                     <textarea
                       rows={5}
                       required
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Describe your request..."
+                      placeholder={t("contactYourMessagePlaceholder")}
                       className="search-input-box w-full resize-y rounded-xl bg-[#F8FAFC] border border-slate-200 focus:bg-white focus:border-[#0055B8] p-3 text-xs sm:text-sm font-normal outline-none transition-all"
                     ></textarea>
                   </div>
@@ -303,7 +311,7 @@ export default function ContactUsPage() {
                     type="submit"
                     className="bg-[#0055B8] hover:bg-[#004394] text-white font-semibold py-3 px-8 rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-sm self-start mt-2 cursor-pointer"
                   >
-                    Send Message
+                    {t("contactSendMessage")}
                   </button>
                 </form>
               )}
@@ -316,13 +324,13 @@ export default function ContactUsPage() {
               <div className={`p-8 rounded-2xl border transition-all ${
                 activeTab === "hq" ? "bg-white border-[#0055B8] shadow-md ring-2 ring-blue-100" : "bg-[#F3F5F8] border-slate-200/90 shadow-sm"
               }`}>
-                <h3 className="text-xs uppercase tracking-wider font-bold text-[#0055B8] mb-2">Central Office</h3>
-                <div className="text-lg font-bold text-[#111827] mb-2">TenderHub Procurement Headquarters</div>
+                <h3 className="text-xs uppercase tracking-wider font-bold text-[#0055B8] mb-2">{t("contactCentralOffice")}</h3>
+                <div className="text-lg font-bold text-[#111827] mb-2">{t("contactHeadquartersName")}</div>
                 <p className="text-sm text-gray-600 font-normal leading-relaxed mb-4">
-                  Level 14, World Trade Centre, Echelon Square, Colombo 01, Sri Lanka.
+                  {t("contactHeadquartersAddress")}
                 </p>
                 <div className="text-sm font-semibold text-gray-800 font-mono">
-                  Tel: +94 11 200 8000 / +94 11 200 8001
+                  {t("contactTel")}
                 </div>
                 <div className="text-sm text-[#0055B8] mt-1 font-medium">
                   tenders@tenderhub.lk
@@ -333,16 +341,16 @@ export default function ContactUsPage() {
               <div className={`p-8 rounded-2xl transition-all ${
                 activeTab === "submissions" ? "bg-[#004394] shadow-xl ring-2 ring-blue-300 text-white" : "bg-[#0055B8] text-white shadow-md"
               }`}>
-                <div className="text-xs uppercase tracking-wider font-bold text-blue-200 mb-2">Editorial Desk</div>
-                <div className="text-xl font-bold mb-2">Publish a Tender or RFP</div>
+                <div className="text-xs uppercase tracking-wider font-bold text-blue-200 mb-2">{t("contactEditorialDesk")}</div>
+                <div className="text-xl font-bold mb-2">{t("contactPublishTender")}</div>
                 <p className="text-sm text-blue-100 font-normal leading-relaxed mb-4">
-                  Need to broadcast an Expression of Interest or Vendor Registration to 3,200+ verified Sri Lankan suppliers?
+                  {t("contactPublishDesc")}
                 </p>
                 <Link
                   href="/register"
                   className="inline-flex items-center gap-2 font-bold text-sm text-white border-b border-white pb-0.5 hover:text-blue-200 transition-colors"
                 >
-                  <span>Submit Tender Notice</span>
+                  <span>{t("contactSubmitTenderNotice")}</span>
                   <span>↗</span>
                 </Link>
               </div>
@@ -350,10 +358,10 @@ export default function ContactUsPage() {
               {/* Support & Billing Quick Info (Dynamic when Billing selected) */}
               {activeTab === "billing" && (
                 <div className="bg-white border-2 border-[#0055B8] p-6 rounded-2xl shadow-md animate-fadeIn">
-                  <div className="text-xs font-black uppercase text-[#0055B8] mb-1">Billing Priority Hotline</div>
-                  <div className="text-sm font-bold text-slate-900 mb-2">Direct Bank Claim Verification</div>
+                  <div className="text-xs font-black uppercase text-[#0055B8] mb-1">{t("contactBillingHotline")}</div>
+                  <div className="text-sm font-bold text-slate-900 mb-2">{t("contactDirectBankClaim")}</div>
                   <p className="text-xs text-slate-600 font-normal leading-relaxed mb-3">
-                    For faster activation of your Enterprise subscription, attach your bank transfer slip or contact:
+                    {t("contactBillingDesc2")}
                   </p>
                   <div className="font-mono text-xs font-bold text-slate-800">billing@tenderhub.lk</div>
                 </div>

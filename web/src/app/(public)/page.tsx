@@ -7,38 +7,50 @@ import { useToast } from "@/components/ui/Toaster";
 import { useLanguage } from "@/context/LanguageContext";
 
 const CATEGORIES = [
-  { id: "construction", name: "Civil Construction & Works", count: "7,767" },
-  { id: "it", name: "Computer, Servers & IT", count: "3,694" },
+  { id: "construction", name: "Construction", count: "7,767" },
+  { id: "it", name: "Computer & IT", count: "3,694" },
   { id: "suppliers", name: "Registration of Suppliers", count: "3,217" },
-  { id: "electrical", name: "Electrical & Power Distribution", count: "2,850" },
-  { id: "electronics", name: "Electronic & Telecom Equipment", count: "2,209" },
+  { id: "unclassified", name: "Unclassified", count: "3,051" },
+  { id: "electrical", name: "Electrical", count: "2,850" },
+  { id: "electronics", name: "Electronics", count: "2,209" },
   { id: "medical", name: "Medical & Pharmaceuticals", count: "1,991" },
-  { id: "cleaning", name: "Janitorial & Facilities", count: "1,916" },
-  { id: "security", name: "Security & Guarding Services", count: "1,736" },
-  { id: "hardware", name: "Hardware & Machinery", count: "1,613" },
-  { id: "vehicles", name: "Vehicles & Auto Parts", count: "1,566" },
-  { id: "printing", name: "Printing, Media & Advertising", count: "1,230" },
+  { id: "cleaning", name: "Cleaning & Janitorial Services", count: "1,916" },
+  { id: "security", name: "Manpower & Security Services", count: "1,736" },
+  { id: "hardware", name: "Hardware", count: "1,613" },
+  { id: "vehicles", name: "Vehicles, Auto Parts & Services", count: "1,566" },
+  { id: "printing", name: "Printing & Advertising", count: "1,230" },
+  { id: "agriculture", name: "Agriculture", count: "914" },
+  { id: "transport", name: "Transport & Rent A Car Services", count: "892" },
+  { id: "consultancy", name: "Consultancy, Audit & Tax Services", count: "833" },
+  { id: "furniture", name: "Furniture", count: "728" },
+  { id: "services", name: "Services", count: "718" },
+  { id: "laboratory", name: "Laboratory & Chemicals", count: "641" },
+  { id: "finance", name: "Bank, Finance & Insurance", count: "630" },
+  { id: "stationery", name: "Gift & Stationery", count: "502" },
+  { id: "fashion", name: "Fashion & Textiles", count: "443" },
+  { id: "food", name: "Food & Beverage", count: "410" },
+  { id: "courier", name: "Courier & Logistics", count: "307" },
+  { id: "plastic", name: "Plastic & Rubber", count: "84" },
   { id: "solar", name: "Renewable Energy & Solar", count: "186" },
 ];
 
 const SECTORS = [
   { id: "all", name: "All Procurement Sectors", count: "39,942" },
-  { id: "government", name: "Government & Ministries", count: "32,480" },
-  { id: "semi-government", name: "Semi-Gov & State Boards", count: "6,725" },
-  { id: "private", name: "Private Corporates & Commercial", count: "737" },
+  { id: "government", name: "Government Tenders", count: "39,205" },
+  { id: "private", name: "Private Tenders", count: "737" },
 ];
 
 const PROVINCES = [
-  { id: "all", name: "All Provinces (National)" },
-  { id: "western", name: "Western Province" },
-  { id: "central", name: "Central Province" },
-  { id: "southern", name: "Southern Province" },
-  { id: "north-western", name: "North Western Province" },
-  { id: "northern", name: "Northern Province" },
-  { id: "eastern", name: "Eastern Province" },
-  { id: "sabaragamuwa", name: "Sabaragamuwa Province" },
-  { id: "uva", name: "Uva Province" },
-  { id: "north-central", name: "North Central Province" },
+  { id: "all", name: "All Provinces (National)", count: "39,942" },
+  { id: "western", name: "Western Province", count: "27,712" },
+  { id: "central", name: "Central Province", count: "2,405" },
+  { id: "southern", name: "Southern Province", count: "1,807" },
+  { id: "eastern", name: "Eastern Province", count: "1,739" },
+  { id: "northern", name: "Northern Province", count: "1,554" },
+  { id: "north-western", name: "North Western Province", count: "1,456" },
+  { id: "north-central", name: "North Central Province", count: "1,115" },
+  { id: "sabaragamuwa", name: "Sabaragamuwa Province", count: "1,103" },
+  { id: "uva", name: "Uva Province", count: "1,051" },
 ];
 
 const VALUE_BANDS = [
@@ -62,7 +74,7 @@ export default function HomePage() {
   const [selectedValueBand, setSelectedValueBand] = useState<string>("all");
   const [closingWindow, setClosingWindow] = useState<string>("all");
   const [sectorFilter, setSectorFilter] = useState<string>("all");
-  const [statusTab, setStatusTab] = useState<"all" | "today" | "live" | "closing" | "suppliers">("live");
+  const [statusTab, setStatusTab] = useState<"all" | "today" | "live" | "closing" | "closed" | "suppliers">("live");
   const [sortBy, setSortBy] = useState("closing");
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
@@ -71,25 +83,127 @@ export default function HomePage() {
 
   // Bookmarking Watchlist
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set(["SLPA-2026-PT-04"]));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    setIsLoggedIn(document.cookie.includes("tenderhub_auth"));
+  }, []);
 
   // Modern Dropdown State
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // Dynamic Typing Search Animation
-  const TYPING_SUGGESTIONS = [
-    "Search by tender title, procuring entity, reference code, or keywords...",
-    "Try 'Civil Construction & Road Infrastructure'...",
-    "Try 'Solar Power & Renewable Energy Parks'...",
-    "Try 'Enterprise Server IT & Hardware'...",
-    "Try 'Medical & Hospital Pharmaceutical Supplies'...",
-    "Try 'Registration of Verified Suppliers 2026'...",
-  ];
+  // Translation Helper Functions for Dynamic Trilingual Support
+  const getCategoryName = (id: string, fallback?: string) => {
+    const map: Record<string, string> = {
+      "construction": "catCivil",
+      "it": "catIT",
+      "suppliers": "catSuppliers",
+      "unclassified": "catUnclassified",
+      "electrical": "catElectrical",
+      "electronics": "catTelecom",
+      "medical": "catMedical",
+      "cleaning": "catJanitorial",
+      "security": "catSecurity",
+      "hardware": "catMachinery",
+      "vehicles": "catVehicles",
+      "printing": "catPrinting",
+      "agriculture": "catAgriculture",
+      "transport": "catTransport",
+      "consultancy": "catConsultancy",
+      "furniture": "catFurniture",
+      "services": "catServices",
+      "laboratory": "catLaboratory",
+      "finance": "catBankFinance",
+      "stationery": "catGift",
+      "fashion": "catFashion",
+      "food": "catFood",
+      "courier": "catCourier",
+      "plastic": "catPlastic",
+      "solar": "catSolar",
+    };
+    return map[id] ? t(map[id]) : (fallback || id);
+  };
+
+  const getProvinceName = (id: string, fallback?: string) => {
+    const map: Record<string, string> = {
+      "western": "provWestern",
+      "central": "provCentral",
+      "southern": "provSouthern",
+      "northern": "provNorthern",
+      "eastern": "provEastern",
+      "north-western": "provNorthWestern",
+      "north-central": "provNorthCentral",
+      "uva": "provUva",
+      "sabaragamuwa": "provSabaragamuwa",
+    };
+    return map[id] ? t(map[id]) : (fallback || id);
+  };
+
+  const getValueBandName = (id: string, fallback?: string) => {
+    const map: Record<string, string> = {
+      "<5M": "bandUnder5M",
+      "5M-25M": "band5M25M",
+      "25M-100M": "band25M100M",
+      "100M-500M": "band100M500M",
+      ">500M": "bandOver500M",
+    };
+    return map[id] ? t(map[id]) : (fallback || id);
+  };
+
+  const getSectorName = (id: string, fallback?: string) => {
+    const map: Record<string, string> = {
+      "all": "allTendersLabel",
+      "government": "govTenders",
+      "semi-government": "secSemiGov",
+      "private": "privateTenders",
+    };
+    return map[id] ? t(map[id]) : (fallback || id);
+  };
+
+  const getDeadlineName = (id: string) => {
+    if (id === "3days") return t("urgent3DaysOpt");
+    if (id === "7days") return t("next7DaysOpt");
+    if (id === "30days") return t("next30DaysOpt");
+    return t("anyClosingDateOpt");
+  };
+
+  // Dynamic Typing Search Animation (Fully Localized for EN / SI / TA)
+  const TYPING_SUGGESTIONS = useMemo(() => {
+    if (language === "si") {
+      return [
+        t("searchPlaceholder"),
+        "සොයන්න 'සිවිල් ඉදිකිරීම් හා මාර්ග සංවර්ධන'...",
+        "සොයන්න 'සූර්ය බලශක්ති හා පුනර්ජනනීය ව්‍යාපෘති'...",
+        "සොයන්න 'පරිගණක හා තොරතුරු තාක්ෂණ සේවා'...",
+        "සොයන්න 'රෝහල් ඖෂධ හා ශල්‍ය ද්‍රව්‍ය'...",
+        "සොයන්න 'සැපයුම්කරුවන් ලියාපදිංචිය 2026'...",
+      ];
+    }
+    if (language === "ta") {
+      return [
+        t("searchPlaceholder"),
+        "தேடுங்கள் 'கட்டிட நிர்மாணம் மற்றும் பணிகள்'...",
+        "தேடுங்கள் 'சூரிய சக்தி மற்றும் புதுப்பிக்கத்தக்க சக்தி'...",
+        "தேடுங்கள் 'கணினி மற்றும் IT சேவைகள்'...",
+        "தேடுங்கள் 'மருத்துவம் மற்றும் மருந்துகள்'...",
+        "தேடுங்கள் 'வழங்குநர் பதிவு 2026'...",
+      ];
+    }
+    return [
+      t("searchPlaceholder"),
+      "Try 'Civil Construction & Road Infrastructure'...",
+      "Try 'Solar Power & Renewable Energy Parks'...",
+      "Try 'Enterprise Server IT & Hardware'...",
+      "Try 'Medical & Hospital Pharmaceutical Supplies'...",
+      "Try 'Registration of Verified Suppliers 2026'...",
+    ];
+  }, [language, t]);
+
   const [typingIndex, setTypingIndex] = useState(0);
   const [displayedPlaceholder, setDisplayedPlaceholder] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const currentText = TYPING_SUGGESTIONS[typingIndex];
+    const currentText = TYPING_SUGGESTIONS[typingIndex] || t("searchPlaceholder");
     let timer: NodeJS.Timeout;
 
     if (!isDeleting && displayedPlaceholder === currentText) {
@@ -110,7 +224,7 @@ export default function HomePage() {
     }
 
     return () => clearTimeout(timer);
-  }, [displayedPlaceholder, isDeleting, typingIndex]);
+  }, [displayedPlaceholder, isDeleting, typingIndex, TYPING_SUGGESTIONS, t]);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -162,7 +276,7 @@ export default function HomePage() {
     });
   };
 
-  const handleStatusTabChange = (tab: "all" | "today" | "live" | "closing" | "suppliers") => {
+  const handleStatusTabChange = (tab: "all" | "today" | "live" | "closing" | "closed" | "suppliers") => {
     setStatusTab(tab);
     if (tab === "suppliers") {
       setSelectedCategory("suppliers");
@@ -171,6 +285,9 @@ export default function HomePage() {
       setClosingWindow("7days");
       setSelectedCategory("all");
     } else if (tab === "today") {
+      setClosingWindow("all");
+      setSelectedCategory("all");
+    } else if (tab === "closed") {
       setClosingWindow("all");
       setSelectedCategory("all");
     } else {
@@ -226,9 +343,9 @@ export default function HomePage() {
     return result;
   }, [keyword, selectedCategory, selectedProvince, selectedValueBand, sectorFilter, closingWindow, sortBy, activePreset]);
 
-  // Pagination State
+  // Pagination State - default 10 to match TenderNotices.lk (Showing 1-10 of 39942)
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -270,52 +387,52 @@ export default function HomePage() {
     activePreset !== null;
 
   return (
-    <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-[1680px] 2xl:max-w-[1760px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 2xl:px-10 py-4 xs:py-6 sm:py-8">
       
-      {/* 1. HERO BANNER WITH DYNAMIC METRICS OVERLAY & INTEGRATED SEARCH ENGINE */}
-      <section className="relative rounded-3xl sm:rounded-[36px] mb-16 sm:mb-20 shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-30">
+      {/* 1. HERO BANNER WITH DYNAMIC METRICS OVERLAY & INTEGRATED SEARCH ENGINE - Fluid responsive */}
+      <section className="relative rounded-2xl xs:rounded-3xl sm:rounded-[32px] lg:rounded-[36px] mb-8 xs:mb-12 sm:mb-16 lg:mb-20 shadow-xl sm:shadow-2xl bg-[#0A1633] text-white border border-slate-800 z-30 overflow-hidden">
         
         {/* Full Section Background Image Container (Strictly Rounded & Clipped) */}
-        <div className="absolute inset-0 pointer-events-none rounded-3xl sm:rounded-[36px] overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none rounded-2xl xs:rounded-3xl sm:rounded-[32px] lg:rounded-[36px] overflow-hidden">
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-75 scale-105 transition-transform duration-1000"
+            className="absolute inset-0 bg-cover bg-center opacity-60 xs:opacity-70 sm:opacity-75 scale-105 transition-transform duration-1000"
             style={{
               backgroundImage: `url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2000&auto=format&fit=crop')`,
             }}
           />
-          {/* Soft Contrast Gradient Overlay */}
-          <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/85 via-[#0A1E4A]/65 to-[#07132F]/80" />
+          {/* Soft Contrast Gradient Overlay - stronger on mobile for readability */}
+          <div className="absolute inset-0 bg-linear-to-r from-[#07132F]/90 via-[#0A1E4A]/70 to-[#07132F]/85 sm:from-[#07132F]/85 sm:via-[#0A1E4A]/65 sm:to-[#07132F]/80" />
         </div>
 
-        <div className="relative z-10 px-6 sm:px-12 lg:px-20 py-20 sm:py-28 lg:py-32">
+        <div className="relative z-10 px-4 xs:px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-10 xs:py-12 sm:py-16 md:py-20 lg:py-28 xl:py-32">
           
-          {/* Top Hero Header (Grand Scale) */}
-          <div className="max-w-5xl mb-10 sm:mb-12">
+          {/* Top Hero Header (Grand Scale) - Responsive typography 320px -> 1920px+ */}
+          <div className="max-w-5xl mb-6 xs:mb-8 sm:mb-10 lg:mb-12">
             
-            {/* Top Verification Beacon */}
-            <div className="mb-4 animate-hero-badge">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20">
-                <span className="relative flex h-2.5 w-2.5">
+            {/* Top Verification Beacon - wraps on tiny screens */}
+            <div className="mb-3 xs:mb-4 animate-hero-badge">
+              <div className="inline-flex items-center gap-1.5 xs:gap-2 bg-white/10 backdrop-blur-md px-2.5 xs:px-3.5 py-1.5 rounded-full border border-white/20 max-w-full">
+                <span className="relative flex h-2 w-2 xs:h-2.5 xs:w-2.5 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 xs:h-2.5 xs:w-2.5 bg-emerald-400"></span>
                 </span>
-                <span className="text-[11px] font-black uppercase tracking-widest text-blue-200">
+                <span className="text-[9px] xs:text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-blue-200 leading-tight">
                   {t("heroSubtitle")}
                 </span>
               </div>
             </div>
 
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight uppercase leading-[1.02] mb-5 animate-hero-title">
+            <h1 className="font-display text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[4.5rem] font-black tracking-tight uppercase leading-[0.95] xs:leading-[1.02] mb-3 xs:mb-4 sm:mb-5 animate-hero-title break-words">
               {t("heroTitle")}
             </h1>
 
-            <p className="text-base sm:text-lg text-blue-100 font-normal leading-relaxed max-w-3xl animate-hero-desc">
+            <p className="text-sm xs:text-[15px] sm:text-base lg:text-lg text-blue-100 font-normal leading-relaxed max-w-3xl animate-hero-desc line-clamp-4 xs:line-clamp-none">
               {t("heroDesc")}
             </p>
           </div>
 
-          {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO */}
-          <div className="bg-white rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl text-slate-900 border border-slate-100 relative z-30">
+          {/* FULL INTEGRATED SEARCH & FILTER PANEL INSIDE HERO - Responsive padding */}
+          <div className="bg-white rounded-2xl xs:rounded-3xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 xl:p-12 shadow-xl sm:shadow-2xl text-slate-900 border border-slate-100 relative z-30 mx-[-4px] xs:mx-0">
             
             {/* Primary Search Bar */}
             <div className="mb-6 relative" ref={searchContainerRef}>
@@ -327,7 +444,7 @@ export default function HomePage() {
                   value={keyword}
                   onFocus={() => setIsSearchFocused(true)}
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-2xl py-4.5 sm:py-5 pl-6 sm:pl-7 pr-16 text-base sm:text-lg font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal shadow-2xs"
+                  className="w-full bg-[#F8FAFC] border border-slate-200 focus:border-[#0055B8] focus:bg-white rounded-xl xs:rounded-2xl py-3.5 xs:py-4 sm:py-4 lg:py-5 pl-4 xs:pl-5 sm:pl-6 lg:pl-7 pr-12 xs:pr-14 sm:pr-16 text-sm xs:text-[15px] sm:text-base lg:text-lg font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal placeholder:text-xs xs:placeholder:text-sm sm:placeholder:text-base shadow-2xs min-h-[44px]"
                 />
                 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -349,7 +466,7 @@ export default function HomePage() {
               {isSearchFocused && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-3.5 animate-fadeIn">
                   <div className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">
-                    Recent Search Queries
+                    {t("recentSearchTitle")}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {["solar infrastructure", "road rehabilitation", "pharmaceuticals", "enterprise server hardware", "janitorial maintenance"].map((term) => (
@@ -370,8 +487,8 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* 4 Core Dropdowns + Action CTA */}
-            <div ref={filterBarRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4 mb-2">
+            {/* 4 Core Dropdowns + Action CTA - Responsive: 1 col xs, 2 col sm, 3 col lg, 5 col xl */}
+            <div ref={filterBarRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 xs:gap-3.5 sm:gap-4 mb-2">
               
               {/* Modern Category Dropdown */}
               <div className="relative">
@@ -382,10 +499,10 @@ export default function HomePage() {
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
-                      CATEGORY
+                      {t("categoryLabel")}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
-                      {selectedCategory === "all" ? `All Categories (${CATEGORIES.length})` : CATEGORIES.find(c => c.id === selectedCategory)?.name}
+                      {selectedCategory === "all" ? `${t("allCategoriesOpt")} (${CATEGORIES.length})` : getCategoryName(selectedCategory, CATEGORIES.find(c => c.id === selectedCategory)?.name)}
                     </span>
                   </div>
                   <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "category" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
@@ -402,7 +519,7 @@ export default function HomePage() {
                         selectedCategory === "all" ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                       }`}
                     >
-                      <span>All Categories ({CATEGORIES.length})</span>
+                      <span>{t("allCategoriesOpt")} ({CATEGORIES.length})</span>
                       {selectedCategory === "all" && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
                     </button>
                     {CATEGORIES.map((cat) => (
@@ -414,7 +531,7 @@ export default function HomePage() {
                           selectedCategory === cat.id ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="truncate">{cat.name}</span>
+                        <span className="truncate">{getCategoryName(cat.id, cat.name)}</span>
                         {selectedCategory === cat.id && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
                       </button>
                     ))}
@@ -431,10 +548,10 @@ export default function HomePage() {
                 >
                   <div className="truncate">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-0.5">
-                      PROVINCE
+                      {t("provinceLabel")}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
-                      {PROVINCES.find(p => p.id === selectedProvince)?.name || "All Provinces (National)"}
+                      {selectedProvince === "all" ? t("allProvincesOpt") : getProvinceName(selectedProvince, PROVINCES.find(p => p.id === selectedProvince)?.name)}
                     </span>
                   </div>
                   <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "province" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
@@ -444,7 +561,17 @@ export default function HomePage() {
 
                 {activeDropdown === "province" && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar animate-fadeIn divide-y divide-slate-50">
-                    {PROVINCES.map((prov) => (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedProvince("all"); setActiveDropdown(null); }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                        selectedProvince === "all" ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      <span>{t("allProvincesOpt")}</span>
+                      {selectedProvince === "all" && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
+                    </button>
+                    {PROVINCES.filter(p => p.id !== "all").map((prov) => (
                       <button
                         key={prov.id}
                         type="button"
@@ -453,7 +580,7 @@ export default function HomePage() {
                           selectedProvince === prov.id ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="truncate">{prov.name}</span>
+                        <span className="truncate">{getProvinceName(prov.id, prov.name)}</span>
                         {selectedProvince === prov.id && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
                       </button>
                     ))}
@@ -473,7 +600,7 @@ export default function HomePage() {
                       {t("valueBandLabel")}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
-                      {VALUE_BANDS.find(v => v.id === selectedValueBand)?.name || "All Value Bands"}
+                      {selectedValueBand === "all" ? t("allValueBandsOpt") : getValueBandName(selectedValueBand, VALUE_BANDS.find(v => v.id === selectedValueBand)?.name)}
                     </span>
                   </div>
                   <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "valueBand" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
@@ -483,7 +610,17 @@ export default function HomePage() {
 
                 {activeDropdown === "valueBand" && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar animate-fadeIn divide-y divide-slate-50">
-                    {VALUE_BANDS.map((band) => (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedValueBand("all"); setActiveDropdown(null); }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                        selectedValueBand === "all" ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      <span>{t("allValueBandsOpt")}</span>
+                      {selectedValueBand === "all" && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
+                    </button>
+                    {VALUE_BANDS.filter(v => v.id !== "all").map((band) => (
                       <button
                         key={band.id}
                         type="button"
@@ -492,7 +629,7 @@ export default function HomePage() {
                           selectedValueBand === band.id ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="truncate">{band.name}</span>
+                        <span className="truncate">{getValueBandName(band.id, band.name)}</span>
                         {selectedValueBand === band.id && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
                       </button>
                     ))}
@@ -512,7 +649,7 @@ export default function HomePage() {
                       {t("deadlineLabel")}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-[#0F172A] truncate block">
-                      {closingWindow === "all" ? "Any Closing Date" : closingWindow === "3days" ? "Next 3 Days (Urgent)" : closingWindow === "7days" ? "Next 7 Days" : "Next 30 Days"}
+                      {getDeadlineName(closingWindow)}
                     </span>
                   </div>
                   <svg className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${activeDropdown === "closing" ? "rotate-180 text-[#0055B8]" : ""}`} viewBox="0 0 20 20" fill="currentColor">
@@ -523,10 +660,10 @@ export default function HomePage() {
                 {activeDropdown === "closing" && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
                     {[
-                      { id: "all", label: "Any Closing Date" },
-                      { id: "3days", label: "Next 3 Days (Urgent)" },
-                      { id: "7days", label: "Next 7 Days" },
-                      { id: "30days", label: "Next 30 Days" },
+                      { id: "all" },
+                      { id: "3days" },
+                      { id: "7days" },
+                      { id: "30days" },
                     ].map((opt) => (
                       <button
                         key={opt.id}
@@ -536,7 +673,7 @@ export default function HomePage() {
                           closingWindow === opt.id ? "bg-[#EFF6FF] text-[#0055B8] font-black" : "text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <span>{opt.label}</span>
+                        <span>{getDeadlineName(opt.id)}</span>
                         {closingWindow === opt.id && <span className="w-2 h-2 rounded-full bg-[#0055B8]" />}
                       </button>
                     ))}
@@ -544,15 +681,22 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Action Buttons: Search CTA & Clear Filters */}
-              <div className="flex gap-2 items-center">
+              {/* Action Buttons: Search CTA & Clear Filters - Spans 2 cols on sm for balance */}
+              <div className="flex gap-2 items-center sm:col-span-2 lg:col-span-1 xl:col-span-1">
+                <button
+                  type="button"
+                  onClick={() => toast.info("Advance Search", "Use category, province and value filters for advanced search")}
+                  className="hidden sm:inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-slate-500 hover:text-[#0055B8] px-2.5 py-2.5 border border-slate-200 rounded-xl bg-white whitespace-nowrap min-h-[44px] shrink-0"
+                >
+                  {t("advanceSearch")}
+                </button>
                 <button
                   type="button"
                   onClick={() => {
                     const el = document.getElementById("tender-results-section");
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs sm:text-sm py-3.5 sm:py-4 px-5 rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
+                  className="flex-1 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs sm:text-sm py-3 sm:py-3.5 lg:py-4 px-4 sm:px-5 rounded-xl sm:rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-md flex items-center justify-center gap-1.5 sm:gap-2 uppercase tracking-wider cursor-pointer min-h-[44px]"
                 >
                   <span>{t("searchBtn")}</span>
                   <span>&rarr;</span>
@@ -562,10 +706,10 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={handleReset}
-                    title="Reset all filters"
-                    className="p-3.5 sm:p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl transition-all hover:scale-105 active:scale-95 text-xs font-bold cursor-pointer"
+                    title={t("resetBtn")}
+                    className="p-3 sm:p-3.5 lg:p-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-600 rounded-xl sm:rounded-2xl transition-all hover:scale-105 active:scale-95 text-xs font-bold cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
                   >
-                    Reset
+                    {t("resetBtn")}
                   </button>
                 )}
               </div>
@@ -577,11 +721,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Classic Live Count - Vintage Gazette Vibe */}
+      <div className="flex justify-center mb-8 xs:mb-10 sm:mb-12">
+        <div className="inline-flex flex-wrap items-center justify-center gap-2 xs:gap-3 bg-[#FFFBEB] border-[3px] border-double border-[#B45309] px-4 xs:px-6 sm:px-8 py-3 xs:py-3.5 rounded-xl shadow-sm max-w-full">
+          <span className="relative flex h-2.5 w-2.5 xs:h-3 xs:w-3 shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 xs:h-3 xs:w-3 bg-red-600 border-2 border-white shadow-xs"></span>
+          </span>
+          <span className="font-serif text-[10px] xs:text-xs sm:text-sm font-black tracking-[0.2em] text-[#92400E] uppercase">{t("liveTendersLabel")}</span>
+          <span className="hidden xs:inline text-[#D97706] font-serif">—</span>
+          <span className="font-display text-xl xs:text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">366</span>
+          <span className="hidden xs:inline-flex items-center gap-1.5 text-[9px] xs:text-[10px] font-black tracking-widest text-[#B45309] uppercase border-l border-[#D97706]/30 pl-2 xs:pl-3 ml-1">
+            <span className="hidden sm:inline">CLASSIC</span> LIVE
+          </span>
+        </div>
+      </div>
+
       {/* 2. MAIN 2-COLUMN STRUCTURAL LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
         
-        {/* LEFT COLUMN: SIDEBAR BREAKDOWNS & TAXONOMY */}
-        <aside className="lg:col-span-3 xl:col-span-3 flex flex-col space-y-6 sticky top-28">
+        {/* LEFT COLUMN: SIDEBAR BREAKDOWNS & TAXONOMY - Responsive: stacked on mobile, sticky only on lg+ */}
+        <aside className="lg:col-span-3 xl:col-span-3 flex flex-col space-y-4 xs:space-y-5 sm:space-y-6 lg:sticky lg:top-24 xl:top-28 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:custom-scrollbar lg:pr-1">
           
           {/* Spotlight 1: Prominent "Registration of Suppliers" Action Button */}
           <button
@@ -595,7 +755,7 @@ export default function HomePage() {
           >
             <div>
               <span className="text-[10px] font-black uppercase tracking-widest block opacity-80">
-                OFFICIAL GAZETTE SPECIAL
+                {t("officialGazetteSpecialBadge")}
               </span>
               <span className="text-sm font-black block">
                 {t("spotlightSuppliers")}
@@ -611,13 +771,13 @@ export default function HomePage() {
           {/* Spotlight 2: Publisher / Buyer Door */}
           <div className="bg-[#0F172A] text-white p-5 rounded-2xl shadow-lg border border-slate-700 hover:-translate-y-0.5 transition-all duration-200">
             <span className="text-[10px] uppercase font-black tracking-widest text-blue-300 block mb-1.5">
-              FOR PROCURING BODIES
+              {t("forProcuringBodiesBadge")}
             </span>
             <h4 className="text-sm font-black leading-tight mb-1.5 text-white">
               {t("publishFreeTitle")}
             </h4>
             <p className="text-xs text-slate-300 mb-4 font-normal leading-relaxed">
-              Connect with 3,200+ verified Sri Lankan suppliers &amp; CIDA contractors.
+              {t("publishFreeSubtitle")}
             </p>
             <Link
               href="/register"
@@ -650,7 +810,7 @@ export default function HomePage() {
                         : "hover:bg-slate-50 font-bold text-slate-700"
                     }`}
                   >
-                    <span className="truncate pr-1">{sec.name}</span>
+                    <span className="truncate pr-1">{getSectorName(sec.id, sec.name)}</span>
                     <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
                       {sec.count}
                     </span>
@@ -666,20 +826,20 @@ export default function HomePage() {
               <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
                 {t("tendersByCategory")}
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">12 Categories</span>
+              <span className="text-[11px] text-slate-400 font-mono">{t("twelveCategoriesLabel")}</span>
             </div>
 
-            <nav className="flex flex-col gap-1.5 text-xs text-slate-700 max-h-96 overflow-y-auto custom-scrollbar pr-1">
+            <nav className="flex flex-col gap-1.5 text-xs text-slate-700 max-h-[45vh] xs:max-h-64 sm:max-h-72 lg:max-h-80 xl:max-h-96 overflow-y-auto custom-scrollbar pr-1 overscroll-contain">
               <button
                 type="button"
                 onClick={() => setSelectedCategory("all")}
-                className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
+                className={`py-2.5 xs:py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer min-h-[40px] xs:min-h-0 ${
                   selectedCategory === "all"
                     ? "bg-[#0055B8] text-white font-black shadow-sm"
-                    : "hover:bg-slate-50 font-bold text-slate-700"
+                    : "hover:bg-slate-50 active:bg-slate-100 font-bold text-slate-700"
                 }`}
               >
-                <span>All Categories</span>
+                <span>{t("allCategoriesLabel")}</span>
                 <span className="font-mono text-[11px] opacity-80">39,942</span>
               </button>
 
@@ -690,15 +850,62 @@ export default function HomePage() {
                     key={cat.id}
                     type="button"
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer ${
+                    className={`py-2.5 xs:py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer min-h-[40px] xs:min-h-0 ${
                       isSelected
                         ? "bg-[#0055B8] text-white font-black shadow-sm"
-                        : "hover:bg-slate-50 font-bold text-slate-700"
+                        : "hover:bg-slate-50 active:bg-slate-100 font-bold text-slate-700"
                     }`}
                   >
-                    <span className="truncate pr-1">{cat.name}</span>
+                    <span className="truncate pr-1">{getCategoryName(cat.id, cat.name)}</span>
                     <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
                       {cat.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Taxonomy Section 3: Tenders By Locations */}
+          <div className="bg-white border border-slate-200/90 p-5 rounded-2xl shadow-md">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <span className="text-xs font-black uppercase tracking-wider text-[#0F172A]">
+                {t("tendersByLocations")}
+              </span>
+              <span className="text-[11px] text-slate-400 font-mono">9 Provinces</span>
+            </div>
+
+            <nav className="flex flex-col gap-1.5 text-xs text-slate-700 max-h-[40vh] xs:max-h-56 sm:max-h-64 lg:max-h-72 xl:max-h-80 overflow-y-auto custom-scrollbar pr-1 overscroll-contain">
+              <button
+                type="button"
+                onClick={() => setSelectedProvince("all")}
+                className={`py-2.5 xs:py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer min-h-[40px] xs:min-h-0 ${
+                  selectedProvince === "all"
+                    ? "bg-[#0055B8] text-white font-black shadow-sm"
+                    : "hover:bg-slate-50 active:bg-slate-100 font-bold text-slate-700"
+                }`}
+              >
+                <span>{t("allProvincesOpt")}</span>
+                <span className="font-mono text-[11px] opacity-80">39,942</span>
+              </button>
+
+              {PROVINCES.filter(p => p.id !== "all").map((prov) => {
+                const isSelected = selectedProvince === prov.id;
+                const provCount = (prov as any).count || "";
+                return (
+                  <button
+                    key={prov.id}
+                    type="button"
+                    onClick={() => setSelectedProvince(prov.id)}
+                    className={`py-2.5 xs:py-2 px-3 rounded-xl text-left flex items-center justify-between transition-all hover:translate-x-1 active:scale-98 cursor-pointer min-h-[40px] xs:min-h-0 ${
+                      isSelected
+                        ? "bg-[#0055B8] text-white font-black shadow-sm"
+                        : "hover:bg-slate-50 active:bg-slate-100 font-bold text-slate-700"
+                    }`}
+                  >
+                    <span className="truncate pr-1">{getProvinceName(prov.id, prov.name)}</span>
+                    <span className={`font-mono text-[11px] ${isSelected ? "text-white" : "text-slate-400"}`}>
+                      {provCount}
                     </span>
                   </button>
                 );
@@ -711,14 +918,15 @@ export default function HomePage() {
         {/* RIGHT COLUMN: DIRECT TENDER RESULTS */}
         <main className="lg:col-span-9 xl:col-span-9">
 
-          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) */}
+          {/* 3. QUICK STATUS TABS RIBBON (Top Filter Bar) - Updated to match TenderNotices.lk stats */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 mb-8 sm:mb-10 shadow-sm flex items-center gap-2 overflow-x-auto">
             {[
-              { id: "live", label: "Live Tenders", count: "366" },
-              { id: "today", label: "Today's Tenders", count: "12" },
-              { id: "closing", label: "Closing This Week", count: "41" },
-              { id: "suppliers", label: "Supplier Registrations", count: "3,217" },
-              { id: "all", label: "All Gazette Notices", count: "39,942" },
+              { id: "today", label: t("todaysTendersLabel"), count: "0" },
+              { id: "live", label: t("liveTendersLabel"), count: "366" },
+              { id: "closed", label: t("closedTendersLabel"), count: "39,576" },
+              { id: "all", label: t("allTendersLabel"), count: "39,942" },
+              { id: "suppliers", label: t("statusSuppliers"), count: "3,217" },
+              { id: "closing", label: t("statusClosing"), count: "41" },
             ].map((tab) => {
               const isActive = statusTab === tab.id;
               return (
@@ -747,54 +955,54 @@ export default function HomePage() {
           <section id="tender-results-section" className="mb-8">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-200">
               
-              <div className="flex items-baseline gap-3">
-                <h3 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
-                  Tender Notices ({filteredTenders.length})
+              <div className="flex items-baseline gap-2 xs:gap-3 min-w-0 flex-1">
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight truncate">
+                  {t("resultsHeaderTitle")} ({filteredTenders.length})
                 </h3>
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline">
-                  Verified procurement publications
+                <span className="text-xs text-slate-500 font-medium hidden lg:inline truncate">
+                  {t("resultsHeaderSubtitle")}
                 </span>
               </div>
 
-              {/* View Switcher & Sort Selector */}
-              <div className="flex items-center gap-3">
+              {/* View Switcher & Sort Selector - Stacks on 320px, row on 375px+ */}
+              <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 xs:gap-3 w-full sm:w-auto">
                 
-                {/* Modern Capsule View Switcher (Rule #8) */}
-                <div className="inline-flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] shadow-2xs">
+                {/* Modern Capsule View Switcher (Rule #8) - Full width on xs */}
+                <div className="inline-flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] shadow-2xs w-full xs:w-auto self-stretch xs:self-auto">
                   <button
                     type="button"
                     onClick={() => setViewMode("cards")}
-                    className={`px-3.5 py-1.5 text-xs font-black rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                    className={`flex-1 xs:flex-none px-3 xs:px-3.5 py-2 xs:py-1.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer min-h-[36px] xs:min-h-0 ${
                       viewMode === "cards"
                         ? "bg-[#0055B8] text-white shadow-xs"
                         : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    <span>Card Grid</span>
+                    <span>{t("cardGridViewBtn")}</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setViewMode("list")}
-                    className={`px-3.5 py-1.5 text-xs font-black rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                    className={`flex-1 xs:flex-none px-3 xs:px-3.5 py-2 xs:py-1.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer min-h-[36px] xs:min-h-0 ${
                       viewMode === "list"
                         ? "bg-[#0055B8] text-white shadow-xs"
                         : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
-                    <span>Dense List</span>
+                    <span>{t("denseListViewBtn")}</span>
                   </button>
                 </div>
 
-                {/* Modern Sort Dropdown */}
-                <div className="relative" ref={sortDropdownRef}>
+                {/* Modern Sort Dropdown - Full width on xs */}
+                <div className="relative w-full xs:w-auto" ref={sortDropdownRef}>
                   <button
                     type="button"
                     onClick={() => setActiveDropdown(activeDropdown === "sort" ? null : "sort")}
-                    className="bg-[#F8FAFC] hover:bg-white border border-slate-200 hover:border-[#0055B8] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] transition-all flex items-center gap-2 cursor-pointer shadow-2xs"
+                    className="w-full xs:w-auto bg-[#F8FAFC] hover:bg-white border border-slate-200 hover:border-[#0055B8] rounded-xl px-3 py-2.5 xs:py-2 text-xs font-bold text-[#0F172A] transition-all flex items-center justify-between xs:justify-start gap-2 cursor-pointer shadow-2xs min-h-[44px] xs:min-h-0"
                   >
-                    <span className="text-slate-400 font-normal">Sort:</span>
-                    <span className="font-black">
-                      {sortBy === "closing" ? "Closing Soon" : sortBy === "newest" ? "Newest First" : sortBy === "amountDesc" ? "Highest Budget" : "Lowest Budget"}
+                    <span className="text-slate-400 font-normal hidden xs:inline">{t("sortLabel")}</span>
+                    <span className="font-black truncate">
+                      {sortBy === "closing" ? t("sortClosingSoon") : sortBy === "newest" ? t("sortRecentlyPublished") : sortBy === "amountDesc" ? t("sortValueHighToLow") : t("sortValueLowToHigh")}
                     </span>
                     <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -804,10 +1012,10 @@ export default function HomePage() {
                   {activeDropdown === "sort" && (
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 animate-fadeIn divide-y divide-slate-50">
                       {[
-                        { id: "closing", label: "Closing Soon (Urgent)" },
-                        { id: "newest", label: "Newest Published" },
-                        { id: "amountDesc", label: "Highest Budget (LKR)" },
-                        { id: "amountAsc", label: "Lowest Budget (LKR)" },
+                        { id: "closing", label: t("closingSoonUrgent") },
+                        { id: "newest", label: t("newestPublished") },
+                        { id: "amountDesc", label: t("highestBudget") },
+                        { id: "amountAsc", label: t("lowestBudget") },
                       ].map((item) => (
                         <button
                           key={item.id}
@@ -832,7 +1040,7 @@ export default function HomePage() {
 
           {/* 5. TENDER CATALOGUE: CARDS GRID VS DENSE LIST */}
           {viewMode === "cards" ? (
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mb-8 items-stretch">
+            <section className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4 xs:gap-5 sm:gap-6 mb-8 items-stretch">
               {paginatedTenders.map((tender) => {
                 const isSaved = savedTenders.has(tender.id);
 
@@ -840,23 +1048,23 @@ export default function HomePage() {
                   <Link
                     key={tender.id}
                     href={`/tender/${tender.id}`}
-                    className="bg-white rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 cursor-pointer group min-h-[290px] no-underline block transform-gpu border-2 border-slate-200/90 hover:border-[#0055B8]"
+                    className="bg-white rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 flex flex-col justify-between shadow-md hover:shadow-xl sm:hover:shadow-2xl hover:-translate-y-1 sm:hover:-translate-y-2 hover:scale-[1.005] sm:hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 cursor-pointer group min-h-[280px] xs:min-h-[290px] no-underline block transform-gpu border border-slate-200/90 sm:border-2 hover:border-[#0055B8] overflow-hidden"
                   >
-                    <div>
-                      {/* Top Authority & Urgency Row */}
-                      <div className="flex items-center justify-between gap-2 pb-3 mb-3.5 border-b border-slate-100 text-xs">
-                        <span className="font-extrabold text-[#0055B8] uppercase tracking-wider truncate text-[11px]">
+                    <div className="min-w-0">
+                      {/* Top Authority & Urgency Row - Wraps on tiny screens */}
+                      <div className="flex flex-wrap xs:flex-nowrap items-center justify-between gap-2 pb-3 mb-3 xs:mb-3.5 border-b border-slate-100 text-xs">
+                        <span className="font-extrabold text-[#0055B8] uppercase tracking-wider truncate text-[10px] xs:text-[11px] min-w-0 flex-1 xs:flex-initial">
                           {tender.entity}
                         </span>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="px-3 py-1 rounded-xl text-xs font-bold bg-[#F1F5F9] text-[#0055B8] border border-[#E2E8F0] shadow-2xs group-hover:bg-blue-50/80 transition-colors">
-                            {tender.daysLeft}d left
+                        <div className="flex items-center gap-1.5 shrink-0 w-full xs:w-auto justify-between xs:justify-end">
+                          <span className="px-2.5 xs:px-3 py-1 rounded-lg xs:rounded-xl text-[11px] xs:text-xs font-bold bg-[#F1F5F9] text-[#0055B8] border border-[#E2E8F0] shadow-2xs group-hover:bg-blue-50/80 transition-colors">
+                            {tender.daysLeft}{t("daysLeftText")}
                           </span>
                           <button
                             type="button"
                             onClick={(e) => toggleBookmark(e, tender.id)}
                             title={isSaved ? "Remove from watchlist" : "Save to watchlist"}
-                            className="p-1.5 rounded-lg bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] text-slate-400 hover:text-[#0055B8] transition-all hover:scale-110 active:scale-90 shadow-2xs cursor-pointer"
+                            className="p-2 xs:p-1.5 rounded-lg bg-[#F1F5F9] hover:bg-white border border-[#E2E8F0] text-slate-400 hover:text-[#0055B8] transition-all hover:scale-110 active:scale-90 shadow-2xs cursor-pointer min-h-[36px] min-w-[36px] xs:min-h-0 xs:min-w-0 flex items-center justify-center shrink-0"
                           >
                             <svg 
                               className={`w-3.5 h-3.5 ${isSaved ? "fill-[#0055B8] text-[#0055B8]" : "fill-none text-slate-400"}`} 
@@ -871,37 +1079,41 @@ export default function HomePage() {
                       </div>
 
                       {/* Main Title */}
-                      <h4 className="text-[15px] sm:text-base font-extrabold text-[#0F172A] leading-snug mb-3.5 group-hover:text-[#0055B8] transition-colors line-clamp-2">
+                      <h4 className="text-[15px] sm:text-base font-extrabold text-[#0F172A] leading-snug mb-3 group-hover:text-[#0055B8] transition-colors line-clamp-2">
                         {tender.title}
                       </h4>
 
-                      {/* Key Meta Badges */}
-                      <div className="flex flex-wrap items-center gap-2 text-xs mb-4">
-                        <span className="bg-[#F1F5F9] group-hover:bg-blue-50/90 text-[#0055B8] border border-[#E2E8F0] px-3 py-1 rounded-xl font-bold transition-all shadow-2xs group-hover:shadow-xs">
-                          {tender.categoryName}
-                        </span>
-                        <span className="bg-[#F1F5F9] text-slate-700 border border-[#E2E8F0] px-3 py-1 rounded-xl font-semibold shadow-2xs">
-                          {tender.district}
-                        </span>
-                        <span className="text-slate-400 font-mono text-[11px] px-1 py-1">
-                          Ref: {tender.ref}
-                        </span>
+                      {/* Organization - Login gated */}
+                      <div className="text-xs font-bold text-[#0055B8] mb-3 flex items-center gap-2">
+                        <span className="text-slate-400 font-semibold">{isLoggedIn ? tender.entity : t("cardLoginToView") + " " + t("cardCategory").replace(":","")}</span>
+                        {!isLoggedIn && <Link href="/login" onClick={(e)=>e.stopPropagation()} className="text-[10px] bg-[#EFF6FF] border border-[#BFDBFE] text-[#0055B8] px-2 py-0.5 rounded-lg font-black hover:bg-blue-100">{t("cardLoginToView")}</Link>}
+                      </div>
+
+                      {/* Detailed Meta - TenderNotices.lk style - Responsive for 320px -> 1920px */}
+                      <div className="space-y-1.5 xs:space-y-1 text-[11px] xs:text-xs mb-4 bg-[#F8FAFC] p-2.5 xs:p-3 rounded-xl border border-slate-100 min-w-0">
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardCategory")}</span><span className="bg-white text-[#0055B8] border border-[#E2E8F0] px-2 py-0.5 rounded-lg font-bold text-[10px] xs:text-[11px] inline-flex w-fit">{tender.categoryName}</span></div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardSource")}</span>{isLoggedIn ? <span className="text-slate-700 font-semibold truncate text-[11px] xs:text-xs">{tender.source}</span> : <Link href="/login" onClick={(e)=>e.stopPropagation()} className="text-[#0055B8] font-bold hover:underline text-[11px] w-fit">{t("cardLoginToView")}</Link>}</div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardLocation")}</span><span className="text-slate-700 font-semibold truncate text-[11px] xs:text-xs">{tender.location}</span></div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardPublishedDate")}</span>{isLoggedIn ? <span className="text-slate-700 text-[11px] xs:text-xs">{tender.startDate}</span> : <Link href="/login" onClick={(e)=>e.stopPropagation()} className="text-[#0055B8] font-bold hover:underline text-[11px] w-fit">{t("cardLoginToView")}</Link>}</div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardClosingDate")}</span><span className="text-slate-700 font-bold text-[11px] xs:text-xs">{tender.endDate}</span></div>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-0.5 xs:gap-2"><span className="font-bold text-slate-500 w-auto xs:w-20 sm:w-24 lg:w-28 shrink-0 text-[10px] xs:text-[11px]">{t("cardReferenceNo")}</span><span className="font-mono text-[#0055B8] font-bold text-[11px] xs:text-xs break-all">{tender.ref}</span></div>
+                        <div className="flex flex-wrap items-center gap-1.5 xs:gap-2 pt-1"><span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-black text-[9px] xs:text-[10px]">{t("cardLiveTender")}</span><span className="text-[#0055B8] font-bold text-[10px] xs:text-[11px]">{t("cardTenderClosingIn")} {tender.daysLeft} {t("cardDays")}</span></div>
                       </div>
                     </div>
 
-                    {/* Bottom Budget & Action */}
-                    <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between mt-2">
-                      <div>
-                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">
-                          Budget Estimate
+                    {/* Bottom Budget & Action - Stacks on 320px */}
+                    <div className="pt-3 xs:pt-3.5 border-t border-slate-100 flex flex-col xs:flex-row xs:items-center justify-between gap-3 xs:gap-2 mt-2">
+                      <div className="min-w-0">
+                        <div className="text-[9px] xs:text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">
+                          {t("budgetEstimateLabel")}
                         </div>
-                        <div className="text-base sm:text-lg font-black text-[#0F172A] font-mono tracking-tight">
+                        <div className="text-sm xs:text-base sm:text-lg font-black text-[#0F172A] font-mono tracking-tight truncate">
                           {tender.amount}
                         </div>
                       </div>
                       
-                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#F1F5F9] group-hover:bg-[#0055B8] group-hover:text-white text-[#0055B8] font-bold text-xs rounded-xl border border-[#E2E8F0] group-hover:border-[#0055B8] transition-all duration-200 shadow-xs group-hover:translate-x-1 group-hover:shadow-md">
-                        <span>View Details</span>
+                      <span className="inline-flex items-center justify-center gap-1.5 px-4 xs:px-3.5 py-2.5 xs:py-1.5 bg-[#0055B8] group-hover:bg-[#004394] text-white font-bold text-xs rounded-lg xs:rounded-xl border border-[#0055B8] transition-all duration-200 shadow-xs group-hover:translate-x-1 group-hover:shadow-md w-full xs:w-auto min-h-[40px] xs:min-h-0">
+                        <span>{t("cardClickToView")}</span>
                         <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
                       </span>
                     </div>
@@ -910,18 +1122,18 @@ export default function HomePage() {
               })}
             </section>
           ) : (
-            /* DENSE TABLE VIEW WITH DIRECT FULL PAGE LINK */
-            <section className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden mb-8 shadow-lg">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs sm:text-sm border-collapse">
-                  <thead className="bg-[#F8FAFC] border-b border-slate-200 text-slate-500 font-black uppercase tracking-wider text-[11px]">
+            /* DENSE TABLE VIEW WITH DIRECT FULL PAGE LINK - Responsive: scroll on mobile, optimized for tablet/desktop */
+            <section className="bg-white border border-slate-200/90 rounded-xl xs:rounded-2xl overflow-hidden mb-8 shadow-md sm:shadow-lg -mx-3 xs:mx-0">
+              <div className="overflow-x-auto custom-scrollbar overscroll-x-contain">
+                <table className="w-full text-left text-[11px] xs:text-xs sm:text-sm border-collapse min-w-[640px] sm:min-w-0">
+                  <thead className="bg-[#F8FAFC] border-b border-slate-200 text-slate-500 font-black uppercase tracking-wider text-[10px] xs:text-[11px]">
                     <tr>
-                      <th className="px-5 py-4 w-[22%] min-w-[180px] align-middle">Procuring Entity &amp; Ref</th>
-                      <th className="px-5 py-4 w-[32%] min-w-[240px] align-middle">Tender Title</th>
-                      <th className="px-5 py-4 w-[18%] min-w-[170px] align-middle text-center">Category</th>
-                      <th className="px-5 py-4 w-[14%] min-w-[140px] align-middle text-center">Closing Date</th>
-                      <th className="px-5 py-4 w-[10%] min-w-[110px] align-middle text-right">Value (LKR)</th>
-                      <th className="px-5 py-4 w-[4%] min-w-[90px] align-middle text-center">Action</th>
+                      <th className="px-3 xs:px-4 sm:px-5 py-3 xs:py-4 w-[22%] min-w-[140px] xs:min-w-[180px] align-middle">{t("tableEntityCol")}</th>
+                      <th className="px-3 xs:px-4 sm:px-5 py-3 xs:py-4 w-[32%] min-w-[180px] xs:min-w-[240px] align-middle">{t("tableTitleCol")}</th>
+                      <th className="px-3 xs:px-4 sm:px-5 py-3 xs:py-4 w-[18%] min-w-[120px] xs:min-w-[170px] align-middle text-center hidden sm:table-cell">{t("tableCategoryCol")}</th>
+                      <th className="px-3 xs:px-4 sm:px-5 py-3 xs:py-4 w-[14%] min-w-[100px] xs:min-w-[140px] align-middle text-center">{t("tableClosingCol")}</th>
+                      <th className="px-3 xs:px-4 sm:px-5 py-3 xs:py-4 w-[10%] min-w-[90px] xs:min-w-[110px] align-middle text-right hidden md:table-cell">{t("tableValueCol")}</th>
+                      <th className="px-3 xs:px-4 sm:px-5 py-3 xs:py-4 w-[4%] min-w-[80px] xs:min-w-[90px] align-middle text-center">{t("tableActionCol")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium text-slate-900">
@@ -958,7 +1170,7 @@ export default function HomePage() {
                               {tender.endDate}
                             </div>
                             <div className="font-mono text-[11px] font-bold text-[#0055B8] mt-0.5">
-                              {tender.daysLeft}d left
+                              {tender.daysLeft}{t("daysLeftText")}
                             </div>
                           </td>
                           
@@ -987,7 +1199,7 @@ export default function HomePage() {
                                 href={`/tender/${tender.id}`}
                                 className="px-3.5 py-1.5 bg-[#0055B8] hover:bg-[#004394] text-white font-black text-xs rounded-xl shadow-xs transition-all hover:-translate-y-0.5 active:scale-95 uppercase tracking-wider"
                               >
-                                Details &rarr;
+                                {t("viewDetailsBtn")} &rarr;
                               </Link>
                             </div>
                           </td>
@@ -1000,21 +1212,21 @@ export default function HomePage() {
             </section>
           )}
 
-          {/* 6. MODERN LOAD BALANCED PAGINATION CONTROL BAR */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-16">
-            <div className="text-xs text-slate-500 font-medium">
-              Showing <strong className="font-bold text-[#0F172A]">{startIndex}</strong> to <strong className="font-bold text-[#0F172A]">{endIndex}</strong> of <strong className="font-bold text-[#0055B8]">{filteredTenders.length}</strong> Notices
+          {/* 6. MODERN LOAD BALANCED PAGINATION CONTROL BAR - Fully responsive 320px -> 1920px+ */}
+          <div className="bg-white border border-slate-200/90 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 shadow-sm flex flex-col gap-3 xs:gap-4 sm:flex-row sm:items-center sm:justify-between mb-12 xs:mb-16">
+            <div className="text-[11px] xs:text-xs text-slate-500 font-medium text-center xs:text-left order-2 sm:order-1">
+              {t("paginationShowing")} <strong className="font-bold text-[#0F172A]">{startIndex}</strong> {t("paginationTo")} <strong className="font-bold text-[#0F172A]">{endIndex}</strong> {t("paginationOf")} <strong className="font-bold text-[#0055B8]">{filteredTenders.length}</strong> {t("paginationNotices")}
             </div>
 
-            {/* Page Navigation Switcher */}
-            <div className="flex items-center gap-1.5 self-center sm:self-auto">
+            {/* Page Navigation Switcher - Scrollable on 320px, centered */}
+            <div className="flex items-center gap-1 xs:gap-1.5 self-center sm:self-auto order-1 sm:order-2 max-w-full overflow-x-auto custom-scrollbar pb-1 xs:pb-0 px-1 xs:px-0">
               <button
                 type="button"
                 disabled={currentPage <= 1}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className="px-3 py-1.5 bg-[#F1F5F9] hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-2xs"
+                className="px-2.5 xs:px-3 py-2 xs:py-1.5 bg-[#F1F5F9] hover:bg-slate-200 active:bg-slate-300 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-[11px] xs:text-xs rounded-lg xs:rounded-xl transition-all cursor-pointer shadow-2xs shrink-0 min-h-[36px] xs:min-h-0"
               >
-                &larr; Prev
+                &larr; <span className="hidden xs:inline">{t("paginationPrev")}</span><span className="xs:hidden">Prev</span>
               </button>
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
@@ -1022,10 +1234,10 @@ export default function HomePage() {
                   key={pageNum}
                   type="button"
                   onClick={() => handlePageChange(pageNum)}
-                  className={`w-8 h-8 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                  className={`w-7 h-7 xs:w-8 xs:h-8 rounded-lg xs:rounded-xl text-[11px] xs:text-xs font-black transition-all cursor-pointer shrink-0 min-h-[28px] xs:min-h-0 ${
                     currentPage === pageNum
                       ? "bg-[#0055B8] text-white shadow-md scale-105"
-                      : "bg-[#F8FAFC] text-slate-700 hover:bg-slate-200 border border-slate-200"
+                      : "bg-[#F8FAFC] text-slate-700 hover:bg-slate-200 active:bg-slate-300 border border-slate-200"
                   }`}
                 >
                   {pageNum}
@@ -1036,17 +1248,17 @@ export default function HomePage() {
                 type="button"
                 disabled={currentPage >= totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
-                className="px-3 py-1.5 bg-[#F1F5F9] hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-2xs"
+                className="px-2.5 xs:px-3 py-2 xs:py-1.5 bg-[#F1F5F9] hover:bg-slate-200 active:bg-slate-300 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-[11px] xs:text-xs rounded-lg xs:rounded-xl transition-all cursor-pointer shadow-2xs shrink-0 min-h-[36px] xs:min-h-0"
               >
-                Next &rarr;
+                <span className="hidden xs:inline">{t("paginationNext")}</span><span className="xs:hidden">Next</span> &rarr;
               </button>
             </div>
 
-            {/* Items Per Page Selector */}
-            <div className="flex items-center gap-2 self-end sm:self-auto text-xs">
-              <span className="text-slate-400 font-medium">Per Page:</span>
-              <div className="inline-flex p-0.5 bg-[#F1F5F9] rounded-xl border border-slate-200">
-                {[6, 12, 24].map((size) => (
+            {/* Items Per Page Selector - Full width on xs, auto on sm */}
+            <div className="flex items-center justify-center xs:justify-end gap-2 self-center sm:self-auto text-[11px] xs:text-xs order-3 w-full xs:w-auto">
+              <span className="text-slate-400 font-medium whitespace-nowrap">{t("paginationPerPage")}</span>
+              <div className="inline-flex p-0.5 bg-[#F1F5F9] rounded-lg xs:rounded-xl border border-slate-200">
+                {[10, 12, 24].map((size) => (
                   <button
                     key={size}
                     type="button"

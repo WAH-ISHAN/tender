@@ -1,9 +1,11 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function RelatedTendersPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   useEffect(() => {
     router.replace("/dashboard?tab=related");
   }, [router]);
@@ -13,7 +15,7 @@ export default function RelatedTendersPage() {
       <div className="text-center">
         <div className="w-8 h-8 border-3 border-[#0055B8] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-          Loading Related Tenders...
+          {t("dashLoadingRelated")}
         </span>
       </div>
     </div>
