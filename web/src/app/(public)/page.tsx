@@ -1192,8 +1192,8 @@ export default function HomePage() {
             document.body
           )}
 
-          {/* 3. TENDERS BY CATEGORY (12) SIDE MENU TRIGGER BUTTON */}
-          <div className="mb-6 xs:mb-8 flex items-center">
+          {/* 3A. MOBILE/TABLET ONLY: TENDERS BY CATEGORY (12) SIDE MENU TRIGGER BUTTON */}
+          <div className="lg:hidden mb-5 xs:mb-6 flex items-center">
             <button
               type="button"
               onClick={() => setIsMobileSideMenuOpen(true)}
@@ -1209,6 +1209,39 @@ export default function HomePage() {
                 12
               </span>
             </button>
+          </div>
+
+          {/* 3B. DESKTOP ONLY: QUICK STATUS TABS RIBBON (Classic Full Ribbon for Large Screens) */}
+          <div className="hidden lg:flex bg-white border border-slate-200/90 rounded-2xl p-1.5 xs:p-2 sm:p-2.5 mb-6 xs:mb-8 sm:mb-10 shadow-sm items-center gap-1.5 xs:gap-2 overflow-x-auto no-scrollbar">
+            {[
+              { id: "live", label: t("liveTendersLabel"), count: "366" },
+              { id: "today", label: t("todaysTendersLabel"), count: "0" },
+              { id: "closed", label: t("closedTendersLabel"), count: "39,576" },
+              { id: "all", label: t("allTendersLabel"), count: "39,942" },
+              { id: "suppliers", label: t("statusSuppliers"), count: "3,217" },
+              { id: "closing", label: t("statusClosing"), count: "41" },
+            ].map((tab) => {
+              const isActive = statusTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => handleStatusTabChange(tab.id as any)}
+                  className={`px-3.5 xs:px-4 py-2 xs:py-2.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-2 shrink-0 cursor-pointer min-h-[38px] ${
+                    isActive
+                      ? "bg-[#0055B8] text-white shadow-md"
+                      : "text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-bold"
+                  }`}
+                >
+                  <span className="whitespace-nowrap shrink-0">{tab.label}</span>
+                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono shrink-0 whitespace-nowrap font-bold ${
+                    isActive ? "bg-white/20 text-white" : "bg-[#F1F5F9] text-slate-600"
+                  }`}>
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* 4. RESULTS HEADER & CONTROLS */}
