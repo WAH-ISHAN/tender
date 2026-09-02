@@ -1,0 +1,67 @@
+name: TenderHub CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # 1. Test & Build Frontend
+  test-and-build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './web/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run verification test suite
+        run: npx tsx scripts/verify-all-phases.mjs
+
+      - name: Build Next.js 16 Web application
+        run: npm run build
+
+  # 2. Production Docker Build Check
+  docker-build-verification:
+    needs: test-and-build-frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: actions/setup-buildx-action@v3
+
+      - name: Validate Docker Compose Configuration
+        run: docker compose -f docker-compose.prod.yml config
+
+      - name: Build CodeIgniter 4 API Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/api
+          file: ./apps/api/Dockerfile
+          push: false
+          tags: tenderhub-api:latest
+
+      - name: Build Next.js Web Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./web
+          file: ./web/Dockerfile
+          push: false
+          tags: tenderhub-web:latest

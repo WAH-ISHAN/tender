@@ -18,6 +18,7 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\Api\V1'], static funct
         $routes->get('awards', 'MiscController::awards');
         $routes->get('stats/summary', 'MiscController::summary');
         $routes->get('taxonomy/(:segment)', 'MiscController::taxonomy/$1');
+        $routes->post('notices/submit-rfp', 'RfpSubmissionController::submit');
     });
 
     // ------------------------------------------------------------- auth
@@ -28,6 +29,17 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\Api\V1'], static funct
         $routes->post('otp/verify', 'AuthController::otpVerify');
         $routes->post('refresh', 'AuthController::refresh');
         $routes->post('logout', 'AuthController::logout');
+        $routes->post('forgot-password', 'PasswordResetController::forgotPassword');
+        $routes->post('reset-password', 'PasswordResetController::resetPassword');
+        $routes->post('verify-email', 'EmailVerificationController::verify');
+        $routes->post('resend-verification', 'EmailVerificationController::resend');
+    });
+
+    // --------------------------------------------------------- payments
+    $routes->group('payments', ['namespace' => 'App\Controllers\Api\V1\Payments'], static function ($routes) {
+        $routes->post('checkout', 'CheckoutController::checkout', ['filter' => ['auth-jwt', 'tenant']]);
+        $routes->post('webhook/payhere', 'CheckoutController::webhookPayHere');
+        $routes->post('refund', 'RefundController::process', ['filter' => ['auth-jwt', 'tenant', 'group:staff']]);
     });
 
     // ----------------------------------------------- member (the bidder)
@@ -138,6 +150,7 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\Api\V1'], static funct
         $routes->get('payments', 'PaymentController::index');
         $routes->post('payments/(:num)/confirm', 'PaymentController::confirm/$1');
         $routes->post('payments/(:num)/reject', 'PaymentController::reject/$1');
+        $routes->post('ingest/push', 'IngestWebhookController::push');
     });
 
     // ---------------------------------------------------------- partner
