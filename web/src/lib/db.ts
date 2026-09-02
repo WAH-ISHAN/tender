@@ -6,9 +6,10 @@ let dbInstance: any = null;
 export function getDb(): any {
   if (dbInstance) return dbInstance;
   const dbPaths = [
-    path.resolve(process.cwd(), "../TenderHub/apps/api/writable/tenderhub.sqlite"),
-    path.resolve(process.cwd(), "TenderHub/apps/api/writable/tenderhub.sqlite"),
-    "E:/tender/TenderHub/apps/api/writable/tenderhub.sqlite",
+    path.resolve(process.cwd(), "../apps/api/writable/tenderhub.sqlite"),
+    path.resolve(process.cwd(), "apps/api/writable/tenderhub.sqlite"),
+    path.resolve(process.cwd(), "../api/writable/tenderhub.sqlite"),
+    "E:/tender/apps/api/writable/tenderhub.sqlite",
   ];
   for (const p of dbPaths) {
     if (fs.existsSync(p)) {
