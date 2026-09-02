@@ -97,7 +97,7 @@ export function DataTable<T extends { id: number | string }>({
             value={q}
             onChange={(e) => { setQ(e.target.value); setPage(1); }}
             placeholder="Search…"
-            className="h-[var(--ctl-h)] w-56 rounded-[8px] border border-ink-300 px-2.5 text-[13px] outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+            className="h-[var(--ctl-h)] w-full sm:w-56 rounded-[8px] border border-ink-300 px-2.5 text-[13px] outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
           />
         ) : null}
 

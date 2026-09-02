@@ -43,8 +43,8 @@ export function PortalShell({
             <SignOutButton />
           </div>
         </div>
-        <nav className="flex gap-0.5 overflow-x-auto border-t border-ink-100 px-5 py-1.5 md:hidden">
-          {nav.map((n) => <NavLink key={n.href} href={n.href}>{n.label}</NavLink>)}
+        <nav className="flex flex-nowrap items-center gap-1 overflow-x-auto no-scrollbar border-t border-ink-100 px-4 py-1.5 md:hidden">
+          {nav.map((n) => <div key={n.href} className="shrink-0"><NavLink href={n.href}>{n.label}</NavLink></div>)}
         </nav>
       </header>
       <main className="mx-auto max-w-[1400px] px-5 py-6">{children}</main>

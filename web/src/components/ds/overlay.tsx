@@ -41,17 +41,17 @@ export function Modal({
   if (!mounted || !open) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-ink-900/40" onClick={onClose} />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="absolute inset-0 bg-ink-900/50 backdrop-blur-xs" onClick={onClose} />
       <div ref={ref} role="dialog" aria-modal="true" aria-label={title}
            style={{ maxWidth: width }}
-           className="relative w-full rounded-[12px] bg-white shadow-[var(--shadow-pop)]">
+           className="relative w-full rounded-t-[16px] sm:rounded-[12px] bg-white shadow-[var(--shadow-pop)] max-h-[90dvh] sm:max-h-[85vh] flex flex-col animate-slideUp sm:animate-none">
         <div className="flex items-center justify-between border-b border-ink-200 px-5 py-3.5">
           <h2 className="text-[15px] font-semibold text-ink-900">{title}</h2>
-          <button onClick={onClose} aria-label="Close" className="rounded-[6px] px-2 py-1 text-ink-400 hover:bg-ink-100">✕</button>
+          <button onClick={onClose} aria-label="Close" className="flex h-8 w-8 items-center justify-center rounded-[6px] text-ink-400 hover:bg-ink-100 cursor-pointer">✕</button>
         </div>
-        <div className="max-h-[70vh] overflow-auto px-5 py-4 text-[13px] text-ink-700">{children}</div>
-        {footer ? <div className="flex justify-end gap-2 border-t border-ink-200 px-5 py-3">{footer}</div> : null}
+        <div className="max-h-[75dvh] sm:max-h-[70vh] overflow-y-auto custom-scrollbar px-5 py-4 text-[13px] text-ink-700">{children}</div>
+        {footer ? <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 border-t border-ink-200 px-5 py-3 pb-[calc(12px+env(safe-area-inset-bottom,0px))] sm:pb-3">{footer}</div> : null}
       </div>
     </div>,
     document.body,
