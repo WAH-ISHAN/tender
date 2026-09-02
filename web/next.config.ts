@@ -17,7 +17,15 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
   },
 
-  // 3. React Strict Mode for predictable rendering
+  // 3. Allow LAN IP origins in development for mobile access
+  allowedDevOrigins: [
+    "192.168.8.106",
+    "192.168.8.106:3000",
+    "localhost:3000",
+    "127.0.0.1:3000",
+  ],
+
+  // 4. React Strict Mode for predictable rendering
   reactStrictMode: true,
 };
 

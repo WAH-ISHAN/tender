@@ -2,11 +2,13 @@
 import { useState, useEffect } from "react";
 
 export default function WebLoader() {
+  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(15);
+  const [progress, setProgress] = useState(25);
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Smooth progress simulation
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -14,19 +16,19 @@ export default function WebLoader() {
           clearInterval(interval);
           return 100;
         }
-        return prev + Math.floor(Math.random() * 25) + 15;
+        return prev + 20;
       });
     }, 120);
 
     // Fade out timer
     const fadeTimer = setTimeout(() => {
       setFading(true);
-    }, 700);
+    }, 600);
 
     // Complete unmount timer
     const hideTimer = setTimeout(() => {
       setLoading(false);
-    }, 1100);
+    }, 950);
 
     return () => {
       clearInterval(interval);
@@ -35,7 +37,7 @@ export default function WebLoader() {
     };
   }, []);
 
-  if (!loading) return null;
+  if (!mounted || !loading) return null;
 
   return (
     <div
