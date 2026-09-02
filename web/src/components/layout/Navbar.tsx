@@ -6,9 +6,10 @@ import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, hydrated, setLanguage, t } = useLanguage();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // mounted: still needed for createPortal (document.body must exist)
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -116,7 +117,7 @@ export default function Navbar() {
               onClick={() => setLanguage("en")}
               aria-label="Switch to English"
               className={`px-1.5 xs:px-2 sm:px-2.5 py-1 sm:py-1 text-[11px] sm:text-xs rounded-md sm:rounded-lg font-black transition-all cursor-pointer min-h-[28px] sm:min-h-0 min-w-[32px] xs:min-w-[36px] sm:min-w-0 flex items-center justify-center ${
-                language === "en" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
+                hydrated && language === "en" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
               }`}
             >
               EN
@@ -126,7 +127,7 @@ export default function Navbar() {
               onClick={() => setLanguage("si")}
               aria-label="Switch to Sinhala"
               className={`px-1.5 xs:px-2 sm:px-2.5 py-1 sm:py-1 text-[11px] sm:text-xs rounded-md sm:rounded-lg font-black transition-all cursor-pointer min-h-[28px] sm:min-h-0 min-w-[32px] xs:min-w-[36px] sm:min-w-0 flex items-center justify-center ${
-                language === "si" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
+                hydrated && language === "si" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
               }`}
             >
               සිං
@@ -136,7 +137,7 @@ export default function Navbar() {
               onClick={() => setLanguage("ta")}
               aria-label="Switch to Tamil"
               className={`px-1.5 xs:px-2 sm:px-2.5 py-1 sm:py-1 text-[11px] sm:text-xs rounded-md sm:rounded-lg font-black transition-all cursor-pointer min-h-[28px] sm:min-h-0 min-w-[32px] xs:min-w-[36px] sm:min-w-0 flex items-center justify-center ${
-                language === "ta" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
+                hydrated && language === "ta" ? "bg-white text-[#0055B8] shadow-xs" : "text-gray-600 hover:text-black font-bold"
               }`}
             >
               த
@@ -244,7 +245,7 @@ export default function Navbar() {
                     type="button"
                     onClick={() => setLanguage("en")}
                     className={`py-2 text-xs rounded-lg font-black transition-all cursor-pointer text-center ${
-                      language === "en" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
+                      hydrated && language === "en" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
                     EN
@@ -253,7 +254,7 @@ export default function Navbar() {
                     type="button"
                     onClick={() => setLanguage("si")}
                     className={`py-2 text-xs rounded-lg font-black transition-all cursor-pointer text-center ${
-                      language === "si" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
+                      hydrated && language === "si" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
                     සිං
@@ -262,7 +263,7 @@ export default function Navbar() {
                     type="button"
                     onClick={() => setLanguage("ta")}
                     className={`py-2 text-xs rounded-lg font-black transition-all cursor-pointer text-center ${
-                      language === "ta" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
+                      hydrated && language === "ta" ? "bg-[#0055B8] text-white shadow-xs" : "text-slate-600 hover:text-black font-bold"
                     }`}
                   >
                     த

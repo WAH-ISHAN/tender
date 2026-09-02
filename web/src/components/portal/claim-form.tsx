@@ -40,7 +40,7 @@ export function ClaimForm({ terms }: { terms: Record<string, { months: number; a
       <div className="grid gap-3 sm:grid-cols-2">
         <F name="bank" label="Bank you transferred from" required />
         <F name="slip_ref" label="Slip / reference number" required />
-        <F name="paid_on" label="Date paid" type="date" required defaultValue={new Date().toISOString().slice(0, 10)} />
+        <F name="paid_on" label="Date paid" type="date" required suppressHydrationWarning defaultValue={typeof window === "undefined" ? "" : new Date().toISOString().slice(0, 10)} />
         <label className="block">
           <span className="mb-1 block text-[12px] font-medium text-ink-600">How you sent the slip</span>
           <select name="channel" className="h-[38px] w-full rounded-[8px] border border-ink-300 bg-white px-2.5 text-[13px]">

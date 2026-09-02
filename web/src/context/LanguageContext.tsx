@@ -920,6 +920,7 @@ export const DICTIONARY: Translations = {
 
 interface LanguageContextType {
   language: Language;
+  hydrated: boolean;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
@@ -928,6 +929,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
+  const [hydrated, setHydrated] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -937,6 +939,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       setLanguageState(saved);
       document.documentElement.lang = saved;
     }
+    // Mark as hydrated — components can now render language-dependent
+    // active states without SSR vs client mismatch
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
@@ -965,7 +970,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, hydrated, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
