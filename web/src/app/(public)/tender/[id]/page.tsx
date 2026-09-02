@@ -183,36 +183,44 @@ export default function TenderDetailPage() {
         {/* RIGHT COLUMN: INSTITUTIONAL DOSSIER TABS */}
         <main className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-lg">
           
-          {/* Clean Corporate Tabs (No AI Emojis) */}
-          <div className="flex border-b border-slate-200 mb-6 overflow-x-auto text-xs font-black gap-2">
+          {/* Clean Corporate Tabs (Responsive Mobile Swipeable Ribbon) */}
+          <div className="flex flex-nowrap items-center border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar gap-1.5 sm:gap-3 py-1">
             <button
               onClick={() => setActiveTab("scope")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
-                activeTab === "scope" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
+              className={`shrink-0 pb-3 px-3.5 sm:px-5 transition-all uppercase tracking-wider text-[11px] sm:text-xs font-bold whitespace-nowrap rounded-t-lg cursor-pointer ${
+                activeTab === "scope" 
+                  ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/60 font-black shadow-xs" 
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               {t("tenderTabScope")}
             </button>
             <button
               onClick={() => setActiveTab("docs")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
-                activeTab === "docs" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
+              className={`shrink-0 pb-3 px-3.5 sm:px-5 transition-all uppercase tracking-wider text-[11px] sm:text-xs font-bold whitespace-nowrap rounded-t-lg cursor-pointer ${
+                activeTab === "docs" 
+                  ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/60 font-black shadow-xs" 
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               {t("tenderTabDocs")} ({tender.documentsList.length})
             </button>
             <button
               onClick={() => setActiveTab("cida")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
-                activeTab === "cida" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
+              className={`shrink-0 pb-3 px-3.5 sm:px-5 transition-all uppercase tracking-wider text-[11px] sm:text-xs font-bold whitespace-nowrap rounded-t-lg cursor-pointer ${
+                activeTab === "cida" 
+                  ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/60 font-black shadow-xs" 
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               {t("tenderTabCida")}
             </button>
             <button
               onClick={() => setActiveTab("inquiries")}
-              className={`pb-3 px-4 transition-colors uppercase tracking-wider whitespace-nowrap rounded-t-lg cursor-pointer ${
-                activeTab === "inquiries" ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/40" : "text-slate-500 hover:text-black font-bold"
+              className={`shrink-0 pb-3 px-3.5 sm:px-5 transition-all uppercase tracking-wider text-[11px] sm:text-xs font-bold whitespace-nowrap rounded-t-lg cursor-pointer ${
+                activeTab === "inquiries" 
+                  ? "text-[#0055B8] border-b-2 border-[#0055B8] bg-blue-50/60 font-black shadow-xs" 
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               {t("tenderTabInquiries")}

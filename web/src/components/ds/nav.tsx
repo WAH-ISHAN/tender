@@ -6,10 +6,10 @@ import { useState, type ReactNode } from "react";
 
 export function Tabs({ tabs, value, onChange }: { tabs: { key: string; label: string; n?: number }[]; value: string; onChange: (k: string) => void }) {
   return (
-    <div role="tablist" className="flex gap-1 overflow-x-auto border-b border-ink-200 px-[var(--card-p)]">
+    <div role="tablist" className="flex flex-nowrap gap-1 overflow-x-auto no-scrollbar border-b border-ink-200 px-[var(--card-p)] py-0.5">
       {tabs.map((t) => (
         <button key={t.key} role="tab" aria-selected={value === t.key} onClick={() => onChange(t.key)}
-          className={`-mb-px whitespace-nowrap border-b-2 px-3 py-2.5 text-[13px] font-medium ${value === t.key ? "border-brand-600 text-brand-700" : "border-transparent text-ink-500 hover:text-ink-800"}`}>
+          className={`shrink-0 -mb-px whitespace-nowrap border-b-2 px-3 py-2.5 text-[13px] font-medium transition-all ${value === t.key ? "border-brand-600 text-brand-700 font-bold" : "border-transparent text-ink-500 hover:text-ink-800"}`}>
           {t.label}
           {t.n !== undefined ? <span className="ml-1.5 rounded-full bg-ink-100 px-1.5 py-0.5 font-mono text-[11px] text-ink-500">{t.n}</span> : null}
         </button>
