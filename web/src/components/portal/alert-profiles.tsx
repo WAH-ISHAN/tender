@@ -102,10 +102,10 @@ export function AlertProfileEditor({ profiles, categories, districts }: { profil
           </div>
           <div>
             <p className="mb-1.5 text-[12px] font-medium text-ink-600">Channels</p>
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap gap-1.5">
               {[["inapp", "In-app feed"], ["email", "E-mail"], ["sms", "SMS"], ["whatsapp", "WhatsApp"]].map(([v, l]) => (
                 <button type="button" key={v} onClick={() => setChannels(channels.includes(v) ? channels.filter((c) => c !== v) : [...channels, v])}
-                  className={`rounded-full px-3 py-1 text-[12px] ${channels.includes(v) ? "bg-brand-600 text-white" : "bg-ink-100 text-ink-600"}`}>{l}</button>
+                  className={`rounded-full px-3 py-1.5 text-[12px] font-medium transition-colors cursor-pointer ${channels.includes(v) ? "bg-brand-600 text-white" : "bg-ink-100 text-ink-600 hover:bg-ink-200"}`}>{l}</button>
               ))}
             </div>
             <p className="mt-2 text-[11px] text-ink-400">

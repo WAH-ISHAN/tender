@@ -70,21 +70,48 @@ export async function Catalogue({ kind, sp }: { kind: "tender" | "auction"; sp: 
     );
   };
 
-  return (
-    <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-      <aside className="lg:sticky lg:top-20 lg:self-start">
-        <Card>
-          <form action={base} className="border-b border-ink-200 p-4">
-            <input name="q" defaultValue={q} placeholder="Search title or reference"
-              className="h-[var(--ctl-h)] w-full rounded-[8px] border border-ink-300 px-2.5 text-[13px] outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
-            {status !== "all" ? <input type="hidden" name="status" value={status} /> : null}
-          </form>
-          <FacetGroup title="Category" param="category" values={facets.category} selected={cats} />
-          <FacetGroup title="District" param="district" values={facets.district} selected={dists} />
-          <FacetGroup title="Value" param="value_band" values={facets.value_band} selected={bands} />
-          <FacetGroup title="Sector" param="sector" values={facets.sector} selected={sectors} />
-        </Card>
-      </aside>
+    const filterCard = (
+      <Card>
+        <form action={base} className="border-b border-ink-200 p-4">
+          <input name="q" defaultValue={q} placeholder="Search title or reference"
+            className="h-[var(--ctl-h)] w-full rounded-[8px] border border-ink-300 px-2.5 text-[13px] outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+          {status !== "all" ? <input type="hidden" name="status" value={status} /> : null}
+        </form>
+        <FacetGroup title="Category" param="category" values={facets.category} selected={cats} />
+        <FacetGroup title="District" param="district" values={facets.district} selected={dists} />
+        <FacetGroup title="Value" param="value_band" values={facets.value_band} selected={bands} />
+        <FacetGroup title="Sector" param="sector" values={facets.sector} selected={sectors} />
+      </Card>
+    );
+
+    const activeFilterCount = cats.length + dists.length + bands.length + sectors.length;
+
+    return (
+      <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+        <aside className="lg:sticky lg:top-20 lg:self-start">
+          {/* Mobile Collapsible Filter Drawer / Accordion */}
+          <details className="group lg:hidden mb-2">
+            <summary className="flex items-center justify-between p-3.5 bg-white border border-ink-200 rounded-[10px] text-[13px] font-semibold text-ink-800 cursor-pointer list-none shadow-xs hover:bg-ink-50">
+              <span className="flex items-center gap-2">
+                <span>Filter & Search</span>
+                {activeFilterCount > 0 ? (
+                  <span className="rounded-full bg-brand-100 text-brand-700 px-2 py-0.5 text-[11px] font-mono font-bold">
+                    {activeFilterCount} active
+                  </span>
+                ) : null}
+              </span>
+              <span className="text-ink-400 group-open:rotate-180 transition-transform text-[11px]">▼</span>
+            </summary>
+            <div className="mt-2.5">
+              {filterCard}
+            </div>
+          </details>
+
+          {/* Desktop Permanent Sticky Sidebar */}
+          <div className="hidden lg:block">
+            {filterCard}
+          </div>
+        </aside>
 
       <div>
         <div className="mb-4 flex flex-wrap items-center gap-2">

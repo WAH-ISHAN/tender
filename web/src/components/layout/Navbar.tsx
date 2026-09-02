@@ -205,8 +205,8 @@ export default function Navbar() {
             aria-hidden="true"
           />
 
-          {/* Off-canvas Side Drawer Panel (Slide from Right, 100vh full height) */}
-          <div className="relative w-full max-w-[85vw] sm:max-w-sm h-screen max-h-screen bg-white shadow-2xl flex flex-col z-[100000] animate-slideLeft">
+          {/* Off-canvas Side Drawer Panel (Slide from Right, 100dvh full height) */}
+          <div className="relative w-full max-w-[85vw] sm:max-w-sm h-[100dvh] max-h-[100dvh] bg-white shadow-2xl flex flex-col z-[100000] animate-slideLeft pb-[env(safe-area-inset-bottom,0px)]">
             
             {/* Side Menu Header */}
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-[#0A1633] text-white shrink-0">

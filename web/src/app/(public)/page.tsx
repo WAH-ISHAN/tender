@@ -948,8 +948,8 @@ export default function HomePage() {
                 aria-hidden="true"
               />
               
-              {/* Off-canvas Drawer Panel (Slide from Left, full height) */}
-              <div className="relative w-full max-w-[85vw] sm:max-w-sm h-screen max-h-screen bg-white shadow-2xl flex flex-col z-[100000] animate-slideRight">
+              {/* Off-canvas Drawer Panel (Slide from Left, 100dvh full height) */}
+              <div className="relative w-full max-w-[85vw] sm:max-w-sm h-[100dvh] max-h-[100dvh] bg-white shadow-2xl flex flex-col z-[100000] animate-slideRight pb-[env(safe-area-inset-bottom,0px)]">
                 
                 {/* Drawer Header */}
                 <div className="p-4 xs:p-5 border-b border-slate-100 flex items-center justify-between bg-[#0A1633] text-white shrink-0">

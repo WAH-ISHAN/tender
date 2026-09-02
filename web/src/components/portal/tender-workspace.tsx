@@ -210,30 +210,32 @@ export function TenderWorkspace(p: {
             ) : null}
 
             {p.submissions.length ? (
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b border-ink-200 bg-ink-50 text-[11px] uppercase tracking-wide text-ink-500">
-                    <th className="px-[var(--card-p)] py-2 font-semibold">Reference</th>
-                    {p.opened ? <th className="px-3 py-2 font-semibold">Bidder</th> : null}
-                    {p.opened ? <th className="px-3 py-2 text-right font-semibold">Total price</th> : null}
-                    {p.opened ? <th className="px-3 py-2 font-semibold">Security</th> : null}
-                    <th className="px-3 py-2 text-right font-semibold">Size</th>
-                    <th className="px-[var(--card-p)] py-2 text-right font-semibold">Received</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {p.submissions.map((s) => (
-                    <tr key={s.id} className="border-b border-ink-100 last:border-0" style={{ height: "var(--row-h)" }}>
-                      <td className="px-[var(--card-p)] font-mono text-[12px] text-ink-700">{s.reference}</td>
-                      {p.opened ? <td className="px-3 text-[13px] font-medium text-ink-900">{s.bidder_name}</td> : null}
-                      {p.opened ? <td className="px-3 text-right font-mono text-[13px] tabular">{lkr(Number(s.total_price))}</td> : null}
-                      {p.opened ? <td className="px-3">{s.has_security ? <Badge tone="ok">Lodged</Badge> : <Badge tone="bad">Missing</Badge>}</td> : null}
-                      <td className="px-3 text-right font-mono text-[12px] text-ink-500">{bytes(s.size_bytes)}</td>
-                      <td className="px-[var(--card-p)] text-right font-mono text-[12px] text-ink-500">{dateTime(s.received_at)}</td>
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left min-w-[500px]">
+                  <thead>
+                    <tr className="border-b border-ink-200 bg-ink-50 text-[11px] uppercase tracking-wide text-ink-500">
+                      <th className="px-[var(--card-p)] py-2 font-semibold">Reference</th>
+                      {p.opened ? <th className="px-3 py-2 font-semibold">Bidder</th> : null}
+                      {p.opened ? <th className="px-3 py-2 text-right font-semibold">Total price</th> : null}
+                      {p.opened ? <th className="px-3 py-2 font-semibold">Security</th> : null}
+                      <th className="px-3 py-2 text-right font-semibold">Size</th>
+                      <th className="px-[var(--card-p)] py-2 text-right font-semibold">Received</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {p.submissions.map((s) => (
+                      <tr key={s.id} className="border-b border-ink-100 last:border-0" style={{ height: "var(--row-h)" }}>
+                        <td className="px-[var(--card-p)] font-mono text-[12px] text-ink-700">{s.reference}</td>
+                        {p.opened ? <td className="px-3 text-[13px] font-medium text-ink-900">{s.bidder_name}</td> : null}
+                        {p.opened ? <td className="px-3 text-right font-mono text-[13px] tabular">{lkr(Number(s.total_price))}</td> : null}
+                        {p.opened ? <td className="px-3">{s.has_security ? <Badge tone="ok">Lodged</Badge> : <Badge tone="bad">Missing</Badge>}</td> : null}
+                        <td className="px-3 text-right font-mono text-[12px] text-ink-500">{bytes(s.size_bytes)}</td>
+                        <td className="px-[var(--card-p)] text-right font-mono text-[12px] text-ink-500">{dateTime(s.received_at)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             ) : <EmptyState title="No bids lodged yet" />}
           </>
         ) : null}
