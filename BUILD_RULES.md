@@ -1,6 +1,6 @@
 ﻿# TenderHub — Build Rules
 
-These rules govern all architectural, implementation, and code generation tasks across the TenderHub codebase.
+These rules govern all architectural, implementation, testing, and status reporting tasks across the TenderHub codebase.
 
 ---
 
@@ -56,9 +56,35 @@ These are fixed. Do not "improve" or simplify them:
 - ❌ A count query that resets/diverges from its paired list query's `WHERE`/`JOIN` clauses.
 - ❌ Sending a proxied request body as re-parsed text instead of forwarding raw bytes with the original `Content-Type` — breaks multipart uploads (the boundary lives in that header).
 - ❌ A service locator call for a service that isn't registered, allowed to fail silently instead of erroring loud — verify every `service()`/DI call resolves to something real, don't assume the framework will complain.
+- ❌ Implementing backend logic directly inside the Next.js process (raw SQL queries in a frontend `lib/` file) instead of building the actual separate API service the blueprint specifies, and then calling that a "backend." If the file is named `mock-data.ts` or the function `getMockResponse`, it is a mock, whatever data source it queries.
+- ❌ Auth that checks whether a token *string contains* a role/plan keyword (`token.includes("business")`) instead of verifying a real signed JWT (signature, expiry, claims). This is not authentication — any string with the right substring grants access.
+- ❌ Blending a real query result with a hardcoded fallback via `Math.max(real, fakeNumber)` (or similar) so a plausible-looking number always shows even when the real count is low or zero. This silently fakes data under the appearance of a live query — the query result must be shown as-is, or explicitly marked empty/zero, never floored to a nicer-looking constant.
+- ❌ "Verifying" a refusal rule (self-approval, same-officer opening, tampered link, early opening) by reading stored data and observing it looks consistent, instead of actually calling the endpoint with the violating request and pasting the real 403/409 response. Passive data inspection is not the same as an attempted negative test.
 
 ## Rule 7 — Honesty in status reporting
 Never report a subsystem as done, working, or "built" without having made an actual request against a running instance and observed the actual response in this session. If something is implemented but not run/verified, say "written, not verified" — not "done." This mirrors the blueprint's own `built` / `partial` / `planned` labeling; keep using those three labels and don't round `partial` up to `built`.
 
 ## Rule 8 — When stuck, name the fork instead of picking silently
 If there are two reasonable ways to implement something the blueprint doesn't fully specify, state both options and which one you're taking and why — in one line — rather than silently picking one. This is what makes a bad default catchable before it's built on top of.
+
+## Rule 9 — No status claim without pasted raw output
+A phase/subsystem/status table may **never** say "built" or "verified" unless the *actual* raw output that proves it is pasted directly beneath the claim — the real terminal output of the actual command, or the real HTTP response body, run in this session, against this codebase. Not a description of what the output would be. Not a summary. Not a number that sounds plausible ("366 Live / 98% Verified") with no query shown that produced it.
+
+Concretely, for each claim:
+- "Migrations ran" → paste the migration runner's actual console output.
+- "Endpoint returns X" → paste the actual `curl`/HTTP response body and status code, not a description of it.
+- "Paywall withholds field Y" → paste the actual response JSON and show the field is absent, or grep the actual served HTML and paste the (empty) match count.
+- "Dual-control opening enforced" → paste the actual 403/409 response body from the actual second call.
+- "Database has N rows" → paste the actual `SELECT count(*)` output.
+
+If a claim can't be backed by pasted real output in that same turn, the correct status is **"written, not yet verified"** — not "built." A status table with no pasted evidence anywhere under it is a narrative, not a report, and must be treated as unverified regardless of how confident or detailed it reads. This rule exists because a model will produce a convincing status table from the spec's own wording without running anything, and that is indistinguishable from a real report unless raw output is demanded every time.
+
+## Rule 10 — A subsystem that has never executed cannot be "built"
+If the process that owns a piece of logic has never successfully run in this session (e.g. the PHP backend was never reachable on its port), then **every claim resting on that process's source code is "written," never "built" or "verified,"** no matter how complete the code looks on disk or how many files exist. File count and code review are not execution. Do not let an honest finding in one section ("PHP is not running") coexist with "built" labels in a later summary table for subsystems that only that process can serve — the summary must inherit the finding, not contradict it.
+
+Two testing-methodology rules that follow from this:
+- **A security/business-logic test must go through the real request path** — real HTTP call, real session/auth, real routing — not a direct in-process call to an internal function with a hand-built fake user object. Calling `someInternalFunction({id: 1})` from a Node script proves that function's logic is self-consistent; it proves nothing about whether the real running system enforces the rule, because it skips auth, routing, and every filter in between. If a test can't be run as an actual HTTP request, say so explicitly rather than substituting a function-level call and reporting it as equivalent.
+- **A test that returns a description of what the code does ("refusal logic checks X") is not evidence.** Only the actual response body/status code, pasted verbatim, counts. If a described test and a pasted-output test are mixed in the same report, the described ones must be labeled unverified, not folded into the same "built" checkmark as the pasted ones.
+- **A literal placeholder value inside real-looking infrastructure is still fake** — a cookie or token whose value is literally `mock_jwt_token_...` or similar is proof the auth is not implemented, not partial evidence toward it, however correctly the cookie flags (`HttpOnly`, `SameSite`) are set around it.
+- **A requested test that gets silently substituted with a different, easier check is a gap, not a pass** — e.g. asked to verify a duplicate-submission is refused, running `SELECT count(*)` instead answers a different question and must be reported as "not tested," not folded into the same row as the tests that were actually run.
+- **A file count spanning `vendor/`, framework core, or dependencies is not evidence of app code being written.** Count only the application's own directory (e.g. `apps/api/app/`) when using file counts as a completeness signal.
