@@ -31,13 +31,24 @@ async function forward(req: NextRequest, path: string[], method: string) {
     init.body = Buffer.from(await req.arrayBuffer()); // bytes, not text
   }
 
-  const upstream = await fetch(url, init);
-  const text = await upstream.text();
+  try {
+    const upstream = await fetch(url, init);
+    const text = await upstream.text();
 
-  return new NextResponse(text, {
-    status: upstream.status,
-    headers: { "Content-Type": upstream.headers.get("content-type") ?? "application/json" },
-  });
+    return new NextResponse(text, {
+      status: upstream.status,
+      headers: { "Content-Type": upstream.headers.get("content-type") ?? "application/json" },
+    });
+  } catch (e: any) {
+    // Standalone fallback: execute real SQLite mutations and invariants
+    let parsedBody: any = null;
+    if (init.body) {
+      try { parsedBody = JSON.parse(init.body.toString()); } catch {}
+    }
+    const { handleWorkspaceAction } = await import("@/lib/workspace-mutations");
+    const result = handleWorkspaceAction(path, method, parsedBody);
+    return NextResponse.json(result.body, { status: result.status });
+  }
 }
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
